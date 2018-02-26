@@ -1,0 +1,46 @@
+<div class="row">
+	<div class="tarjeta-contacto--detalle" *ngIf="contacto; else sincontacto">
+		<figure class="tarjeta-contacto--detalle__shape">
+			<img src="{{ contacto.foto }}" alt="" class="tarjeta-contacto--detalle__img">
+		</figure>
+		<div class="tarjeta-contacto--detalle__texto">
+			<h3 class="titulo__tarjeta">{{ contacto.nombre }}</h3>
+			<p>
+				Institución: {{ contacto.organizacion }}
+			</p>
+			<p>
+				Cargo: {{ contacto.cargo }}
+			</p>
+			<p>
+				Teléfono: <span class="telefono">{{ contacto.telefono }}</span> Móvil: <span class="telefono">{{ contacto.movil }}</span>
+			</p>
+			<p>
+				Correo: <a href="mailto:{{ contacto.correo }}" class="correo">{{ contacto.correo }}</a>
+			</p>
+			<p>
+				Región: {{ contacto.region }} Municipio: {{ contacto.municipio }}
+			</p>
+			<p><a routerLink="/contactos/editar/{{ item.key }}" class="btn-texto">Editar</a><a href="#" class="btn-texto" (click)="OnEliminarClick($event,item.key)">Eliminar</a></p>
+		</div>
+	</div>
+	<ng-template #sincontacto>
+		<div class="mensaje-overlay">
+			<div class="mensaje">
+				<h2 class="mensaje__titulo">No se encontró el contacto</h2>
+			</div>
+		</div>
+	</ng-template>
+</div>
+
+<div class="overlay" [class.overlay--active]="dialogo_borrar">
+	<div class="overlay__close" (click)="dialogo_borrar=false">
+		<span class="overlay__icon">&#xe00e;</span>
+	</div>
+	<div class="dialog">
+      <h3 class="dialog__titulo u-margin-bottom-medium">Eliminar Contacto</h3>
+      <p>
+      	Se eliminará el contacto de la base de datos. ¿Desea Continuar?
+      </p>
+      <a href="#" class="btn" (click)="EliminarContacto($event)">Si</a><a href="#" class="btn" (click)="CerrarModal($event)">No</a>
+    </div>
+</div>

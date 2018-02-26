@@ -1,0 +1,77 @@
+.tarjeta-contacto {
+
+	
+	background-color: $color-blanco;
+	
+	&--lista {
+
+		box-shadow: 1rem 2rem 3rem rgba($color-negro, .7);
+		width: 95%;
+		font-size: 1rem;
+		transform: skewX(-12deg);
+
+		 &__shape {
+		 	@include shape-tarjeta(9rem);
+			transform: translateX(2rem) skewX(12deg);
+		 }
+
+		 &__img {
+			height: 100%;																																																																																																																																			
+		}
+
+		&__texto {
+			text-transform: uppercase;
+			font-weight: 300;
+			transform: skewX(12deg);
+			color: $color-gris-oscuro-3;
+		}
+
+		&:hover &__texto {
+			.encabezado-terciario {
+				border-color: $color-terciario-oscuro;
+				color: $color-primario-oscuro;
+				font-weight: 700;
+			}
+		}
+	}
+
+	&--detalle {
+
+		margin-top: 5rem;
+		width: 30%;
+		background-color: rgba($color-blanco, .7);
+		border: 1px solid $color-negro;
+		border-radius: 3px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%,-50%);
+		padding: 2rem;
+
+		&__shape {
+			@include shape-tarjeta-detalle(12rem);
+		}
+
+		&__img {
+			height: 100%;																																																																																																																																			
+		}
+
+		&__texto {
+			font-size: $fuente-por-default;
+			text-transform: uppercase;
+			font-weight: 300;
+			//transform: skewX(12deg);
+			color: $color-gris-oscuro-3;
+		}
+	}
+
+}
+
+.tarjeta-contacto--detalle__texto > a.btn-texto {
+	margin-right: 3rem;
+	&:not(:last-child) {
+		
+	}
+	
+}
+

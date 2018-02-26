@@ -1,0 +1,10 @@
+<macz-nav [navitems]="menuNav"></macz-nav>
+<section class="opciones">
+	<div class="row">
+		<div class="fields-container" >
+			<div class="fields-container__group" *ngFor="let opcion of menuPrincipal">
+				<a [routerLink]="opcion.ruta" class="btn btn--azul btn--menu">{{ opcion.titulo }}</a>
+			</div>
+		</div>
+	</div>
+</section>

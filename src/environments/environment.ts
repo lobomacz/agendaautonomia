@@ -4,5 +4,15 @@
 // The list of which env maps to which file can be found in `.angular-cli.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebase: {
+  	apiKey: "AIzaSyADHtFuM_KST7j7MgvO7yjYQ49pqrD1qOQ",
+    authDomain: "agendaautonomia.firebaseapp.com",
+    databaseURL: "https://agendaautonomia.firebaseio.com",
+    projectId: "agendaautonomia",
+    storageBucket: "agendaautonomia.appspot.com",
+    messagingSenderId: "131196472512"
+  },
+  sitetitle1: "Agenda Autonómica",
+  sitetitle2: "del Desarrollo"
 };

@@ -1,0 +1,27 @@
+*,
+*::after,
+*::before {
+	box-sizing: inherit;
+	margin: 0;
+	padding: 0; 
+}
+
+html {
+	//Se usa para definir el tamaño de 1rem
+	font-size: 62.5%;
+}
+
+body{
+	padding: 1rem;
+	box-sizing: border-box;
+}
+
+.principal {
+	background-image: linear-gradient(to right bottom, rgba($color-terciario-claro, .75), rgba($color-terciario-oscuro, .75)), url("./assets/img/cornisland1.jpg");
+	//background-image: linear-gradient(to right bottom, $color-terciario-claro, $color-terciario-oscuro), url("./assets/img/cornisland1.jpg");
+	background-blend-mode: screen;
+	height: 95vh;
+	background-size: cover;
+	position: relative;
+	background-position: top;
+}

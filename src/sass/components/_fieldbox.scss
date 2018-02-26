@@ -1,0 +1,93 @@
+.form-container,
+.fields-container {
+	width: 40rem;
+	background-color: rgba($color-gris-claro, .5);
+	padding: .5rem 1rem;
+	border-radius: 4px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-35%);
+	text-transform: uppercase;
+	text-align: center;
+	box-shadow: 0 1.5rem 2rem rgba($color-negro, .8);
+	backface-visibility: hidden;
+	animation: entradaAparece 1s ease-out;
+
+
+
+	&__group {
+		width: 95%;
+		margin: 1.5rem auto;
+		/*margin-bottom: 1.5rem;
+		
+		&:first-child {
+			margin-top: 1.5rem;
+		}*/
+	}
+
+	&__label {
+		display: inline-block;
+		color: $color-gris-oscuro;
+		font-size: 2rem;
+		font-weight: 300;
+	}
+
+	&__control {
+		width: 95%;
+		font-size: 2rem;
+		border-radius: 3px;
+		background-color: rgba($color-terciario-claro, .8);
+		border: 1px solid $color-gris-oscuro;
+		display: block;
+		margin: 0 auto;
+		padding: 1rem;
+
+		&.ng-valid[required],
+		&.ng-pristine[required]{
+			&:not(form) {
+				border-left: .5rem solid $color-verde-musgo;
+			}
+		}
+		
+
+		&.ng-dirty,
+		&.ng-invalid[required] {
+			&:not(form) {
+				border-left: .5rem solid $color-rojo-oscuro;
+			}
+		}
+	}
+
+	
+}
+
+
+
+.ng-invalid,
+.ng-dirty {
+
+	&.ng-touched {
+		&:not(form) {
+			border-left: .5rem solid $color-rojo-oscuro;
+		}
+	}
+	
+}
+
+.mensaje {
+
+	&--error {
+		color: $color-negro;
+		font-weight: 300;
+		font-size: 1.5rem;
+		font-style: italic;
+		width: 95%;
+		border-radius: 3px;
+		background-color: rgba($color-rojo-oscuro, .4);
+		border: 1px solid $color-gris-oscuro;
+		margin: 0 auto;
+		padding: 1rem;
+		text-align: left;
+	}
+}

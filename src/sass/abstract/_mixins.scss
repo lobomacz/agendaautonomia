@@ -1,0 +1,36 @@
+@mixin clearfix {
+	&::after {
+		content: "";
+		display: table;
+		clear: both;
+	}
+}
+
+@mixin texto-gradiente($color-inicio, $color-final) {
+	display: inline-block;
+	background-image: linear-gradient(to right, $color-inicio, $color-final);
+	-webkit-background-clip: text;
+	color: transparent;
+}
+
+@mixin shape-tarjeta($dimension) {
+	margin-top: 1rem;
+	width: $dimension;
+	height: $dimension;
+	-webkit-clip-path: circle(50% at 50% 50%);
+	clip-path: circle(50% at 50% 50%);
+	-webkit-shape-outside: circle(50% at 50% 50%);
+	shape-outside: circle(50% at 50% 50%);
+	position: relative;
+	float: left;
+	backface-visibility: hidden;
+}
+
+@mixin shape-tarjeta-detalle($dimension){
+	width: $dimension;
+	height: $dimension;
+	-webkit-clip-path: circle(50% at 50% 50%);
+	clip-path: circle(50% at 50% 50%);
+	position: relative;
+	backface-visibility: hidden;
+}
