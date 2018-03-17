@@ -44,3 +44,15 @@
       <a href="#" class="btn" (click)="EliminarContacto($event)">Si</a><a href="#" class="btn" (click)="CerrarModal($event)">No</a>
     </div>
 </div>
+
+<div class="dialogo" [class.dialogo--active]="dialogo_mensaje">
+	<div class="dialog__mensaje" *ngIf="dialogo_mensaje">
+		<div class="dialogo__titulo">
+			{{ mensaje.titulo }}
+		</div>
+		<div class="dialogo__texto">
+			<p><span class="dialogo__texto-principal">{{ mensaje.mensaje }}</span><span class="dialogo_texto-icono">{{ mensaje.icono[mensaje.tipo] }}</span></p>
+		</div>
+		<div class="btn btn--white" (click)="CerrarDialogo($event)">Ok</div>
+	</div>
+</div>
