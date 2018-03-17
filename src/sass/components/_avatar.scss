@@ -1,0 +1,59 @@
+.avatar {
+	background-color: rgba($color-gris-oscuro, .6);
+	//width: 25%;
+	float: right;
+
+	&__figure {
+		cursor: pointer;
+		width: 4.8rem;
+		height: 4.8rem;
+		margin: 0 2rem;
+		float: right;
+		clip-path: circle(50% at 50% 50%);
+		position: relative;
+		transition: all .2s;
+
+		&:hover .avatar__caption {
+			opacity: 1;
+			//transform: translate(-50%, -50%);
+		}
+
+		&:hover .avatar__img {
+			filter: blur(3px) brightness(80%);
+		}
+	}
+
+	&__caption {
+
+		@include centra-elemento;
+		font-family: $fuente-basic;
+		opacity: 0;
+		text-align: center;
+		color: $color-gris-claro;
+		font-size: 2rem;
+		font-weight: 700;
+		backface-visibility: hidden;
+		transition: all .2s;
+
+	}
+
+	&__img {
+		backface-visibility: hidden;
+		width: 100%;
+
+	}
+
+	&__text {
+		color: $color-gris-claro;
+		text-transform: uppercase;
+		font-weight: 700;
+		font-size: 1.4rem;
+		text-align: right;
+		display: inline-block;
+		float: right;
+		padding-left: 2rem;
+		margin-top: .5rem;
+	}
+
+
+}

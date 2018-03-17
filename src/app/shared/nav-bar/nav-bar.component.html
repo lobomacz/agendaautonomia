@@ -1,0 +1,19 @@
+
+<header id="header" class="header">
+	<div class="header__nombre">
+		<p class="header__nombre-texto">{{ titulo_sitio }}</p>
+	</div>
+	<nav class="header__navegacion">
+		<a class="navegacion__link" *ngFor="let link of link_list" (click)="OnNavLink_Click($event,link.ruta)" [innerHtml]="link.icono"></a>
+	</nav>
+	
+	<div class="avatar">
+		<figure class="avatar__figure">
+			<img class="avatar__img" src="./assets/img/unknown-user.png" alt="Avatar del usuario">
+			<figcaption class="avatar__caption">[</figcaption>
+		</figure>
+		<div class="avatar__text">
+			<h4>Juan Pérez</h4>
+		</div>
+	</div>
+</header><!-- /header -->
