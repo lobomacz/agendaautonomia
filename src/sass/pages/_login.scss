@@ -1,11 +1,27 @@
-.contenido {
+.login {
+	height: 95vh;
+	position: relative;
 
-	&__encabezado {
-		
-		&::after {
-			content: "";
-			display: table;
-			clear: both;
-		}
+	&-container {
+		width: 40rem;
+		background-image: linear-gradient(to bottom, rgba($color-gris-claro, .5), rgba($color-gris-oscuro, .5));
+		padding: .5rem 1rem;
+		border-radius: 4px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%,-35%);
+		//text-transform: uppercase;
+		//text-align: center;
+		box-shadow: 0 1.5rem 2rem rgba($color-negro, .8);
+		backface-visibility: hidden;
+		animation: entradaAparece 1s ease-out;
+		color: $color-gris-claro-1;
+	}
+
+	&__button {
+		width: 100%;
+		text-align: center;
+		//margin: 1rem auto;
 	}
 }

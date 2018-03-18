@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { environment } from '../../environments/environment';
 import { OpcionMenu } from '../clases/opcion-menu';
 import { OpcionNav } from '../clases/opcion-nav';
 
@@ -9,16 +8,11 @@ import { OpcionNav } from '../clases/opcion-nav';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-
-	private titulo1:String;
-	private titulo2:String;
-
+	
   private menuPrincipal:Array<OpcionMenu>;
   private menuNav:Array<OpcionNav>;
 
   constructor() {
-  	this.titulo1 = environment.sitetitle1;
-  	this.titulo2 = environment.sitetitle2;
 
     this.menuPrincipal = new Array<OpcionMenu>();
     this.menuPrincipal.push({titulo:'contactos',ruta:'contactos'});

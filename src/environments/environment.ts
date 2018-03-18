@@ -13,6 +13,5 @@ export const environment = {
     storageBucket: "agendaautonomia.appspot.com",
     messagingSenderId: "131196472512"
   },
-  sitetitle1: "Agenda Autonómica",
-  sitetitle2: "del Desarrollo"
+  sitetitle: "Agenda Autonómica del Desarrollo",
 };

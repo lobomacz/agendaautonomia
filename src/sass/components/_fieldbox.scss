@@ -1,23 +1,8 @@
-.form-container,
-.fields-container {
-	width: 40rem;
-	background-color: rgba($color-gris-claro, .5);
-	padding: .5rem 1rem;
-	border-radius: 4px;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%,-35%);
-	text-transform: uppercase;
-	text-align: center;
-	box-shadow: 0 1.5rem 2rem rgba($color-negro, .8);
-	backface-visibility: hidden;
-	animation: entradaAparece 1s ease-out;
+.form {
 
-
-	&__group {
+	&__group:not(:last-child) {
 		width: 95%;
-		margin: 1.5rem auto;
+		margin: 2rem auto;
 		/*margin-bottom: 1.5rem;
 		
 		&:first-child {
@@ -26,21 +11,38 @@
 	}
 
 	&__label {
-		display: inline-block;
-		color: $color-gris-oscuro;
-		font-size: 2rem;
-		font-weight: 300;
+		display: block;
+		color: $color-gris-claro;
+		margin-left: 2.8rem;
+		font-size: 1.2rem;
+		font-weight: 700;
+		transform: translateY(-6.4rem);
+		transition: all .3s;
 	}
 
-	&__control {
+	&__input:placeholder-shown + &__label {
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(-3.8rem);
+	}
+
+	&__input {
+		color: inherit;
 		width: 95%;
-		font-size: 2rem;
+		font-family: inherit;
+		font-size: 1.5rem;
 		border-radius: 3px;
-		background-color: rgba($color-terciario-claro, .8);
-		border: 1px solid $color-gris-oscuro;
+		background-color: rgba($color-gris-claro, .5);
+		border: none;
+		border-bottom: 3px solid transparent;
 		display: block;
 		margin: 0 auto;
-		padding: 1rem;
+		padding: 1rem 1.5rem;
+		transition: all .3s;
+
+		&::-webkit-input-placeholder {
+			color: $color-gris-oscuro-2;
+		}
 
 		&.ng-valid[required],
 		&.ng-pristine[required]{
@@ -56,11 +58,15 @@
 				border-left: .5rem solid $color-rojo-oscuro;
 			}
 		}
+
+		&:focus {
+			outline: none;
+			box-shadow: 0 1rem 2rem rgba($color-gris-claro-2, .1);
+			border-bottom: 3px solid $color-terciario-oscuro;
+		}
 	}
 
-	
 }
-
 
 
 .ng-invalid,
@@ -88,5 +94,7 @@
 		margin: 0 auto;
 		padding: 1rem;
 		text-align: left;
+		transform: translateY(-2.5rem);
+		z-index: 1;
 	}
 }
