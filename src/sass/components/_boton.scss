@@ -30,6 +30,10 @@
 	&--verde {
 		background-image: linear-gradient(to right bottom, $color-primario-claro, $color-primario-oscuro);
 		color: $color-negro;
+		&:not(:last-child) {
+			margin-right: 1rem;
+		}
+		
 	}
 
 	&--azul {

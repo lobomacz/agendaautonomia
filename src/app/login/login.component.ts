@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';//28022018 Se removió FormsModule de los imports
 import { AngularFireAuth } from 'angularfire2/auth';
-import { environment } from '../../environments/environment';
+import { NavBarComponent } from '../shared/nav-bar/nav-bar.component';
 import * as firebase from 'firebase/app';
 
 
@@ -13,12 +13,9 @@ import * as firebase from 'firebase/app';
 })
 export class LoginComponent implements OnInit {
 
-  private titulo1:String;
-  private titulo2:String;
+  private usuario:boolean;
 
   constructor(private afAuth:AngularFireAuth, private router:Router) {
-    this.titulo1 = environment.sitetitle1;
-    this.titulo2 = environment.sitetitle2;
     
 		this.revisaSesion();
   }
@@ -28,6 +25,9 @@ export class LoginComponent implements OnInit {
   }
 
   revisaSesion():any{
+
+      this.usuario = false;
+
       let suscripcion = this.afAuth.authState.forEach(value => {
         console.log(value);
       });

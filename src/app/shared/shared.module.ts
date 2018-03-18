@@ -3,14 +3,14 @@ import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { NavComponent } from './nav/nav.component';
 import { DialogComponent } from './dialog/dialog.component';
-import { OverlayComponent } from './overlay/overlay.component';
+import { NavBarComponent } from './nav-bar/nav-bar.component';
 
 
 @NgModule({
   imports: [
     CommonModule
   ],
-  declarations: [NavComponent, DialogComponent, OverlayComponent],
-  exports: [NavComponent, DialogComponent, OverlayComponent]
+  declarations: [NavComponent, DialogComponent, NavBarComponent],
+  exports: [NavComponent, DialogComponent, NavBarComponent]
 })
 export class SharedModule { }
