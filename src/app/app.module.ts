@@ -9,6 +9,7 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AgendaService } from './agenda.service';
 
 import { CoreModule } from '../app/core/core.module';
 import { ShellComponent } from '../app/core/shell/shell.component';
@@ -27,7 +28,9 @@ import { ShellComponent } from '../app/core/shell/shell.component';
     AngularFireStorageModule,
     AngularFireAuthModule,
   ],
-  providers: [],
+  providers: [
+    AgendaService
+  ],
   bootstrap: [ShellComponent]
 })
 export class AppModule { }
