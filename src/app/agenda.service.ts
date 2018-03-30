@@ -16,6 +16,18 @@ export class AgendaService {
 	private _storage:AngularFireStorage;
 	private _auth:AngularFireAuth;
 
-  constructor() { }
+  constructor(db:AngularFireDatabase,storage:AngularFireStorage,auth:AngularFireAuth) {
+  	this._db = db;
+  	this._storage = storage;
+  	this._auth = auth;
+  }
+
+  public GetContactoObservable(contactSubject:BehaviorSubject<string | null>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
+  	return contactSubject.switchMap(instit => this._db.list('/contactos', ref => instit ? ref.orderByChild('organización').equalTo(instit) : ref).snapshotChanges());
+  }
+
+  public GetAllOrganizaciones():Observable<any[]>{
+  	return this._db.list('/organizaciones').valueChanges();
+  }
 
 }
