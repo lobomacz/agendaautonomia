@@ -11,25 +11,25 @@ import { EliminarComponent } from './eliminar/eliminar.component';
 
 
 const routes:Routes = [
-	{
-		path: '',
-		component: ContactosComponent
-	},
+  {
+    path: 'ver/:id',
+    component: DetalleComponent
+  },
+  {
+    path: 'editar/:id',
+    component: EditarComponent
+  },
+  {
+    path: 'eliminar/:id',
+    component: EliminarComponent
+  },
   {
     path: 'nuevo',
     component: NuevoComponent
   },
   {
-    path: 'detalle/:id',
-    component: DetalleComponent
-  },
-  {
-    path: 'editar/:id',
-    component:EditarComponent
-  },
-  {
-    path: 'eliminar/:id',
-    component: EliminarComponent
+    path: '',
+    component: ContactosComponent
   }
 ];
 

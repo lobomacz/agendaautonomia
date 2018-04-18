@@ -13,10 +13,11 @@ import { AgendaService } from './agenda.service';
 
 import { CoreModule } from '../app/core/core.module';
 import { ShellComponent } from '../app/core/shell/shell.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 
 @NgModule({
-  declarations: [],
+  declarations: [PageNotFoundComponent],
   imports: [
     BrowserModule,
     FormsModule,

@@ -1,0 +1,38 @@
+%navegacion__link__extend {
+	&,
+	&:link,
+	&:visited {
+		padding-top: .3rem;
+		font-family: $fuente-basic;
+		color: $color-blanco;
+		font-size: 2.5rem;
+		font-weight: 700;
+		text-decoration: none;
+		//border-right: 1px solid $color-gris-claro-2;
+		display: inline-block;
+		width: 5rem;
+		text-align: center;
+		height: 100%;
+		transition: all .2s;
+	}
+
+	&:hover {
+		text-decoration: none;
+		//color: $color-primario-oscuro;
+		background-color: rgba($color-gris-oscuro-2, .6);
+		cursor: pointer;
+		font-size: 2.7rem;
+		padding-top: 0;
+	}
+}
+
+%navegacion__boton__extend {
+	display: inline-block;
+	height: 100%;
+	position: relative;
+}
+
+%navegacion__boton__hover__extend {
+	width: 6rem;
+	opacity: 1;
+}

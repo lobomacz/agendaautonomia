@@ -13,5 +13,5 @@ export const environment = {
     storageBucket: "agendaautonomia.appspot.com",
     messagingSenderId: "131196472512"
   },
-  sitetitle: "Agenda Autonómica del Desarrollo"
+  sitetitle: "GRACCS"
 };

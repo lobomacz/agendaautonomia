@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import "./sass/abstract/animations";
 @import "./sass/abstract/variables";
+@import "./sass/abstract/extends";
 @import "./sass/abstract/mixins";
 
 @import "./sass/base/base";
@@ -13,12 +14,15 @@
 @import "./sass/components/fieldbox";
 @import "./sass/components/navbar";
 @import "./sass/components/navigation";
+@import "./sass/components/tabla-de-bloques";
 @import "./sass/components/tarjeta";
 
 @import "./sass/layout/grid";
 
 @import "./sass/pages/contactos";
+@import "./sass/pages/home";
 @import "./sass/pages/login";
+@import "./sass/pages/organizaciones";
 
 @import "./sass/vendors/twitter";
 

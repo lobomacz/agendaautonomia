@@ -30,4 +30,10 @@ export class AgendaService {
   	return this._db.list('/organizaciones').valueChanges();
   }
 
+  public AuthUser():Observable<any>{
+
+  	return this._auth.authState;
+  	
+  }
+
 }

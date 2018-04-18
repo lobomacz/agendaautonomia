@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
 import { NavComponent } from './nav/nav.component';
 import { DialogComponent } from './dialog/dialog.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';

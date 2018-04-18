@@ -1,34 +1,6 @@
 <section class="seccion-contactos">
-	<macz-nav [navitems]="menuNav"></macz-nav>
+	<macz-nav-bar [usuario]="usuario"></macz-nav-bar>
 	<h2 class="encabezado-secundario u-margin-bottom-medium">Lista de contactos de instituciones</h2>
-	<div class="row">
-		<div class="contenedor__controles">
-			
-		</div>
-
-
-
-		<!--
-		<table class="tabla-datos">
-			<caption>table title and/or explanatory text</caption>
-			<thead class="tabla-datos__encabezado">
-				<tr>
-					<th></th>
-					<th>NOMBRE</th>
-					<th>INSTITUCIÓN</th>
-					<th>CARGO</th>
-				</tr>
-			</thead>
-			<tbody class="tabla-datos__contenido">
-				<tr class="tabla-datos__fila" *ngFor="let contacto of contactosObservable | async as contactos; odd as isOdd" [fila-impar]="isOdd">
-					<td class="tabla-datos__celda">{{ contacto.foto }}</td>
-					<td class="tabla-datos__celda">{{ contacto.nombre }}</td>
-					<td class="tabla-datos__celda">{{ contacto.organizacion }}</td>
-					<td class="tabla-datos__celda">{{ contacto.cargo }}</td>
-				</tr>
-			</tbody>
-		</table> -->
-	</div>
 	<div class="row">
 		<div class="col-1-de-3  u-margin-bottom-medium" *ngFor="let contacto of contactos | async">
 			<div class="tarjeta-contacto tarjeta-contacto--lista">
@@ -45,7 +17,7 @@
 					<p>
 						Cargo: {{ contacto.payload.val().cargo }}
 					</p>
-					<p><a routerLink="detalle/{{ contacto.key }}" class="btn-texto">Ver contacto</a></p>
+					<p><a routerLink="ver/{{ contacto.key }}" class="btn-texto">Ver contacto</a></p>
 				</div>
 			</div>
 		</div>

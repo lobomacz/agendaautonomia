@@ -5,7 +5,7 @@ import { ShellComponent } from './shell/shell.component';
 
 const routes: Routes = [
 	{
-		path: '',
+		path: 'login',
 		loadChildren: './../login/login.module#LoginModule'
 	},
 	{
@@ -23,7 +23,16 @@ const routes: Routes = [
 	{
 		path: 'documentos',
 		loadChildren: './../documentos/documentos.module#DocumentosModule'
-	}
+	},
+	{
+		path: 'organizaciones',
+		loadChildren: './../organizaciones/organizaciones.module#OrganizacionesModule'
+	},
+	{
+		path: '',
+		redirectTo: '/home',
+		pathMatch: 'full'
+	},
 ];
 
 @NgModule({

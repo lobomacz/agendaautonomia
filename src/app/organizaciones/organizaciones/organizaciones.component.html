@@ -1,0 +1,41 @@
+<macz-nav-bar [usuario]="usuario"></macz-nav-bar>
+<section class="seccion-organizaciones">
+	<h2 class="encabezado-secundario u-margin-bottom-medium">Lista de Organizaciones</h2>
+	<div class="row">
+		<div class="col-1-de-3">
+			<div class="filter">
+				<form action="#" class="filter__form">
+					<div class="filter__field-group">
+						
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	
+	<div class="tabla-bloques">
+		<div class="tabla-bloques__header">
+			<div class="tabla-bloques__cell">Organización</div>
+			<div class="tabla-bloques__cell">Nombre</div>
+			<div class="tabla-bloques__cell">Tipo de Organización</div>
+		</div>
+		<div class="tabla-bloques__filas">
+			<div class="tabla-bloques__fila" *ngFor="let organizacion of lista_organizaciones | async">
+				<div class="tabla-bloques__columna tabla-bloques__columna--siglas" *ngIf="organizacion">
+					{{ organizacion.key }}
+				</div>
+				<div class="tabla-bloques__columna tabla-bloques__columna--texto" *ngIf="organizacion">
+					{{ organizacion.payload.val().nombre }}
+				</div>
+				<div class="tabla-bloques__columna tabla-bloques__columna--texto" *ngIf="organizacion">
+					{{ organizacion.payload.val().tipo }}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+<p>
+  organizaciones works!
+</p>

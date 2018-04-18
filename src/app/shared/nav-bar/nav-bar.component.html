@@ -4,10 +4,16 @@
 		<p class="header__nombre-texto">{{ titulo_sitio }}</p>
 	</div>
 	<nav class="header__navegacion">
-		<a class="navegacion__link" *ngFor="let link of link_list" (click)="OnNavLink_Click($event,link.ruta)" [innerHtml]="link.icono"></a>
+		<div class="navegacion__boton"  *ngFor="let link of link_list">
+			<a class="navegacion__link"(click)="OnNavLink_Click($event,link.ruta)" [innerHtml]="link.icono"></a>
+			<span class="navegacion__hint">
+				{{ link.titulo }}
+			</span>
+		</div>
+		
 	</nav>
 	
-	<div class="avatar">
+	<div class="avatar" *ngIf="usuario; else visitante">
 		<figure class="avatar__figure">
 			<img class="avatar__img" src="./assets/img/unknown-user.png" alt="Avatar del usuario">
 			<figcaption class="avatar__caption">[</figcaption>
@@ -16,4 +22,10 @@
 			<h4>Juan Pérez</h4>
 		</div>
 	</div>
+	<ng-template #visitante>
+		<div class="navegacion__boton--login">
+			<a routerLink="login" class="navegacion__link--login" (click)="OnNavLink_Click($event,'login')">&#xe020;</a>
+			<span class="navegacion__hint">Entrar</span>
+		</div>
+	</ng-template>
 </header><!-- /header -->

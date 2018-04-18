@@ -37,7 +37,6 @@ export class LoginComponent implements OnInit {
     
     let valores:any = loginform.value;
 
-    console.log(valores.correo);
 
     this.router.navigateByUrl('home');
 
