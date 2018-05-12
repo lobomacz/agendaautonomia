@@ -1,0 +1,10 @@
+<section class="seccion-organizaciones__detalle">
+	<div class="detalle-elemento" *ngIf="organizacion">
+			<h1 class="encabezado-primario">{{ idOrg | uppercase }}</h1>
+			<ul>
+				<li>{{ organizacion.nombre }}</li>
+				<li>{{ organizacion.direccion }}</li>
+				<li>{{ organizacion.sitio }}</li>
+			</ul>
+	</div>
+</section>

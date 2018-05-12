@@ -4,8 +4,22 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { OrganizacionesComponent } from './organizaciones/organizaciones.component';
 import { SharedModule } from '../shared/shared.module';
+import { VerOrganizacionesComponent } from './ver-organizaciones/ver-organizaciones.component';
+import { EditarOrganizacionesComponent } from './editar-organizaciones/editar-organizaciones.component';
 
 const routes:Routes = [
+  {
+    path: 'ver/:id',
+    component:VerOrganizacionesComponent
+  },
+  {
+    path: 'ver',
+    component: VerOrganizacionesComponent
+  },
+  {
+    path: 'editar/:id',
+
+  },
 	{
 		path: '',
 		component: OrganizacionesComponent
@@ -19,6 +33,10 @@ const routes:Routes = [
     FormsModule,
     SharedModule
   ],
-  declarations: [OrganizacionesComponent]
+  declarations: [
+  OrganizacionesComponent, 
+  VerOrganizacionesComponent,
+  EditarOrganizacionesComponent
+  ]
 })
 export class OrganizacionesModule { }

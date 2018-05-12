@@ -69,7 +69,8 @@
 		
 		&--login {
 			@extend %navegacion__link__extend;
-			transform: rotate(90deg);
+			font-family: $fuente-macz;
+			//transform: rotate(90deg);
 		}
 	}
 

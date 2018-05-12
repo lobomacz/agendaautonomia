@@ -22,6 +22,7 @@ export class EditarComponent implements OnInit {
 	private mensaje:Mensaje;
 	private dialogo_mensaje:boolean;
 	private _router:Router;
+  private usuario:any;
 
   constructor(db:AngularFireDatabase,router:Router,route:ActivatedRoute) {
   	this._db = db;

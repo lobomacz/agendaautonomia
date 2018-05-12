@@ -12,6 +12,7 @@ import { Mensaje } from '../../clases/mensaje';
 })
 export class DetalleComponent implements OnInit {
 
+  private usuario:any;
 	private contacto:Funcionario;
 	private contactoRef:AngularFireObject<any>;
 	private contactoObservable:Observable<any>;

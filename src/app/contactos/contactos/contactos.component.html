@@ -1,5 +1,8 @@
+<macz-nav-bar [usuario]="usuario"></macz-nav-bar>
 <section class="seccion-contactos">
-	<macz-nav-bar [usuario]="usuario"></macz-nav-bar>
+	<div class="fab-button">
+		<a class="fab-button__link" routerLink="nuevo">&#xe20d;</a>
+	</div>
 	<h2 class="encabezado-secundario u-margin-bottom-medium">Lista de contactos de instituciones</h2>
 	<div class="row">
 		<div class="col-1-de-3  u-margin-bottom-medium" *ngFor="let contacto of contactos | async">

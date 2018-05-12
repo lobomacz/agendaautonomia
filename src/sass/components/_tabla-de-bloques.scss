@@ -1,0 +1,39 @@
+.tabla-bloques {
+
+	display: table;
+	width: 90%;
+	padding: 2rem;
+	border: 1px solid $color-gris-claro-2;
+	margin: 5rem auto;
+
+	&__header {
+		
+		display: table-header-group;
+		font-size: 2rem;
+		font-weight: 400;
+
+		&-cell {
+			display: table-cell;
+			width: 6rem;
+			border: 1px solid $color-gris-claro-2;
+		}
+	}
+
+	&__filas {
+		display: table-row-group;
+	}
+
+	&__fila {
+		display: table-row;
+		transition: all .2s;
+
+		&:hover {
+			background-color: rgba($color-gris-claro, .6);
+			color: $color-blanco;
+		}
+	}
+
+	&__columna {
+		display: table-cell;
+	}
+}

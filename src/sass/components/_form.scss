@@ -1,14 +1,21 @@
 .form {
 
-	&__group:not(:last-child) {
-		width: 95%;
-		margin: 2rem auto;
-		/*margin-bottom: 1.5rem;
-		
-		&:first-child {
-			margin-top: 1.5rem;
-		}*/
+	background-color: rgba($color-gris-claro-1, .2);
+	border-radius: 1rem;
+	color: $color-gris-claro;
+	overflow: hidden;
+	box-shadow: 0 2rem 3rem rgba($color-negro, .4);
+	//@include centra-elemento;
+
+	&__group {
+		padding: 1.5rem;
+		background-color: $color-gris-oscuro;
+
+		&-option{
+			display: inline-block;
+		}
 	}
+
 
 	&__label {
 		display: block;
@@ -66,35 +73,49 @@
 		}
 	}
 
-}
-
-
-.ng-invalid,
-.ng-dirty {
-
-	&.ng-touched {
-		&:not(form) {
-			border-left: .5rem solid $color-rojo-oscuro;
-		}
+	&__radio-group {
+		display: inline-block;
 	}
-	
-}
 
-.mensaje {
+	&__radio-input {
+		display: none;
+	}
 
-	&--error {
-		color: $color-negro;
-		font-weight: 300;
-		font-size: 1.5rem;
-		font-style: italic;
-		width: 95%;
-		border-radius: 3px;
-		background-color: rgba($color-rojo-oscuro, .4);
-		border: 1px solid $color-gris-oscuro;
-		margin: 0 auto;
-		padding: 1rem;
-		text-align: left;
-		transform: translateY(-2.5rem);
-		z-index: 1;
+	&__radio-label {
+		font-size: $fuente-por-default;
+		cursor: pointer;
+		position: relative;
+		padding-left: 4rem;
+		margin-left: 2rem;
+	}
+
+	&__radio-button {
+
+		height: 3rem;
+		width: 3rem;
+		display: inline-block;
+		border: 5px solid $color-gris-oscuro-3;
+		border-radius: 50%;
+		position: absolute;
+		top: -.4rem;
+		left: 0;
+		backface-visibility: hidden;
+
+		&::after {
+			content: "";
+			display: block;
+			border-radius: 50%;
+			width: 1.2rem;
+			height: 1.2rem;
+			@include centra-elemento;
+			background-color: $color-gris-claro;
+			opacity: 0;
+			transition: opacity .2s;
+		}
+
+	}
+
+	&__radio-input:checked + &__radio-label &__radio-button::after {
+		opacity: 1;
 	}
 }

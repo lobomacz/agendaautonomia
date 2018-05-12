@@ -1,13 +1,41 @@
 <macz-nav-bar [usuario]="usuario"></macz-nav-bar>
 <section class="seccion-organizaciones">
-	<h2 class="encabezado-secundario u-margin-bottom-medium">Lista de Organizaciones</h2>
+	<div class="fab-button">
+		<a class="fab-button__link" routerLink="nuevo">&#xe20d;</a>
+	</div>
+	<h2 class="encabezado-secundario u-margin-bottom-medium">Lista de Instituciones</h2>
 	<div class="row">
-		<div class="col-1-de-3">
+		<div class="col-1-de-2">
 			<div class="filter">
-				<form action="#" class="filter__form">
-					<div class="filter__field-group">
-						
+				<form #filterForm="ngForm" accept-charset="utf-8" class="form">
+					<div class="form__group">
+						<fieldset>
+							<legend>Filtrar por Tipo:</legend>
+							<div class="form__group-option">
+								<input #todas class="form__radio-input" id="optTodas" type="radio" name="tipoOrg" [checked]="tipo_filtro=='todas'" value="todas" (click)="setTipoFiltro(todas.value)" >
+								<label class="form__radio-label" for="optTodas">
+									<span class="form__radio-button"></span>
+									Todas
+								</label>
+							</div>
+							<div class="form__group-option">
+								<input #gobierno id="optGobierno" class="form__radio-input" type="radio" name="tipoOrg" value="gobierno" (click)="setTipoFiltro(gobierno.value)">
+								<label class="form__radio-label" for="optGobierno">
+									<span class="form__radio-button"></span>
+									Gobierno
+								</label>
+							</div>
+							<div class="form__group-option">
+								<input #ong class="form__radio-input" id="optOng" type="radio" name="tipoOrg" value="ong" (click)="setTipoFiltro(ong.value)">
+								<label class="form__radio-label" for="optOng">
+									<span class="form__radio-button"></span>
+									ONG
+								</label>
+							</div>
+							
+						</fieldset>
 					</div>
+					
 				</form>
 			</div>
 		</div>
@@ -15,27 +43,25 @@
 	
 	<div class="tabla-bloques">
 		<div class="tabla-bloques__header">
-			<div class="tabla-bloques__cell">Organización</div>
-			<div class="tabla-bloques__cell">Nombre</div>
-			<div class="tabla-bloques__cell">Tipo de Organización</div>
+			<div class="tabla-bloques__header-cell">Institución</div>
+			<div class="tabla-bloques__header-cell">Nombre</div>
+			<div class="tabla-bloques__header-cell">Tipo</div>
 		</div>
 		<div class="tabla-bloques__filas">
-			<div class="tabla-bloques__fila" *ngFor="let organizacion of lista_organizaciones | async">
-				<div class="tabla-bloques__columna tabla-bloques__columna--siglas" *ngIf="organizacion">
-					{{ organizacion.key }}
+			<div class="tabla-bloques__fila" [ngClass]="{'fila-impar': impar}" *ngFor="let organizacion of organizaciones$ | async; odd as impar">
+				<div class="tabla-bloques__columna" *ngIf="organizacion != null">
+					<a routerLink="ver/{{ organizacion.key }}" title="">
+						{{ organizacion.key | uppercase }}
+					</a>
 				</div>
-				<div class="tabla-bloques__columna tabla-bloques__columna--texto" *ngIf="organizacion">
-					{{ organizacion.payload.val().nombre }}
+				<div class="tabla-bloques__columna" *ngIf="organizacion != null">
+					{{ organizacion.payload.val().nombre | uppercase }}
 				</div>
-				<div class="tabla-bloques__columna tabla-bloques__columna--texto" *ngIf="organizacion">
-					{{ organizacion.payload.val().tipo }}
+				<div class="tabla-bloques__columna" *ngIf="organizacion != null">
+					{{ organizacion.payload.val().tipo | uppercase }}
 				</div>
 			</div>
 		</div>
 	</div>
+	
 </section>
-
-
-<p>
-  organizaciones works!
-</p>

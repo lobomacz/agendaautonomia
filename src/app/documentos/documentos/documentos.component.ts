@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'macz-documentos',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./documentos.component.scss']
 })
 export class DocumentosComponent implements OnInit {
+
+	@Input() private usuario:boolean;
 
   constructor() { }
 

@@ -30,6 +30,14 @@ export class AgendaService {
   	return this._db.list('/organizaciones').valueChanges();
   }
 
+  public GetOrganizacionesPorTipo(organizacionesSub:BehaviorSubject<string | null>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
+    return organizacionesSub.switchMap(tipo_org => this._db.list('/organizaciones', ref => tipo_org ? ref.orderByChild('tipo').equalTo(tipo_org) : ref).snapshotChanges());
+  }
+
+  public GetOrganizacion(_id:string):Observable<any>{
+    return this._db.object('/organizaciones/'+_id).valueChanges();
+  }
+
   public AuthUser():Observable<any>{
 
   	return this._auth.authState;

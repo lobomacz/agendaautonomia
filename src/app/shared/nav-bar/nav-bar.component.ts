@@ -20,17 +20,21 @@ export class NavBarComponent implements OnInit {
   	this.titulo_sitio = environment.sitetitle;
 
   	this.link_list = [
-    	{
-    		titulo:'Contactos',icono:'o',ruta:'contactos'
-    	},
+      {
+        titulo:'Contactos',icono:'o',ruta:'contactos'
+      },
+      {
+        titulo:'Instituciones',icono:'&#xe028;',ruta:'organizaciones'
+      },
     	{
     		titulo:'Documentos',icono:'N',ruta:'documentos'
     	},
-    	{
-    		titulo:'Instituciones',icono:'&#xe028;',ruta:'organizaciones'
-    	},
+    	
       {
         titulo:'Proyectos',icono:'?',ruta:'proyectos'
+      },
+      {
+        titulo:'Monitoreo',icono:'a',ruta:'monitoreo'
       }
   	];
   }

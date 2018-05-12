@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AgendaService } from '../../agenda.service';
+import { Funcionario } from '../../clases/funcionario';
+
 
 @Component({
   selector: 'macz-nuevo',
@@ -7,7 +12,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NuevoComponent implements OnInit {
 
-  constructor() { }
+	private usuario:any;
+
+  constructor(_service:AgendaService) { }
 
   ngOnInit() {
   }
