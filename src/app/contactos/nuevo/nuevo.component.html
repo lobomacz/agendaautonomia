@@ -7,7 +7,7 @@
 					<figcaption>explanatory caption</figcaption>
 					<img src="{{ funcionario.foto }}" alt="Foto de {{ funcionario.nombre }}">
 				</figure>
-				<input type="file" name="foto" (change)="console.log('archivo');">
+				<input type="file" #foto name="foto" (change)="OnFotoChange(foto)">
 			</div>
 			
 			<div class="form-container__group">
