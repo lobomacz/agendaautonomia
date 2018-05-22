@@ -30,7 +30,6 @@ export class OrganizacionesComponent implements OnInit {
   }
 
   setTipoFiltro(tipo:string):void{
-  	console.log(tipo);
   	this.tipo_filtro = tipo;
 
   	if (this.tipo_filtro != 'todas') {

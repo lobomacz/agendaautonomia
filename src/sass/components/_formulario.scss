@@ -1,0 +1,53 @@
+.formulario {
+	&-container {
+		display: inline-block;
+		padding: 5rem;
+		text-align: left;
+		@include centra-elemento;
+		background-color: rgba($color-gris-claro, .7);
+		border-radius: 1rem;
+
+		&__image {
+			width: 25.6rem;
+			height: 25.6rem;
+			border-radius: 5px;
+			margin-bottom: 2rem;
+		}
+
+		&__group {
+			font-size: 1.3rem;
+		}
+
+		&__control {
+			width: 60%;
+			height: 2.5rem;
+			margin-left: 1rem;
+			padding-left: 1rem;
+			border-radius: 5px;
+		}
+
+		&__boton-archivo {
+			//width: 4rem;
+			height: 4rem;
+			background-color: $color-blanco;
+			border: 1px solid $color-gris-oscuro;
+			border-radius: 5px;
+			text-align: center;
+			padding: 0 .6rem .6rem;
+		}
+
+		&__icono-archivo {
+			font-size: 2rem;
+			color: $color-gris-oscuro;
+			font-family: $fuente-macz;
+		}
+
+		&__input-archivo {
+			display: none;
+		}
+	}
+}
+
+input[type="file"] {
+	display: none;
+}

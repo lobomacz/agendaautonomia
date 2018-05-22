@@ -1,63 +1,60 @@
 <macz-nav-bar [usuario]="usuario"></macz-nav-bar>
 <section class="seccion-nuevo-usuario">
-	<div class="form-container">
-		<form #editForm="ngForm" accept-charset="utf-8">
-			<div class="form-container__group">
-				<figure>
-					<figcaption>explanatory caption</figcaption>
-					<img src="{{ funcionario.foto }}" alt="Foto de {{ funcionario.nombre }}">
-				</figure>
-				<input type="file" #foto name="foto" (change)="OnFotoChange(foto)">
+	<div class="formulario-container">
+		<form #contactForm="ngForm" accept-charset="utf-8">
+			<div class="formulario-container__group">
+				<img class="formulario-container__image" src="{{ funcionario.foto }}" alt="Foto de {{ funcionario.nombre }}">
 			</div>
 			
-			<div class="form-container__group">
+			<div class="formulario-container__group">
 				<label for="nombre">Nombre</label>
-				<input class="form-container__control" [ngModel]="funcionario.nombre | uppercase" type="text" #nombre="ngModel" name="nombre" required placeholder="Nombre Apellido">
+				<input class="formulario-container__control" [(ngModel)]="funcionario.nombre" type="text" #nombre="ngModel" name="nombre" required placeholder="Nombre y Apellido">
 				<div class="mensaje mensaje--error" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
 					<div *ngIf="nombre.errors.required">
 						El campo nombre es requerido.
 					</div>
 				</div>
+				<label for="foto" class="formulario-container__boton-archivo">Foto&nbsp;<span class="formulario-container__icono-archivo">&#xe072;</span></label>
+				<input class="formulario-container__input-archivo" type="file" #foto id="foto" name="foto" (change)="OnFotoChange(foto)" accept="image/jpeg|image/png|image/jpg">
 			</div>
-			<div class="form-container__group">
-				<label for="organizacion">Organización</label>
-				<select class="form-container__control" name="organizacion" [ngModel]="funcionario.organizacion" required>
-					<option *ngFor="let org of organizaciones | async" value="{{ org.key }}">{{ org.payload.val().nombre | uppercase }}</option>
+			<div class="formulario-container__group">
+				<label for="organizacion">Institución</label>
+				<select class="formulario-container__control" name="organizacion" [(ngModel)]="funcionario.organizacion" required>
+					<option *ngFor="let org of organizaciones | async" value="{{ org.key }}">{{ org.key | uppercase }}</option>
 				</select>
 			</div>
-			<div class="form-container__group">
+			<div class="formulario-container__group">
 				<label for="cargo">Cargo</label>
-				<input class="form-container__control" type="text" name="cargo" [ngModel]="funcionario.cargo | uppercase" placeholder="Cargo" #cargo="ngModel" id="cargo" required>
+				<input class="formulario-container__control" type="text" name="cargo" [(ngModel)]="funcionario.cargo" placeholder="Cargo" #cargo="ngModel" id="cargo" required>
 			</div>
-			<div class="form-container__group">
+			<div class="formulario-container__group">
 				<label for="region">Región</label>
-				<select name="region" id="region" required [ngModel]="funcionario.region" placeholder="Seleccione">
-					<option *ngFor="let region of regiones | async" value="region.key">{{ region.payload.val().nombre }}</option>
-					option
+				<select class="formulario-container__control" name="region" id="region" required #region [(ngModel)]="funcionario.region" (change)="OnSelectRegion()">
+					<option *ngFor="let region of regiones | async" value="{{ region.key }}">{{ region.key | uppercase }}</option>
 				</select>
 			</div>
-			<div class="form-container__group">
+			<div class="formulario-container__group">
 				<label for="municipio">Municipio</label>
-				<select name="municipio" id="municipio" required [ngModel]="funcionario.municipio" placeholder="Seleccione">
-					<option *ngFor="let municipio of municipios | async" value="municipio.key">{{ municipio.payload.val().nombre }}</option>
+				<select class="formulario-container__control" name="municipio" id="municipio" required [(ngModel)]="funcionario.municipio" placeholder="Seleccione">
+					<option *ngFor="let municipio of municipios | async" value="{{ municipio.key }}">{{ municipio.payload.val().nombre }}</option>
 					option
 				</select>
 			</div>
-			<div class="form-container__group">
+			<div class="formulario-container__group">
 				<label for="email">Correo</label>
-				<input class="form-container__control" type="email" name="correo" [ngModel]="funcionario.correo" placeholder="Correo" #correo="ngModel" id="correo" required>
+				<input class="formulario-container__control" type="email" name="correo" [(ngModel)]="funcionario.correo" placeholder="Correo" #correo="ngModel" id="correo" required>
 			</div>
-			<div class="form-container__group">
+			<div class="formulario-container__group">
 				<label for="telefono">Teléfono</label>
-				<input class="form-container__control" type="text" name="telefono" [ngModel]="funcionario.telefono" placeholder="Teléfono" #telefono="ngModel" id="telefono" required>
+				<input class="formulario-container__control" type="text" name="telefono" [(ngModel)]="funcionario.telefono" placeholder="Teléfono" #telefono="ngModel" id="telefono" required>
 			</div>
-			<div class="form-container__group">
+			<div class="formulario-container__group">
 				<label for="movil">Móvil</label>
-				<input class="form-container__control" type="text" name="movil" [ngModel]="funcionario.movil | uppercase" placeholder="Móvil" #movil="ngModel" id="movil" required>
+				<input class="formulario-container__control" type="text" name="movil" [(ngModel)]="funcionario.movil" placeholder="Móvil" #movil="ngModel" id="movil" required>
+			</div>
+			<div class="formulario-container__group">
+				<input class="btn btn-blanco" [disabled]="!contactForm.form.valid" type="button" name="guardar" value="{{ nuevo == true ? 'Guardar' : 'Actualizar' }}">
 			</div>
 		</form>
 	</div>
 </section>
-<p>
-  nuevo works!
-</p>

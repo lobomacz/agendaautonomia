@@ -51,6 +51,9 @@
 			color: $color-gris-oscuro-2;
 		}
 
+		//REVISAR LA ACTIVACION DE ESTILO 
+		//PARA CAMPOS VALIDOS Y NO VALIDOS
+
 		&.ng-valid[required],
 		&.ng-pristine[required]{
 			&:not(form) {

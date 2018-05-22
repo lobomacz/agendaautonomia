@@ -26,8 +26,8 @@ export class AgendaService {
   	return contactSubject.switchMap(instit => this._db.list('/contactos', ref => instit ? ref.orderByChild('organización').equalTo(instit) : ref).snapshotChanges());
   }
 
-  public GetAllOrganizaciones():Observable<any[]>{
-  	return this._db.list('/organizaciones').valueChanges();
+  public GetAllOrganizaciones():Observable<AngularFireAction<DatabaseSnapshot>[]>{
+  	return this._db.list('/organizaciones').snapshotChanges();
   }
 
   public GetOrganizacionesPorTipo(organizacionesSub:BehaviorSubject<string | null>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
@@ -38,10 +38,29 @@ export class AgendaService {
     return this._db.object('/organizaciones/'+_id).valueChanges();
   }
 
+  public GetRegiones():Observable<AngularFireAction<DatabaseSnapshot>[]>{
+    return this._db.list('/regiones').snapshotChanges();
+  }
+
+  public GetMunicipiosPorRegion(municipioSubject:BehaviorSubject<string | null>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
+    return municipioSubject.switchMap(reg => this._db.list('/municipios', ref => reg ? ref.orderByChild('region').equalTo(reg) : ref).snapshotChanges());
+  }
+
   public AuthUser():Observable<any>{
 
   	return this._auth.authState;
   	
+  }
+
+  public GuardaFotoContacto(nombre:string, archivo:any):Observable<string>{
+    //this._storage.ref('/user_imgs/').putString(nombre);
+    let ref = this._storage.ref('/user_imgs/'+nombre);
+
+    return ref.put(archivo).downloadURL();
+  }
+
+  public BorraImagen(imagenUrl:string){
+    this._storage.ref(imagenUrl).delete();
   }
 
 }

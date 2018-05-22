@@ -23,6 +23,8 @@ export class EditarComponent implements OnInit {
 	private dialogo_mensaje:boolean;
 	private _router:Router;
   private usuario:any;
+  private guardado:boolean;
+  private nuevo:boolean;
 
   constructor(db:AngularFireDatabase,router:Router,route:ActivatedRoute) {
   	this._db = db;
@@ -33,6 +35,8 @@ export class EditarComponent implements OnInit {
   	this._router = router;
   	this.dialogo_mensaje = false;
   	this.mensaje = new Mensaje();
+    this.guardado = false;
+    this.nuevo = false;
   }
 
   ngOnInit() {

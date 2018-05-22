@@ -4,7 +4,7 @@ export class Funcionario {
 	organizacion:string;
 	cargo:string;
 	municipio:string;
-	region:number;
+	region:string;
 	correo:string;
 	telefono:string;
 	movil:string;
