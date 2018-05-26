@@ -22,8 +22,12 @@ export class AgendaService {
   	this._auth = auth;
   }
 
-  public GetContactoObservable(contactSubject:BehaviorSubject<string | null>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
+  public GetContactosObservable(contactSubject:BehaviorSubject<string | null>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
   	return contactSubject.switchMap(instit => this._db.list('/contactos', ref => instit ? ref.orderByChild('organización').equalTo(instit) : ref).snapshotChanges());
+  }
+
+  public GetContactoObservable(_id:string):Observable<any>{
+    return this._db.object('/contactos/'.concat(_id)).valueChanges();
   }
 
   public GetAllOrganizaciones():Observable<AngularFireAction<DatabaseSnapshot>[]>{
@@ -52,6 +56,10 @@ export class AgendaService {
   	
   }
 
+  public GetFotoContacto(nombre:string):Observable<string>{
+    return this._storage.ref('/user_imgs/'.concat(nombre)).getDownloadURL();
+  }
+
   public GuardaFotoContacto(nombre:string, archivo:any):Observable<string>{
     //this._storage.ref('/user_imgs/').putString(nombre);
     let ref = this._storage.ref('/user_imgs/'+nombre);
@@ -59,8 +67,26 @@ export class AgendaService {
     return ref.put(archivo).downloadURL();
   }
 
+  public UpdateFotoContact(anterior:string, nuevo:string, archivo:any):Observable<string>{
+    this._storage.ref('/user_imgs/'.concat(anterior)).delete();
+    return this.GuardaFotoContacto(nuevo,archivo);
+  }
+
   public BorraImagen(imagenUrl:string){
     this._storage.ref(imagenUrl).delete();
+  }
+
+  public GuardaContacto(clave:string, funcionario:Funcionario):any{
+    return this._db.object('/contactos/'.concat(clave)).set(funcionario.ToJSon());
+    //return this._db.ref('/contactos/'.concat(clave)).set()
+  }
+
+  public ActualizaContacto(clave:string, funcionario:Funcionario):any{
+    return this._db.object('/contactos/'.concat(clave)).update(funcionario.ToJSon());
+  }
+
+  public EliminaContacto(clave:string):any{
+    return this._db.object('/contactos/'.concat(clave)).remove();
   }
 
 }

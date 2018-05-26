@@ -34,6 +34,17 @@
 			border-radius: 5px;
 			text-align: center;
 			padding: 0 .6rem .6rem;
+			@include efecto-boton;
+
+			&:hover {
+				border-color: $color-terciario-claro;
+				color: $color-terciario-claro;
+			}
+
+			&:active {
+				border-color: $color-secundario-oscuro;
+				color: $color-secundario-oscuro;
+			}
 		}
 
 		&__icono-archivo {

@@ -12,7 +12,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Component({
   selector: 'macz-nuevo',
-  templateUrl: './nuevo.component.html',
+  templateUrl: '../contacto.plantilla.html',
   styleUrls: ['./nuevo.component.scss']
 })
 export class NuevoComponent implements OnInit {
@@ -20,7 +20,7 @@ export class NuevoComponent implements OnInit {
 	private usuario:any;
   private nuevo:boolean;
   private guardado:boolean;
-  private foto_temp:string;
+  private foto_temp_nombre:string;
 	private funcionario:Funcionario;
   private organizaciones:Observable<AngularFireAction<DatabaseSnapshot>[]>;
   private regiones:Observable<AngularFireAction<DatabaseSnapshot>[]>;
@@ -28,9 +28,9 @@ export class NuevoComponent implements OnInit {
   private municipios:Observable<AngularFireAction<DatabaseSnapshot>[]>;
   
 
-  constructor(private _service:AgendaService) { 
+  constructor(private _service:AgendaService, private router:Router) { 
     this.municipiosSub = new BehaviorSubject(null);
-    this.foto_temp = "";
+    this.foto_temp_nombre = "assets/img/unknown-user.png";
     this.guardado = false;
     this.nuevo = true;
   }
@@ -52,8 +52,8 @@ export class NuevoComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    if (this.guardado == false && this.foto_temp != "" && this.nuevo == true) {
-      let ruta:string = "/user_imgs/" + this.foto_temp;
+    if (this.guardado == false && this.funcionario.foto.indexOf("assets") < 0 && this.nuevo == true) {
+      let ruta:string = "/user_imgs/" + this.foto_temp_nombre;
       this._service.BorraImagen(ruta);
     }
   }
@@ -62,14 +62,17 @@ export class NuevoComponent implements OnInit {
     let tipo_archivo:string;
     let partes:string[];
     let nombre_archivo:string;
+
   	console.log('archivo');
   	console.log(foto.value);
   	console.log(foto.files[0].type);
+
     partes = this.funcionario.nombre.toLowerCase().split(" ");
+
     if(partes.length > 1){
-      nombre_archivo = partes[0].charAt(0) + "_" + partes[1];
+      nombre_archivo = partes[0].charAt(0).concat("_", partes[1]);
     }else{
-      nombre_archivo = partes[0] + "_user";
+      nombre_archivo = partes[0].concat("_user");
     }
     
     switch (foto.files[0].type.split('/')[1]) {
@@ -85,10 +88,12 @@ export class NuevoComponent implements OnInit {
     }
 
     console.log(nombre_archivo);
+    
     this._service.GuardaFotoContacto(nombre_archivo,foto.files[0]).subscribe(imgUrl => {
-      this.funcionario.foto = imgUrl;
-      this.foto_temp = nombre_archivo;
+      this.funcionario.foto = nombre_archivo;
+      this.foto_temp_nombre = imgUrl;
     });
+
   }
 
   OnSelectRegion(){
@@ -96,12 +101,15 @@ export class NuevoComponent implements OnInit {
     this.municipiosSub.next(this.funcionario.region);
   }
 
-  OnGuardar(event:any,form:NgForm) {
-    if(!form.invalid){
-
-    }
-
-
+  OnGuardar() {
+    let clave:string = this.funcionario.foto.split(".")[0];
+    let that = this;
+    this._service.GuardaContacto(clave,this.funcionario).then(
+        function(){
+          that.guardado = true;
+          that.router.navigateByUrl('/contactos');
+        }
+      );
   }
 
 }

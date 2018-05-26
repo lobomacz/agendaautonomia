@@ -41,3 +41,15 @@
 	left: 50%;
 	transform: translate(-50%, -50%);
 }
+
+@mixin efecto-boton {
+	&:hover {
+		transform: translateY(-.4rem);
+		box-shadow: 0 1rem 2rem rgba($color-negro, .4);
+	}
+
+	&:active {
+		transform: translateY(-.2rem);
+		box-shadow: 0 .5rem 1rem rgba($color-negro, .4);
+	}
+}
