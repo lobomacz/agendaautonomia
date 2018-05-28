@@ -63,9 +63,6 @@ export class NuevoComponent implements OnInit {
     let partes:string[];
     let nombre_archivo:string;
 
-  	console.log('archivo');
-  	console.log(foto.value);
-  	console.log(foto.files[0].type);
 
     partes = this.funcionario.nombre.toLowerCase().split(" ");
 
@@ -86,8 +83,6 @@ export class NuevoComponent implements OnInit {
         // code...
         break;
     }
-
-    console.log(nombre_archivo);
     
     this._service.GuardaFotoContacto(nombre_archivo,foto.files[0]).subscribe(imgUrl => {
       this.funcionario.foto = nombre_archivo;
@@ -97,7 +92,6 @@ export class NuevoComponent implements OnInit {
   }
 
   OnSelectRegion(){
-    console.log(this.funcionario.region);
     this.municipiosSub.next(this.funcionario.region);
   }
 

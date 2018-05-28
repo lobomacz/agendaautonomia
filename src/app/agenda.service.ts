@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, AngularFireAction, DatabaseSnapshot } from 'angularfire2/database';
+import { AngularFireDatabase, AngularFireObject, AngularFireAction, DatabaseSnapshot } from 'angularfire2/database';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
@@ -85,8 +85,8 @@ export class AgendaService {
     return this._db.object('/contactos/'.concat(clave)).update(funcionario.ToJSon());
   }
 
-  public EliminaContacto(clave:string):any{
-    return this._db.object('/contactos/'.concat(clave)).remove();
+  public EliminaContacto(clave:string):Promise<void>{
+    return this._db.object("/contactos/".concat(clave)).remove();
   }
 
 }

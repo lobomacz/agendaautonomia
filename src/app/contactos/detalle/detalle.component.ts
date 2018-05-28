@@ -39,7 +39,6 @@ export class DetalleComponent implements OnInit {
 
   getFuncionario(){
   	this.contactoObservable.subscribe(contacto => {
-      console.log(contacto);
       this.contacto.Populate(contacto);
       if(this.contacto.foto.indexOf("assets") < 0){
         this.foto$ = this._service.GetFotoContacto(this.contacto.foto);
@@ -59,8 +58,17 @@ export class DetalleComponent implements OnInit {
   	evento.preventDefault();
   }
 
-  EliminarContacto(evento):void{
+  OnEliminarContacto(evento):void{
+
+    if(this.contacto.foto.indexOf("assets")<0){
+      let ruta:string = "/user_imgs/" + this.contacto.foto;
+      this._service.BorraImagen(ruta);
+      console.log("Se elimina la foto.");
+    }
+
   	this._service.EliminaContacto(this._id).then(function(){
+      console.log("Se elimina el contacto.");
+      this.CerrarModal(evento);
       this._router.navigateByUrl('/contactos');
     }).catch(err => {
       this.mensaje.titulo = "Error al eliminar registro.";
@@ -69,7 +77,6 @@ export class DetalleComponent implements OnInit {
       this.dialogo_mensaje = true;
     });
 
-    
     evento.preventDefault();
 
   }
