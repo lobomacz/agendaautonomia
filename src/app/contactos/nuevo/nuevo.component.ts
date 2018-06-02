@@ -46,7 +46,7 @@ export class NuevoComponent implements OnInit {
   	this.funcionario.telefono = '';
   	this.funcionario.movil = '';
 
-    this.organizaciones = this._service.GetAllOrganizaciones();
+    this.organizaciones = this._service.GetInstituciones();
     this.regiones = this._service.GetRegiones();
     this.municipios = this._service.GetMunicipiosPorRegion(this.municipiosSub);
   }

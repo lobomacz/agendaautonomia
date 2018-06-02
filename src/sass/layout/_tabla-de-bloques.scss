@@ -2,7 +2,7 @@
 
 	display: table;
 	width: 90%;
-	padding: 2rem;
+	padding: 1rem;
 	border: 1px solid $color-gris-claro-2;
 	margin: 5rem auto;
 
@@ -26,6 +26,10 @@
 	&__fila {
 		display: table-row;
 		transition: all .2s;
+
+		&--flat{
+			display: table-row;
+		}
 
 		&:hover {
 			background-color: rgba($color-gris-claro, .6);

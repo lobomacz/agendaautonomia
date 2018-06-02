@@ -23,7 +23,7 @@
 					<p>
 						Región: {{ contacto.region }} Municipio: {{ contacto.municipio }}
 					</p>
-					<p><a routerLink="/contactos/editar/{{ _id }}" class="btn-texto">Editar</a><a href="#" class="btn-texto" (click)="OnEliminarClick($event,_id)">Eliminar</a></p>
+					<p><a routerLink="/contactos/editar/{{ _id }}" class="btn-texto">Editar</a><a href="#" class="btn-texto" (click)="OnEliminarClick($event)">Eliminar</a></p>
 				</div>
 			</div>
 			<ng-template #sincontacto>

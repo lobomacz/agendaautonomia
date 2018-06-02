@@ -6,6 +6,7 @@ import { OrganizacionesComponent } from './organizaciones/organizaciones.compone
 import { SharedModule } from '../shared/shared.module';
 import { VerOrganizacionesComponent } from './ver-organizaciones/ver-organizaciones.component';
 import { EditarOrganizacionesComponent } from './editar-organizaciones/editar-organizaciones.component';
+import { NuevaOrganizacionComponent } from './nueva-organizacion/nueva-organizacion.component';
 
 const routes:Routes = [
   {
@@ -13,12 +14,12 @@ const routes:Routes = [
     component:VerOrganizacionesComponent
   },
   {
-    path: 'ver',
-    component: VerOrganizacionesComponent
+    path: 'nuevo',
+    component: NuevaOrganizacionComponent
   },
   {
     path: 'editar/:id',
-
+    component: EditarOrganizacionesComponent
   },
 	{
 		path: '',
@@ -36,7 +37,8 @@ const routes:Routes = [
   declarations: [
   OrganizacionesComponent, 
   VerOrganizacionesComponent,
-  EditarOrganizacionesComponent
+  EditarOrganizacionesComponent,
+  NuevaOrganizacionComponent
   ]
 })
 export class OrganizacionesModule { }

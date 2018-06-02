@@ -35,7 +35,7 @@ export class ContactosComponent implements OnInit {
 
   ngOnInit() {
     this.contactos = this._service.GetContactosObservable(this.contactosSubject);
-    this.organizaciones = this._service.GetAllOrganizaciones();
+    this.organizaciones = this._service.GetInstituciones();
   }
 
   BuscaFoto(nombre:string):string{

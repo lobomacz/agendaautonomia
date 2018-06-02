@@ -21,10 +21,10 @@ export class NavBarComponent implements OnInit {
 
   	this.link_list = [
       {
-        titulo:'Contactos',icono:'o',ruta:'contactos'
+        titulo:'Instituciones',icono:'&#xe028;',ruta:'instituciones'
       },
       {
-        titulo:'Instituciones',icono:'&#xe028;',ruta:'organizaciones'
+        titulo:'Contactos',icono:'o',ruta:'contactos'
       },
       {
         titulo:'Proyectos',icono:'?',ruta:'proyectos'

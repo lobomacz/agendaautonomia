@@ -26,7 +26,7 @@ export class OrganizacionesComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.organizaciones$ = this._service.GetOrganizacionesPorTipo(this.organizacionesSub);
+    this.organizaciones$ = this._service.GetInstitucionesPorTipo(this.organizacionesSub);
   }
 
   setTipoFiltro(tipo:string):void{

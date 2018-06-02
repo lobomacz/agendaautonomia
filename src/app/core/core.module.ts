@@ -30,7 +30,7 @@ const routes: Routes = [
 		loadChildren: './../documentos/documentos.module#DocumentosModule'
 	},
 	{
-		path: 'organizaciones',
+		path: 'instituciones',
 		loadChildren: './../organizaciones/organizaciones.module#OrganizacionesModule'
 	},
 	{

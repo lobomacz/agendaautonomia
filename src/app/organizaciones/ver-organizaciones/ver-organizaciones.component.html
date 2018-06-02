@@ -1,10 +1,26 @@
+<macz-nav-bar [usuario]="usuario"></macz-nav-bar>
 <section class="seccion-organizaciones__detalle">
 	<div class="detalle-elemento" *ngIf="organizacion">
 			<h1 class="encabezado-primario">{{ idOrg | uppercase }}</h1>
 			<ul>
-				<li>{{ organizacion.nombre }}</li>
-				<li>{{ organizacion.direccion }}</li>
-				<li>{{ organizacion.sitio }}</li>
+				<li>{{ organizacion.nombre | uppercase }}</li>
+				<li>{{ organizacion.direccion | uppercase }}</li>
+				<li>{{ organizacion.sitio | lowercase }}</li>
+				<li>{{ organizacion.descripcion | uppercase }}</li>
 			</ul>
+			<p><a routerLink="/instituciones/editar/{{ _id }}" class="btn-texto">Editar</a><a href="#" class="btn-texto" (click)="OnEliminar_Click($event)">Eliminar</a></p>
 	</div>
 </section>
+
+<div class="overlay" [class.overlay--active]="dialogo_borrar">
+	<div class="overlay__close" (click)="dialogo_borrar=false">
+		<span class="overlay__icon">&#xe00e;</span>
+	</div>
+	<div class="dialog">
+      <h3 class="dialog__titulo u-margin-bottom-medium">Eliminar Institución</h3>
+      <p>
+      	Se eliminará la institución de la base de datos. ¿Desea Continuar?
+      </p>
+      <a href="#" class="btn" (click)="OnEliminarInstitucion($event)">Si</a><a href="#" class="btn" (click)="CerrarModal($event)">No</a>
+    </div>
+</div>

@@ -1,35 +1,38 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AngularFireAction, DatabaseSnapshot } from 'angularfire2/database';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { Router } from '@angular/router';
+import { DatabaseSnapshot, AngularFireAction } from 'angularfire2/database';
 
 import { AgendaService } from '../../agenda.service';
 import { Organizacion } from '../../clases/organizacion';
+import { Funcionario } from '../../clases/funcionario';
+
+import { Observable } from 'rxjs/Observable';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 @Component({
-  selector: 'macz-editar-organizaciones',
-  templateUrl: '../organizacion.plantilla.html', //'./editar-organizaciones.component.html',
-  styleUrls: ['./editar-organizaciones.component.scss']
+  selector: 'macz-nueva-organizacion',
+  templateUrl: '../organizacion.plantilla.html',//'./nueva-organizacion.component.html',
+  styleUrls: ['./nueva-organizacion.component.scss']
 })
-export class EditarOrganizacionesComponent implements OnInit {
+export class NuevaOrganizacionComponent implements OnInit {
 
 	private usuario:boolean;
 	private _id:string;
 	private organizacion:Organizacion;
-	private nuevo:boolean;
 	private regione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private municipiosSubject:BehaviorSubject<string | null>;
 	private municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private lista_niveles:string[];
 	private lista_tipos:string[];
+	private nuevo:boolean;
+	private guardado:boolean;
 
-  constructor(private _service:AgendaService, private _router:Router, private route:ActivatedRoute) { 
-  	this.usuario = false;
-  	this._id = this.route.snapshot.paramMap.get('id');
+  constructor(private _service:AgendaService, private _router:Router) {
+  	this.nuevo = true;
+  	this._id = "";
   	this.municipiosSubject = new BehaviorSubject(null);
-  	this.nuevo = false;
+  	this.usuario = false;
   }
 
   ngOnInit() {
@@ -37,9 +40,7 @@ export class EditarOrganizacionesComponent implements OnInit {
   	this.lista_tipos = ["gobierno","ong"];
   	this.regione$ = this._service.GetRegiones();
   	this.municipio$ = this._service.GetMunicipiosPorRegion(this.municipiosSubject);
-  	this._service.GetInstitucion(this._id).subscribe(instit => {
-  		this.organizacion = new Organizacion(instit);
-  	});
+  	this.organizacion = new Organizacion();
   }
 
   OnSelectRegion(){
@@ -48,10 +49,7 @@ export class EditarOrganizacionesComponent implements OnInit {
   }
 
   OnGuardar(){
-  	let that = this;
-  	this._service.ActualizaInstitucion(this.organizacion,this._id).then(()=>{
-  		this._router.navigateByUrl('/instituciones/ver/'.concat(that._id));
-  	});
+  	this._service.GuardaInstitucion(this.organizacion,this._id).then(()=>this._router.navigateByUrl("/instituciones"));
   }
 
 }

@@ -75,7 +75,7 @@ export class EditarComponent implements OnInit {
   }
 
   GetListas():void{
-    this.organizaciones = this._service.GetAllOrganizaciones();
+    this.organizaciones = this._service.GetInstituciones();
     this.regiones = this._service.GetRegiones();
     this.municipios = this._service.GetMunicipiosPorRegion(this.munisipiosSub);
   }
@@ -136,7 +136,7 @@ export class EditarComponent implements OnInit {
     }
 
     this._service.ActualizaContacto(this._id,this.funcionario).then(function(){
-      that.router.navigateByUrl('/contactos');
+      that.router.navigateByUrl('/contactos/ver/'.concat(that._id));
     });
   	
   }

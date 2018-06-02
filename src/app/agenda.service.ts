@@ -30,16 +30,61 @@ export class AgendaService {
     return this._db.object('/contactos/'.concat(_id)).valueChanges();
   }
 
-  public GetAllOrganizaciones():Observable<AngularFireAction<DatabaseSnapshot>[]>{
+  public GuardaContacto(clave:string, funcionario:Funcionario):any{
+    return this._db.object('/contactos/'.concat(clave)).set(funcionario.ToJSon());
+    //return this._db.ref('/contactos/'.concat(clave)).set()
+  }
+
+  public ActualizaContacto(clave:string, funcionario:Funcionario):any{
+    return this._db.object('/contactos/'.concat(clave)).update(funcionario.ToJSon());
+  }
+
+  public EliminaContacto(clave:string):Promise<void>{
+    return this._db.object("/contactos/".concat(clave)).remove();
+  }
+
+  public GetFotoContacto(nombre:string):Observable<string>{
+    return this._storage.ref('/user_imgs/'.concat(nombre)).getDownloadURL();
+  }
+
+  public GuardaFotoContacto(nombre:string, archivo:any):Observable<string>{
+    
+    let ref = this._storage.ref('/user_imgs/'+nombre);
+
+    return ref.put(archivo).downloadURL();
+  }
+
+  public UpdateFotoContact(anterior:string, nuevo:string, archivo:any):Observable<string>{
+    this._storage.ref('/user_imgs/'.concat(anterior)).delete();
+    return this.GuardaFotoContacto(nuevo,archivo);
+  }
+
+  public BorraImagen(imagenUrl:string){
+    this._storage.ref(imagenUrl).delete();
+  }
+
+  public GetInstituciones():Observable<AngularFireAction<DatabaseSnapshot>[]>{
   	return this._db.list('/organizaciones').snapshotChanges();
   }
 
-  public GetOrganizacionesPorTipo(organizacionesSub:BehaviorSubject<string | null>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
+  public GetInstitucionesPorTipo(organizacionesSub:BehaviorSubject<string | null>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
     return organizacionesSub.switchMap(tipo_org => this._db.list('/organizaciones', ref => tipo_org ? ref.orderByChild('tipo').equalTo(tipo_org) : ref).snapshotChanges());
   }
 
-  public GetOrganizacion(_id:string):Observable<any>{
+  public GetInstitucion(_id:string):Observable<any>{
     return this._db.object('/organizaciones/'+_id).valueChanges();
+  }
+
+  public GuardaInstitucion(item:Organizacion, clave:string){
+    return this._db.object("/organizaciones/".concat(clave.toLowerCase())).set(item.ToJSon());
+  }
+
+  public ActualizaInstitucion(item:Organizacion, clave:string){
+    return this._db.object("/organizaciones/".concat(clave)).update(item.ToJSon());
+  }
+
+  public EliminaInstitucion(clave:string):Promise<void>{
+    return this._db.object("/organizaciones/".concat(clave)).remove();
   }
 
   public GetRegiones():Observable<AngularFireAction<DatabaseSnapshot>[]>{
@@ -56,37 +101,6 @@ export class AgendaService {
   	
   }
 
-  public GetFotoContacto(nombre:string):Observable<string>{
-    return this._storage.ref('/user_imgs/'.concat(nombre)).getDownloadURL();
-  }
-
-  public GuardaFotoContacto(nombre:string, archivo:any):Observable<string>{
-    //this._storage.ref('/user_imgs/').putString(nombre);
-    let ref = this._storage.ref('/user_imgs/'+nombre);
-
-    return ref.put(archivo).downloadURL();
-  }
-
-  public UpdateFotoContact(anterior:string, nuevo:string, archivo:any):Observable<string>{
-    this._storage.ref('/user_imgs/'.concat(anterior)).delete();
-    return this.GuardaFotoContacto(nuevo,archivo);
-  }
-
-  public BorraImagen(imagenUrl:string){
-    this._storage.ref(imagenUrl).delete();
-  }
-
-  public GuardaContacto(clave:string, funcionario:Funcionario):any{
-    return this._db.object('/contactos/'.concat(clave)).set(funcionario.ToJSon());
-    //return this._db.ref('/contactos/'.concat(clave)).set()
-  }
-
-  public ActualizaContacto(clave:string, funcionario:Funcionario):any{
-    return this._db.object('/contactos/'.concat(clave)).update(funcionario.ToJSon());
-  }
-
-  public EliminaContacto(clave:string):Promise<void>{
-    return this._db.object("/contactos/".concat(clave)).remove();
-  }
+  
 
 }

@@ -51,7 +51,7 @@ export class DetalleComponent implements OnInit {
     
   }
 
-  OnEliminarClick(evento,id):void{
+  OnEliminarClick(evento):void{
 
   	this.dialogo_borrar = true;
 
@@ -60,16 +60,15 @@ export class DetalleComponent implements OnInit {
 
   OnEliminarContacto(evento):void{
 
+    let that = this;
+
     if(this.contacto.foto.indexOf("assets")<0){
       let ruta:string = "/user_imgs/" + this.contacto.foto;
       this._service.BorraImagen(ruta);
-      console.log("Se elimina la foto.");
     }
 
   	this._service.EliminaContacto(this._id).then(function(){
-      console.log("Se elimina el contacto.");
-      this.CerrarModal(evento);
-      this._router.navigateByUrl('/contactos');
+      that._router.navigateByUrl('/contactos');
     }).catch(err => {
       this.mensaje.titulo = "Error al eliminar registro.";
       this.mensaje.mensaje = "La operación sufrió un error al intentar eliminar el registro. Error: "+err;
