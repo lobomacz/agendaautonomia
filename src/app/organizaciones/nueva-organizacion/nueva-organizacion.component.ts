@@ -49,7 +49,23 @@ export class NuevaOrganizacionComponent implements OnInit {
   }
 
   OnGuardar(){
-  	this._service.GuardaInstitucion(this.organizacion,this._id).then(()=>this._router.navigateByUrl("/instituciones"));
+    let that = this;
+    let clave = this._id;
+  	this._service.GuardaInstitucion(this.organizacion,clave).then(()=>{
+      that.Redirect();
+    }).catch(error => {
+      if(error.message.indexOf('object_not_found')>=0){
+        let new_id = '/organizaciones';
+        let item = {clave:that.organizacion.ToJSon()};
+        that._service.GetDb().object(new_id).set(item).then(_ => {
+          that.Redirect();
+        });
+      }
+    });
+  }
+
+  Redirect(){
+    this._router.navigateByUrl("/instituciones")
   }
 
 }

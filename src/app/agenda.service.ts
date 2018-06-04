@@ -22,6 +22,10 @@ export class AgendaService {
   	this._auth = auth;
   }
 
+  public GetDb():AngularFireDatabase{
+    return this._db;
+  }
+
   public GetContactosObservable(contactSubject:BehaviorSubject<string | null>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
   	return contactSubject.switchMap(instit => this._db.list('/contactos', ref => instit ? ref.orderByChild('organización').equalTo(instit) : ref).snapshotChanges());
   }
@@ -31,7 +35,8 @@ export class AgendaService {
   }
 
   public GuardaContacto(clave:string, funcionario:Funcionario):any{
-    return this._db.object('/contactos/'.concat(clave)).set(funcionario.ToJSon());
+    let item = funcionario.ToJSon();
+    return this._db.object('/contactos/'.concat(clave)).set(item);
     //return this._db.ref('/contactos/'.concat(clave)).set()
   }
 
@@ -93,6 +98,19 @@ export class AgendaService {
 
   public GetMunicipiosPorRegion(municipioSubject:BehaviorSubject<string | null>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
     return municipioSubject.switchMap(reg => this._db.list('/municipios', ref => reg ? ref.orderByChild('region').equalTo(reg) : ref).snapshotChanges());
+  }
+
+  public GetProyectosPorAnio(proyectosAnio:BehaviorSubject<string | null>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
+    return proyectosAnio.switchMap(anio => this._db.list('/proyectos', ref => anio ? ref.orderByChild('anio').equalTo(anio) : ref).snapshotChanges());
+    //return this._db.list('/proyectos', ref => ref.orderByChild('anio')).snapshotChanges();
+  }
+
+  public GetProyectosPorTipo(proyectosTipo:BehaviorSubject<string>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
+    return proyectosTipo.switchMap(tipoProy => this._db.list('/proyectos', ref => ref.orderByChild('tipo').equalTo(tipoProy)).snapshotChanges());
+  }
+
+  public GetProyectosPorInstitucion(proyectosInstit:BehaviorSubject<string>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
+    return proyectosInstit.switchMap(instit => this._db.list('/proyectos', ref => ref.orderByChild('institucion').equalTo(instit)).snapshotChanges());
   }
 
   public AuthUser():Observable<any>{

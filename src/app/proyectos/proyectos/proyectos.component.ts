@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { NgForm, FormGroup, FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
+import { AngularFireAction, DatabaseSnapshot } from 'angularfire2/database';
 
 @Component({
   selector: 'macz-proyectos',
@@ -7,7 +10,7 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ProyectosComponent implements OnInit {
 
-	private usuario:any;
+	private usuario:boolean;
 
   constructor() { }
 

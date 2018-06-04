@@ -100,10 +100,22 @@ export class NuevoComponent implements OnInit {
     let that = this;
     this._service.GuardaContacto(clave,this.funcionario).then(
         function(){
-          that.guardado = true;
-          that.router.navigateByUrl('/contactos');
+          that.Redirect();
         }
-      );
+      ).catch(error => {
+        if(error.message.indexOf('object_not_found')>=0){
+          let nueva_clave = '/contactos';
+          let item = {clave:that.funcionario.ToJSon()};
+          that._service.GetDb().object(nueva_clave).set(item).then(_ => {
+            that.Redirect();
+          });
+        }
+      });
+  }
+
+  Redirect(){
+    this.guardado = true;
+    this.router.navigateByUrl('/contactos');
   }
 
 }
