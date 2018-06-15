@@ -1,5 +1,6 @@
 export class Organizacion {
-	nombre:string;
+	nombre_corto:string;
+	nombre_largo:string;
 	direccion:string;
 	municipio:string;
 	nivel:string;
@@ -12,7 +13,8 @@ export class Organizacion {
 	constructor(datos?:any, _tipo:string = "gobierno"){
 
 		if(datos != null){
-			this.nombre = datos.nombre;
+			this.nombre_corto = datos.nombre_corto;
+			this.nombre_largo = datos.nombre_largo;
 			this.direccion = datos.direccion;
 			this.municipio = datos.municipio;
 			this.region = datos.region;
@@ -31,7 +33,8 @@ export class Organizacion {
 
 	public ToJSon(){
 		return {
-			"nombre": this.nombre.toUpperCase(),
+			"nombre_corto": this.nombre_corto.toUpperCase(),
+			"nombre_largo": this.nombre_largo.toUpperCase(),
 			"direccion": this.direccion.toUpperCase(),
 			"municipio": this.municipio,
 			"region": this.region,

@@ -1,7 +1,9 @@
 
 <header id="header" class="header">
 	<div class="header__nombre">
-		<p class="header__nombre-texto">{{ titulo_sitio }}</p>
+		<p class="header__nombre-texto" (click)="GoHome()" >
+			{{ titulo_sitio }}
+		</p>
 	</div>
 	<nav class="header__navegacion">
 		<div class="navegacion__boton"  *ngFor="let link of link_list">

@@ -35,7 +35,7 @@ export class Funcionario {
 			"organizacion":this.organizacion,
 			"cargo":this.cargo.toUpperCase(),
 			"municipio":this.municipio,
-			"retion":this.region,
+			"region":this.region,
 			"correo":this.correo,
 			"telefono":this.telefono,
 			"movil":this.movil

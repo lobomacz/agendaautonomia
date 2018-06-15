@@ -48,4 +48,8 @@ export class NavBarComponent implements OnInit {
     event.preventDefault();
   }
 
+  GoHome(){
+    this.router.navigateByUrl("/");
+  }
+
 }

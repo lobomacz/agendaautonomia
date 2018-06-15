@@ -3,7 +3,7 @@ import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DatabaseSnapshot, AngularFireAction } from 'angularfire2/database';
 
-import { AgendaService } from '../../agenda.service';
+import { InstitucionService } from '../../servicios/institucion-service';
 import { Organizacion } from '../../clases/organizacion';
 import { Funcionario } from '../../clases/funcionario';
 
@@ -18,7 +18,6 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 export class NuevaOrganizacionComponent implements OnInit {
 
 	private usuario:boolean;
-	private _id:string;
 	private organizacion:Organizacion;
 	private regione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private municipiosSubject:BehaviorSubject<string | null>;
@@ -28,16 +27,15 @@ export class NuevaOrganizacionComponent implements OnInit {
 	private nuevo:boolean;
 	private guardado:boolean;
 
-  constructor(private _service:AgendaService, private _router:Router) {
+  constructor(private _service:InstitucionService, private _router:Router) {
   	this.nuevo = true;
-  	this._id = "";
   	this.municipiosSubject = new BehaviorSubject(null);
   	this.usuario = false;
   }
 
   ngOnInit() {
   	this.lista_niveles = ["regional","municipal","territorial","comunal"];
-  	this.lista_tipos = ["gobierno","ong"];
+  	this.lista_tipos = ["gobierno","ong","privado"];
   	this.regione$ = this._service.GetRegiones();
   	this.municipio$ = this._service.GetMunicipiosPorRegion(this.municipiosSubject);
   	this.organizacion = new Organizacion();
@@ -50,17 +48,8 @@ export class NuevaOrganizacionComponent implements OnInit {
 
   OnGuardar(){
     let that = this;
-    let clave = this._id;
-  	this._service.GuardaInstitucion(this.organizacion,clave).then(()=>{
+  	this._service.GuardaInstitucion(this.organizacion).then(()=>{
       that.Redirect();
-    }).catch(error => {
-      if(error.message.indexOf('object_not_found')>=0){
-        let new_id = '/organizaciones';
-        let item = {clave:that.organizacion.ToJSon()};
-        that._service.GetDb().object(new_id).set(item).then(_ => {
-          that.Redirect();
-        });
-      }
     });
   }
 

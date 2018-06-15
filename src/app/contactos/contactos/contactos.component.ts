@@ -1,10 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { OpcionNav } from '../../clases/opcion-nav';
-import { AngularFireAction, DatabaseSnapshot } from 'angularfire2/database';
+import { AngularFireAction, DatabaseSnapshot, AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireStorage } from 'angularfire2/storage';
+import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { AgendaService } from "../../agenda.service";
+import { ContactoService } from "../../servicios/contacto-service";
+import { InstitucionService } from '../../servicios/institucion-service';
 
 
 @Component({
@@ -22,10 +25,9 @@ export class ContactosComponent implements OnInit {
 
   private organizaciones:Observable<any[]>;
 
-  constructor( private _service:AgendaService ) {
+  constructor( private _service:ContactoService, private _institService:InstitucionService ) {
 
     this.contactosSubject = new BehaviorSubject(null);
-    
     
   }
 
@@ -35,7 +37,7 @@ export class ContactosComponent implements OnInit {
 
   ngOnInit() {
     this.contactos = this._service.GetContactosObservable(this.contactosSubject);
-    this.organizaciones = this._service.GetInstituciones();
+    this.organizaciones = this._institService.GetInstituciones();
   }
 
   BuscaFoto(nombre:string):string{

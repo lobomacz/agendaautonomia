@@ -7,25 +7,25 @@
 				<div class="tabla-bloques__filas">
 					<div class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
-							<div class="formulario-container__group" *ngIf="nuevo == true; else siglasRO">
-								<input class="formulario-container__control" type="text" #siglas="ngModel" name="siglas" required="true" id="siglas" [(ngModel)]="_id" placeholder="Ej.MITRAB" required>
-								<label class="formulario-container__label" for="siglas">Siglas</label>
-								<div class="mensaje mensaje--error" *ngIf="siglas.invalid && (siglas.dirty || siglas.touched)">
+							<div class="formulario__group" *ngIf="nuevo == true; else siglasRO">
+								<input class="formulario__control" type="text" #nombre_corto="ngModel" name="nombre_corto" required="true" id="nombre_corto" [(ngModel)]="organizacion.nombre_corto" placeholder="Ej.MITRAB" required>
+								<label class="formulario__label" for="nombre_corto">Nombre Corto</label>
+								<div class="mensaje mensaje--error" *ngIf="nombre_corto.invalid && (nombre_corto.dirty || nombre_corto.touched)">
 									<div *ngIf="nombre.errors.required">
-										El campo siglas es requerido.
+										El campo nobre corto es requerido.
 									</div>
 								</div>
 							</div>
 							<ng-template #siglasRO>
-								<h3 class="encabezado-terciario">{{ _id | uppercase }}</h3>
+								<h3 class="encabezado-terciario">{{ organizacion.nombre_corto | uppercase }}</h3>
 							</ng-template>
 						</div>
 						<div class="tabla-bloques__columna">
-							<div class="formulario-container__group">
-								<input class="formulario-container__control" type="text" id="nombre" name="nombre" required="true" [(ngModel)]="organizacion.nombre" #nombre="ngModel" placeholder="Nombre Institución">
-								<label class="formulario-container__label" for="nombre">Nombre</label>
-								<div class="mensaje mensaje--error" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
-									<div *ngIf="nombre.errors.required">
+							<div class="formulario__group">
+								<input class="formulario__control" type="text" id="nombre_largo" name="nombre_largo" required="true" [(ngModel)]="organizacion.nombre_largo" #nombre_largo="ngModel" placeholder="Nombre Institución">
+								<label class="formulario__label" for="nombre_largo">Nombre</label>
+								<div class="mensaje mensaje--error" *ngIf="nombre_largo.invalid && (nombre_largo.dirty || nombre_largo.touched)">
+									<div *ngIf="nombre_largo.errors.required">
 										El campo nombre es requerido.
 									</div>
 								</div>
@@ -34,71 +34,71 @@
 					</div>
 					<div class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
-							<div class="formulario-container__group">
-								<input class="formulario-container__control" type="text" #direccion="ngModel" name="direccion" [(ngModel)]="organizacion.direccion" placeholder="Dirección">
-								<label class="formulario-container__label" for="direccion">Dirección</label>
+							<div class="formulario__group">
+								<input class="formulario__control" type="text" #direccion="ngModel" name="direccion" [(ngModel)]="organizacion.direccion" placeholder="Dirección">
+								<label class="formulario__label" for="direccion">Dirección</label>
 							</div>
 						</div>
 						<div class="tabla-bloques__columna">
-							<div class="formulario-container__group">
-								<input class="formulario-container__control" type="tel" id="telefono" name="telefono" [(ngModel)]="organizacion.telefono" placeholder="Ej. 2572-0078" #telefono="ngModel" required="true">
-								<label for="telefono" class="formulario-container__label">Teléfono</label>
+							<div class="formulario__group">
+								<input class="formulario__control" type="tel" id="telefono" name="telefono" [(ngModel)]="organizacion.telefono" placeholder="Ej. 2572-0078" #telefono="ngModel" required="true">
+								<label for="telefono" class="formulario__label">Teléfono</label>
 							</div>
 						</div>
 					</div>
 					<div class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
-							<div class="formulario-container__group">
-								<select class="formulario-container__control" name="region" id="region" required="true" #region [(ngModel)]="organizacion.region" (change)="OnSelectRegion()">
+							<div class="formulario__group">
+								<select class="formulario__control" name="region" id="region" required="true" #region [(ngModel)]="organizacion.region" (change)="OnSelectRegion()">
 									<option *ngFor="let region of regione$ | async" value="{{ region.key }}">{{ region.key | uppercase }}</option>
 								</select>
-								<label class="formulario-container__label" for="region">Región</label>
+								<label class="formulario__label" for="region">Región</label>
 							</div>
 						</div>
 						<div class="tabla-bloques__columna">
-							<div class="formulario-container__group">
-								<select class="formulario-container__control" name="municipio" id="municipio" required="true" [(ngModel)]="organizacion.municipio" placeholder="Seleccione">
+							<div class="formulario__group">
+								<select class="formulario__control" name="municipio" id="municipio" required="true" [(ngModel)]="organizacion.municipio" placeholder="Seleccione">
 									<option *ngFor="let municipio of municipio$ | async" value="{{ municipio.key }}">{{ municipio.payload.val().nombre }}</option>
 								</select>
-								<label class="formulario-container__label" for="municipio">Municipio</label>
+								<label class="formulario__label" for="municipio">Municipio</label>
 							</div>
 						</div>
 					</div>
 					<div class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
-							<div class="formulario-container__group">
-								<select class="formulario-container__control" name="nivel" id="nivel" #nivel="ngModel" required="true" [(ngModel)]="organizacion.nivel" >
+							<div class="formulario__group">
+								<select class="formulario__control" name="nivel" id="nivel" #nivel="ngModel" required="true" [(ngModel)]="organizacion.nivel" >
 									<option *ngFor="let nivel of lista_niveles" value="nivel">{{ nivel | uppercase }}</option>
 								</select>
-								<label class="formulario-container__label" for="nivel">Nivel</label>
+								<label class="formulario__label" for="nivel">Nivel</label>
 							</div>
 						</div>
 						<div class="tabla-bloques__columna">
-							<div class="formulario-container__group">
+							<div class="formulario__group">
 								<textarea name="descripcion" id="descripcion" cols="30" rows="5" [(ngModel)]="organizacion.descripcion" #descripcion="ngModel" placeholder="Descripción" ></textarea>
-								<label class="formulario-container__label" for="descripcion">Descripción</label>
+								<label class="formulario__label" for="descripcion">Descripción</label>
 							</div>		
 						</div>
 					</div>
 					<div class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
-							<div class="formulario-container__group">
-								<input class="formulario-container__control" type="url" id="sitio" name="sitio" [(ngModel)]="organizacion.sitio" #sitio="ngModel" placeholder="www.ejemplo.org">
-								<label class="formulario-container__label" for="sitio">Sitio web</label>
+							<div class="formulario__group">
+								<input class="formulario__control" type="url" id="sitio" name="sitio" [(ngModel)]="organizacion.sitio" #sitio="ngModel" placeholder="www.ejemplo.org">
+								<label class="formulario__label" for="sitio">Sitio web</label>
 							</div>
 						</div>
 						<div class="tabla-bloques__columna">
-							<div class="formulario-container__group">
-								<select class="formulario-container__control" name="tipo" id="tipo" [(ngModel)]="organizacion.tipo" #tipo="ngModel" required="true" >
+							<div class="formulario__group">
+								<select class="formulario__control" name="tipo" id="tipo" [(ngModel)]="organizacion.tipo" #tipo="ngModel" required="true" >
 									<option *ngFor="let tipo of lista_tipos" value="{{ tipo }}">{{ tipo | uppercase }}</option>
 								</select>
-								<label class="formulario-container__label" for="tipo">Tipo de Institución</label>
+								<label class="formulario__label" for="tipo">Tipo de Institución</label>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-			<div class="formulario-container__group">
+			<div class="formulario__group">
 				<input class="btn btn-blanco" type="button" name="guardar" value="{{ nuevo == true ? 'Guardar':'Actualizar' }}" (click)="OnGuardar()" [disabled]="!formInstitucion.form.valid" >
 			</div>
 		</form>

@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AngularFireAction, DatabaseSnapshot } from 'angularfire2/database';
+import { AngularFireAction, DatabaseSnapshot, AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireStorage } from 'angularfire2/storage';
+import { AngularFireAuth } from 'angularfire2/auth';
 
-import { AgendaService } from '../../agenda.service';
+import { ContactoService } from '../../servicios/contacto-service';
+import { InstitucionService } from '../../servicios/institucion-service';
+
 import { Funcionario } from '../../clases/funcionario';
 
 import { Observable } from 'rxjs/Observable';
@@ -28,7 +32,7 @@ export class NuevoComponent implements OnInit {
   private municipios:Observable<AngularFireAction<DatabaseSnapshot>[]>;
   
 
-  constructor(private _service:AgendaService, private router:Router) { 
+  constructor(private _service:ContactoService, private router:Router, private _institService:InstitucionService) { 
     this.municipiosSub = new BehaviorSubject(null);
     this.foto_temp_nombre = "assets/img/unknown-user.png";
     this.guardado = false;
@@ -46,7 +50,7 @@ export class NuevoComponent implements OnInit {
   	this.funcionario.telefono = '';
   	this.funcionario.movil = '';
 
-    this.organizaciones = this._service.GetInstituciones();
+    this.organizaciones = this._institService.GetInstituciones();
     this.regiones = this._service.GetRegiones();
     this.municipios = this._service.GetMunicipiosPorRegion(this.municipiosSub);
   }

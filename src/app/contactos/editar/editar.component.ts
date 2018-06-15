@@ -2,12 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFireDatabase, AngularFireObject, AngularFireAction, DatabaseSnapshot } from 'angularfire2/database';
+import { AngularFireStorage } from 'angularfire2/storage';
+import { AngularFireAuth } from 'angularfire2/auth';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 import { Funcionario } from '../../clases/funcionario';
 import { Mensaje } from '../../clases/mensaje';
 
-import { AgendaService } from '../../agenda.service';
+import { ContactoService } from '../../servicios/contacto-service';
+import { InstitucionService } from '../../servicios/institucion-service';
 
 @Component({
   selector: 'macz-editar',
@@ -31,7 +34,7 @@ export class EditarComponent implements OnInit {
   private guardado:boolean;
   private nuevo:boolean;
 
-  constructor(private _service:AgendaService, private router:Router, private route:ActivatedRoute) {
+  constructor(private _service:ContactoService, private router:Router, private route:ActivatedRoute, private _institService:InstitucionService) {
   	this._id = this.route.snapshot.paramMap.get('id');
     this.funcionario = new Funcionario();
     this.foto_old_nombre,this.foto_temp_nombre = "";
@@ -46,11 +49,8 @@ export class EditarComponent implements OnInit {
   	this.funcionarioObs.subscribe(item => {
       this.funcionario.Populate(item);
       if(this.funcionario.foto.indexOf("assets") < 0){
-        console.log("Tiene foto en almacen");
         let foto$:Observable<string> = this._service.GetFotoContacto(this.funcionario.foto);
-        console.log(foto$);
         foto$.subscribe(imgUrl => {
-          console.log(imgUrl);
           this.foto_temp_nombre = imgUrl;
         });
       }else{
@@ -75,7 +75,7 @@ export class EditarComponent implements OnInit {
   }
 
   GetListas():void{
-    this.organizaciones = this._service.GetInstituciones();
+    this.organizaciones = this._institService.GetInstituciones();
     this.regiones = this._service.GetRegiones();
     this.municipios = this._service.GetMunicipiosPorRegion(this.munisipiosSub);
   }
@@ -91,12 +91,6 @@ export class EditarComponent implements OnInit {
     let nombre_archivo:string;
     let fecha:Date;
     fecha = new Date();
-
-    console.log(fecha.getTime());
-
-    console.log('archivo');
-    console.log(foto.value);
-    console.log(foto.files[0].type);
 
     partes = this.funcionario.nombre.toLowerCase().split(" ");
 
@@ -118,8 +112,6 @@ export class EditarComponent implements OnInit {
         // code...
         break;
     }
-
-    console.log(nombre_archivo);
     
     this._service.GuardaFotoContacto(nombre_archivo,foto.files[0]).subscribe(imgUrl => {
       this.foto_old_nombre = this.funcionario.foto;

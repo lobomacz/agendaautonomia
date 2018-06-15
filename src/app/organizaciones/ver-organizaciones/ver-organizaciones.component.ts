@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { AgendaService } from '../../agenda.service';
+import { InstitucionService } from '../../servicios/institucion-service';
 import { Observable } from 'rxjs/Observable';
 
 
@@ -19,7 +19,7 @@ export class VerOrganizacionesComponent implements OnInit {
   private dialogo_borrar:boolean;
   private dialogo_mensaje:boolean;
 
-  constructor(private activatedRoute:ActivatedRoute, private _router:Router, private _service:AgendaService) { 
+  constructor(private activatedRoute:ActivatedRoute, private _router:Router, private _service:InstitucionService) { 
   	this._id = this.activatedRoute.snapshot.paramMap.get('id');
     this.dialogo_borrar = false;
     this.dialogo_mensaje = false;

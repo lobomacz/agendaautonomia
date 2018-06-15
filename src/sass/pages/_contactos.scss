@@ -1,13 +1,10 @@
 .seccion-contactos {
 	text-align: center;
-	position: relative;
-	height: 100vh;
+	@extend %extension_de_seccion;
 	//width: 100%;
 }
 
-
-.seccion-nuevo-usuario {
-	position: relative;
-	height: 100vh;
+.seccion-nuevo-usuario, .seccion-editar-contacto {
+	@extend %extension_de_seccion;
 	//width: 100%;
 }

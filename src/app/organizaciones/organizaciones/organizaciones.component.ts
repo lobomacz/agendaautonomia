@@ -4,7 +4,7 @@ import { AngularFireAction, DatabaseSnapshot } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { AgendaService } from "../../agenda.service";
+import { InstitucionService } from "../../servicios/institucion-service";
 
 @Component({
   selector: 'macz-organizaciones',
@@ -20,7 +20,7 @@ export class OrganizacionesComponent implements OnInit {
 	private organizacionesSub:BehaviorSubject<string | null>;
 
 
-  constructor(private _service:AgendaService) {
+  constructor(private _service:InstitucionService) {
   	this.organizacionesSub = new BehaviorSubject(null);
   	this.tipo_filtro = 'todas';
   }

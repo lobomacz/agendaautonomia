@@ -1,9 +1,8 @@
 .seccion-organizaciones {
-	height: 100vh;
-	position: relative;
+	@extend %extension_de_seccion;
 	text-align: center;
+}
 
-	&__detalle {
-		
-	}
+.seccion-formulario-institucion {
+	@extend %extension_de_seccion;
 }

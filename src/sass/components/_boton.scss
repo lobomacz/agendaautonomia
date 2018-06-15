@@ -22,6 +22,36 @@
 		transform: translateY(-0.1rem);
 	}
 
+	&-texto {
+		&:link,
+		&:visited {
+			font-size: 1rem;
+			font-weight: 400;
+			color: $color-primario;
+			display: inline-block;
+			text-decoration: none;
+			border-bottom: 1px solid $color-primario;
+			padding: 3px;
+			//transition: all .2s;
+		}
+
+		&:hover {
+			background-color: $color-primario;
+			color: $color-blanco;
+			box-shadow: 0 1rem 2rem rgba($color-negro, .15);
+			transform: translateY(-2px);
+		}
+
+		&:active {
+			box-shadow: 0 .5rem 1rem rgba($color-negro, .15);
+			transform: translateY(0)
+		}
+
+		&:not(:last-child) {
+			margin-right: 1rem;
+		}
+	}
+
 	&--white {
 		background-color: $color-blanco;
 		color: $color-gris-oscuro;
@@ -48,36 +78,6 @@
 
 	&--menu {
 		width: 90%;
-	}
-}
-
-.btn-texto {
-	&:link,
-	&:visited {
-		font-size: 1rem;
-		font-weight: 400;
-		color: $color-primario;
-		display: inline-block;
-		text-decoration: none;
-		border-bottom: 1px solid $color-primario;
-		padding: 3px;
-		//transition: all .2s;
-	}
-
-	&:hover {
-		background-color: $color-primario;
-		color: $color-blanco;
-		box-shadow: 0 1rem 2rem rgba($color-negro, .15);
-		transform: translateY(-2px);
-	}
-
-	&:active {
-		box-shadow: 0 .5rem 1rem rgba($color-negro, .15);
-		transform: translateY(0)
-	}
-
-	&:not(:last-child) {
-		margin-right: 1rem;
 	}
 }
 

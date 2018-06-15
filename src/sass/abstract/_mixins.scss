@@ -53,3 +53,13 @@
 		box-shadow: 0 .5rem 1rem rgba($color-negro, .4);
 	}
 }
+
+@mixin column-span($inicio, $final) {
+	grid-column-start: $inicio;
+	grid-column-end: $final;
+}
+
+@mixin row-span($inicio, $final) {
+	grid-row-start: $inicio;
+	grid-row-end: $final;
+}

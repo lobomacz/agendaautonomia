@@ -5,7 +5,7 @@ import { AngularFireAction, DatabaseSnapshot } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { AgendaService } from '../../agenda.service';
+import { InstitucionService } from '../../servicios/institucion-service';
 import { Organizacion } from '../../clases/organizacion';
 
 @Component({
@@ -25,7 +25,7 @@ export class EditarOrganizacionesComponent implements OnInit {
 	private lista_niveles:string[];
 	private lista_tipos:string[];
 
-  constructor(private _service:AgendaService, private _router:Router, private route:ActivatedRoute) { 
+  constructor(private _service:InstitucionService, private _router:Router, private route:ActivatedRoute) { 
   	this.usuario = false;
   	this._id = this.route.snapshot.paramMap.get('id');
   	this.municipiosSubject = new BehaviorSubject(null);
@@ -34,7 +34,7 @@ export class EditarOrganizacionesComponent implements OnInit {
 
   ngOnInit() {
   	this.lista_niveles = ["regional","municipal","territorial","comunal"];
-  	this.lista_tipos = ["gobierno","ong"];
+  	this.lista_tipos = ["gobierno","ong","privado"];
   	this.regione$ = this._service.GetRegiones();
   	this.municipio$ = this._service.GetMunicipiosPorRegion(this.municipiosSubject);
   	this._service.GetInstitucion(this._id).subscribe(instit => {

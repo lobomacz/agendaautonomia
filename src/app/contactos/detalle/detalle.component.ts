@@ -3,7 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { AngularFireObject } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 
-import { AgendaService } from '../../agenda.service';
+import { ContactoService } from '../../servicios/contacto-service';
 import { Funcionario } from '../../clases/funcionario';
 import { Mensaje } from '../../clases/mensaje';
 
@@ -26,7 +26,7 @@ export class DetalleComponent implements OnInit {
   private dialogo_mensaje:boolean = false;
 
 
-  constructor(private _route:ActivatedRoute, private _service:AgendaService, private _router:Router) {
+  constructor(private _route:ActivatedRoute, private _service:ContactoService, private _router:Router) {
     this._id = this._route.snapshot.paramMap.get('id');
   	this.contactoObservable = this._service.GetContactoObservable(this._id);
     this.contacto = new Funcionario();

@@ -32,6 +32,13 @@
 									ONG
 								</label>
 							</div>
+							<div class="form__group-option">
+								<input #privado class="form__radio-input" id="optPrivado" type="radio" name="tipoOrg" value="privado" (click)="setTipoFiltro(privado.value)">
+								<label class="form__radio-label" for="optPrivado">
+									<span class="form__radio-button"></span>
+									Privado
+								</label>
+							</div>
 							
 						</fieldset>
 					</div>
@@ -51,11 +58,11 @@
 			<div class="tabla-bloques__fila" [ngClass]="{'fila-impar': impar}" *ngFor="let organizacion of organizaciones$ | async; odd as impar">
 				<div class="tabla-bloques__columna" *ngIf="organizacion != null">
 					<a routerLink="ver/{{ organizacion.key }}" title="">
-						{{ organizacion.key | uppercase }}
+						{{ organizacion.payload.val().nombre_corto | uppercase }}
 					</a>
 				</div>
 				<div class="tabla-bloques__columna" *ngIf="organizacion != null">
-					{{ organizacion.payload.val().nombre | uppercase }}
+					{{ organizacion.payload.val().nombre_largo | uppercase }}
 				</div>
 				<div class="tabla-bloques__columna" *ngIf="organizacion != null">
 					{{ organizacion.payload.val().tipo | uppercase }}

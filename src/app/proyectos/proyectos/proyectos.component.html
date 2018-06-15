@@ -7,11 +7,87 @@
 	<div class="row">
 		<div class="col-1-de-2">
 			<div class="filter">
-				<form #formFilter="ngForm">
-					
+				<form #filterForm="ngForm" accept-charset="utf-8" class="form">
+					<div class="form__group">
+						<fieldset>
+							<legend>Filtrar Por:</legend>
+							<div class="form__group-option">
+								<input #todas class="form__radio-input" id="optTodas" type="radio" name="tipoOrg" [checked]="opcionFiltro=='todos'" value="todos" (click)="setTipoFiltro(todas.value)" >
+								<label class="form__radio-label" for="optTodas">
+									<span class="form__radio-button"></span>
+									Todos
+								</label>
+							</div>
+							<div class="form__group-option">
+								<input #anio id="optAnio" class="form__radio-input" type="radio" name="tipoOrg" value="anio" (click)="setTipoFiltro(anio.value)">
+								<label class="form__radio-label" for="optAnio">
+									<span class="form__radio-button"></span>
+									Año
+								</label>
+							</div>
+							<div class="form__group-option">
+								<input #org class="form__radio-input" id="optOrg" type="radio" name="tipoOrg" value="institucion" (click)="setTipoFiltro(org.value)">
+								<label class="form__radio-label" for="optOrg">
+									<span class="form__radio-button"></span>
+									Institución
+								</label>
+							</div>
+							<div class="form__group-option">
+								<input #sector class="form__radio-input" id="optSector" type="radio" name="tipoOrg" value="sector" (click)="setTipoFiltro(sector.value)">
+								<label class="form__radio-label" for="optSector">
+									<span class="form__radio-button"></span>
+									Sector
+								</label>
+							</div>
+						</fieldset>
+						<div class="formulario__group u-margin-top-small" *ngIf="opcionFiltro=='anio';else comboSelect">
+							<input class="formulario__control" type="text" id="txtanio" name="anioFiltro"  placeholder="Ej. 2018" [ngModel]="filtro" >
+							<label class="formulario__label" for="txtanio" >Año Inicio</label>
+							<input class="btn" type="button" name="btnFiltro" value="Ver" (click)="UpdateLista()">
+						</div>
+						<ng-template #comboSelect>
+							<div class="formulario__group" *ngIf="opcionFiltro != 'todos'">
+								<label for="cmbFiltro">Seleccione:</label>
+								<select class="formulario__control" [(ngModel)]="filtro" name="filtro" id="cmbFiltro" #cmbFiltro (change)="UpdateLista()">
+									<option *ngFor="let opcion of listaOpciones | async" value="{{ opcion.key }}">{{ (opcionFiltro == 'sector' ? opcion.payload.val():opcion.payload.val().nombre) | uppercase }}</option>
+								</select>
+							</div>
+						</ng-template>
+					</div>
 				</form>
 			</div>
 		</div>
 	</div>
+	<div class="tabla-bloques u-margin-top-medium" *ngIf="listaProyectos != null && listaProyectos.length > 0;else sinregistros">
+		<div class="tabla-bloques__header">
+			<div class="tabla-bloques__header-cell">Proyecto</div>
+			<div class="tabla-bloques__header-cell">Organización</div>
+			<div class="tabla-bloques__header-cell">Sector</div>
+			<div class="tabla-bloques__header-cell--small">Monto C$</div>
+			<div class="tabla-bloques__header-cell--small"></div>
+		</div>
+		<div class="tabla-bloques__filas">
+			<div class="tabla-bloques__fila" [ngClass]="{'fila-impar':impar}" *ngFor="let proyecto of listaProyectos; odd as impar">
+				<div class="tabla-bloques__columna">
+					{{ proyecto.payload.val().nombre | uppercase }}
+				</div>
+				<div class="tabla-bloques__columna">
+					{{ listaSectores[proyecto.payload.val().sector].payload.val() }}
+				</div>
+				<div class="tabla-bloques__columna">
+					{{ proyecto.payload.val().anio }}
+				</div>
+				<div class="tabla-bloques__columna">
+					{{ proyecto.payload.val().monto | currency:'NIO':'symbol' }}
+				</div>
+				<div class="tabla-bloques__columna">
+					<a href="#" class="btn-texto" (click)="VerProyecto($event, proyecto.key)" >Ver</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<ng-template #sinregistros>
+		<h2 class="encabezado-secundario">No se encontraron registros.</h2>
+	</ng-template>
 </section>
 

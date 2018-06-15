@@ -17,6 +17,12 @@
 			width: 6rem;
 			border: 1px solid $color-gris-claro-2;
 		}
+
+		&-cell--small {
+			display: table-cell;
+			width: 3rem;
+			border: 1px solid $color-gris-claro-2;
+		}
 	}
 
 	&__filas {
@@ -38,6 +44,15 @@
 	}
 
 	&__columna {
+		
 		display: table-cell;
+
+		&--controls {
+			margin: 3rem;
+		}
+
+		&--span-2 {
+
+		}
 	}
 }
