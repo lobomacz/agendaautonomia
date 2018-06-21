@@ -28,8 +28,16 @@ export class AgendaService {
     return this._db.list('/regiones').snapshotChanges();
   }
 
+  public GetMunicipios():Observable<AngularFireAction<DatabaseSnapshot>[]>{
+    return this._db.list('/municipios').snapshotChanges();
+  }
+
   public GetMunicipiosPorRegion(municipioSubject:BehaviorSubject<string | null>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
     return municipioSubject.switchMap(reg => this._db.list('/municipios', ref => reg ? ref.orderByChild('region').equalTo(reg) : ref).snapshotChanges());
+  }
+
+  public GetComunidadesPorMunicipio(comunidadSubject:BehaviorSubject<string | null>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
+    return comunidadSubject.switchMap(municipio => this._db.list('/comunidades', ref => municipio ? ref.orderByChild('municipio').equalTo(municipio):ref).snapshotChanges());
   }
 
   public AuthUser():Observable<any>{

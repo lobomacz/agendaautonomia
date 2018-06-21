@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ProyectosComponent } from './proyectos/proyectos.component';
 import { SharedModule } from './../shared/shared.module';
 import { NuevoProyectoComponent } from './nuevo-proyecto/nuevo-proyecto.component';
+import { EditaProyectoComponent } from './edita-proyecto/edita-proyecto.component';
 
 
 const routes:Routes = [
@@ -15,6 +16,10 @@ const routes:Routes = [
   {
     path: 'nuevo',
     component: NuevoProyectoComponent
+  },
+  {
+    path: 'editar/:id',
+    component: EditaProyectoComponent
   }
 ];
 
@@ -25,6 +30,6 @@ const routes:Routes = [
     SharedModule,
     FormsModule
   ],
-  declarations: [ProyectosComponent, NuevoProyectoComponent]
+  declarations: [ProyectosComponent, NuevoProyectoComponent, EditaProyectoComponent]
 })
 export class ProyectosModule { }

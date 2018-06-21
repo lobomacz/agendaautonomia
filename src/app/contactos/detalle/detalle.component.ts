@@ -4,7 +4,9 @@ import { AngularFireObject } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 
 import { ContactoService } from '../../servicios/contacto-service';
+import { InstitucionService } from '../../servicios/institucion-service';
 import { Funcionario } from '../../clases/funcionario';
+import { Organizacion } from '../../clases/organizacion';
 import { Mensaje } from '../../clases/mensaje';
 
 @Component({
@@ -18,6 +20,8 @@ export class DetalleComponent implements OnInit {
   private usuario:any;
 	private contacto:Funcionario;
 	private contactoObservable:Observable<any>;
+  private organizacion$:Observable<any>;
+  private organizacion:Organizacion;
   private foto$:Observable<string>;
   private foto:string;
   private mensaje:Mensaje;
@@ -26,11 +30,12 @@ export class DetalleComponent implements OnInit {
   private dialogo_mensaje:boolean = false;
 
 
-  constructor(private _route:ActivatedRoute, private _service:ContactoService, private _router:Router) {
+  constructor(private _route:ActivatedRoute, private _service:ContactoService, private _institService:InstitucionService, private _router:Router) {
     this._id = this._route.snapshot.paramMap.get('id');
   	this.contactoObservable = this._service.GetContactoObservable(this._id);
     this.contacto = new Funcionario();
     this.mensaje = new Mensaje();
+    this.organizacion = new Organizacion();
   }
 
   ngOnInit() {
@@ -39,7 +44,9 @@ export class DetalleComponent implements OnInit {
 
   getFuncionario(){
   	this.contactoObservable.subscribe(contacto => {
-      this.contacto.Populate(contacto);
+      this.contacto = new Funcionario(contacto);
+      this.organizacion$ = this._institService.GetInstitucion(this.contacto.organizacion);
+      this.organizacion$.subscribe(org => this.organizacion = new Organizacion(org));
       if(this.contacto.foto.indexOf("assets") < 0){
         this.foto$ = this._service.GetFotoContacto(this.contacto.foto);
         this.foto$.subscribe(imgUrl => this.foto = imgUrl);

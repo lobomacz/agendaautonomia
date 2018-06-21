@@ -1,17 +1,17 @@
 <macz-nav-bar [usuario]="usuario"></macz-nav-bar>
 <section class="seccion-formulario-institucion">
-	<div class="formulario-container u-margin-top-big">
-		<h2 class="encabezado-secundario u-center-text">{{ nuevo == true ? 'Ingreso':'Edición' }} de Datos de Instituciones</h2>
+	<h2 class="encabezado-secundario u-center-text">{{ nuevo == true ? 'Ingreso':'Edición' }} de Datos de Instituciones</h2>
+	<div class="formulario__container u-margin-top-medium">
 		<form #formInstitucion="ngForm" accept-charset="utf-8">
-			<div class="tabla-bloques">
+			<div class="tabla-bloques--form">
 				<div class="tabla-bloques__filas">
 					<div class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group" *ngIf="nuevo == true; else siglasRO">
-								<input class="formulario__control" type="text" #nombre_corto="ngModel" name="nombre_corto" required="true" id="nombre_corto" [(ngModel)]="organizacion.nombre_corto" placeholder="Ej.MITRAB" required>
-								<label class="formulario__label" for="nombre_corto">Nombre Corto</label>
-								<div class="mensaje mensaje--error" *ngIf="nombre_corto.invalid && (nombre_corto.dirty || nombre_corto.touched)">
-									<div *ngIf="nombre.errors.required">
+								<input class="formulario__control" type="text" #nombreCorto="ngModel" name="nombre_corto" required="true" id="nombreCorto" [(ngModel)]="organizacion.nombre_corto" placeholder="Ej.MITRAB" required>
+								<label class="formulario__label" for="nombreCorto">Nombre Corto</label>
+								<div class="mensaje mensaje--error" *ngIf="nombreCorto.invalid && (nombreCorto.dirty || nombreCorto.touched)">
+									<div *ngIf="nombreCorto.errors.required">
 										El campo nobre corto es requerido.
 									</div>
 								</div>
@@ -22,10 +22,10 @@
 						</div>
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input class="formulario__control" type="text" id="nombre_largo" name="nombre_largo" required="true" [(ngModel)]="organizacion.nombre_largo" #nombre_largo="ngModel" placeholder="Nombre Institución">
-								<label class="formulario__label" for="nombre_largo">Nombre</label>
-								<div class="mensaje mensaje--error" *ngIf="nombre_largo.invalid && (nombre_largo.dirty || nombre_largo.touched)">
-									<div *ngIf="nombre_largo.errors.required">
+								<input class="formulario__control" type="text" id="nombreLargo" name="nombre_largo" required="true" [(ngModel)]="organizacion.nombre_largo" #nombreLargo="ngModel" placeholder="Nombre Institución">
+								<label class="formulario__label" for="nombreLargo">Nombre</label>
+								<div class="mensaje mensaje--error" *ngIf="nombreLargo.invalid && (nombreLargo.dirty || nombreLargo.touched)">
+									<div *ngIf="nombreLargo.errors.required">
 										El campo nombre es requerido.
 									</div>
 								</div>
@@ -47,14 +47,14 @@
 						</div>
 					</div>
 					<div class="tabla-bloques__fila--flat">
-						<div class="tabla-bloques__columna">
+						<!-- <div class="tabla-bloques__columna">
 							<div class="formulario__group">
 								<select class="formulario__control" name="region" id="region" required="true" #region [(ngModel)]="organizacion.region" (change)="OnSelectRegion()">
 									<option *ngFor="let region of regione$ | async" value="{{ region.key }}">{{ region.key | uppercase }}</option>
 								</select>
 								<label class="formulario__label" for="region">Región</label>
 							</div>
-						</div>
+						</div>-->
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
 								<select class="formulario__control" name="municipio" id="municipio" required="true" [(ngModel)]="organizacion.municipio" placeholder="Seleccione">

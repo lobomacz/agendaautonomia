@@ -34,7 +34,7 @@
 			</div>
 
 		<form #formProyecto="ngForm" accept-charset="utf-8">
-			<div class="tabla-bloques">
+			<div class="tabla-bloques--form">
 				<div class="tabla-bloques__filas">
 					<div class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
@@ -47,7 +47,7 @@
 						<div class="tabla-bloques__columna tabla-bloques__columna--controls">
 							<div class="formulario__group">
 								<label for="cmbOrganizacion">{{ tipoOrg != 'privado' ? 'Institución':'Empresa' }}</label>
-								<select class="formulario__control" #id_organizacion="ngModel" [(ngModel)]="proyecto.id_organizacion" name="cmbOrganizacion" id="cmbOrganizacion" required>
+								<select class="formulario__control" #idOrganizacion="ngModel" [(ngModel)]="proyecto.id_organizacion" name="cmbOrganizacion" id="cmbOrganizacion" required>
 									<option *ngFor="let organizacion of organizacione$ | async" value="{{ organizacion.key }}">{{ organizacion.payload.val().nombre_corto | uppercase }}</option>
 								</select>
 							</div>
@@ -104,11 +104,11 @@
 					<div *ngIf="tipoProyecto == 'gobierno';else soloMonto" class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
 							<label for="txtCex">Cooperación Ext. C$</label>
-							<input class="formulario__control" type="number" name="cooperacion" [(ngModel)]="proyecto.cooperacion" placeholder="0.00">
+							<input class="formulario__control" type="number" name="cooperacion" [(ngModel)]="proyecto.cooperacion" placeholder="0.00" required>
 						</div>
 						<div class="tabla-bloques__columna">
 							<label for="txtTesoro">Fondos del Tesoro C$</label>
-							<input class="formulario__control" type="number" name="tesoro" [(ngModel)]="proyecto.tesoro" placeholder="0.00">
+							<input class="formulario__control" type="number" name="tesoro" [(ngModel)]="proyecto.tesoro" placeholder="0.00" required>
 						</div>
 						<div class="tabla-bloques__columna">
 							<label class="formulario__control">Monto</label>
@@ -122,13 +122,94 @@
 							<div class="tabla-bloques__columna">
 								<div class="formulario__group">
 									<label for="txtMonto">Monto C$</label>
-									<input class="formulario__control" id="txtMonto" #monto="ngModel" type="number" name="monto" [(ngModel)]="proyecto.monto" placeholder="0.00">
+									<input class="formulario__control" id="txtMonto" #monto="ngModel" type="number" name="monto" [(ngModel)]="proyecto.monto" placeholder="0.00" required>
 								</div>
 							</div>
 						</div>
 					</ng-template>
-					<div class="tabla-bloques__fila--flat"></div>
-					<div class="tabla-bloques__fila--flat"></div>
+					<div class="tabla-bloques__fila--flat">
+						<h3 class="encabezado-terciario">Ubicación</h3>
+					</div>
+					<div class="tabla-bloques__fila--flat">
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<label for="cmbMunicipio">Municipio</label>
+								<select class="formulario__control" name="municipio" [(ngModel)]="proyecto.municipio" id="cmbMunicipio" #cmbMunicipio="ngModel" (change)="OnMunicipio_Select()" required>
+									<option *ngFor="let municipio of municipio$ | async" value="{{ municipio.key }}">{{ municipio.payload.val().nombre }}</option>
+								</select>
+							</div>
+						</div>
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<label for="cmbComunidad">Comunidad</label>
+								<select class="formulario__control" #cmbComunidad="ngModel" [(ngModel)]="proyecto.comunidad" name="comunidad" id="cmbComunidad" required>
+									<option *ngFor="let comunidad of comunidade$" value="{{ comunidad.key }}">{{ comunidad.payload.val().nombre }}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="tabla-bloques__fila--flat">
+						<h3 class="encabezado-terciario">Personal</h3>
+					</div>
+					<div class="tabla-bloques__fila--flat">
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input id="txtMasculino" class="formulario__control" type="number" name="masculino" [(ngModel)]="proyecto.personal.masculino" placeholder="Masculino">
+								<label class="formulario__label" for="txtMasculino">Masculino</label>
+							</div>
+						</div>
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input class="formulario__control" id="txtFemenino" type="number" name="femenino" [(ngModel)]="proyecto.personal.femenino" placeholder="Femenino">
+								<label class="formulario__label" for="txtFemenino">Femenino</label>
+							</div>
+						</div>
+					</div>
+					<div class="tabla-bloques__fila--flat" *ngIf="tipoProyecto=='gobierno'">
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input id="txtMestizo" class="formulario__control" type="number" name="mestizo" [(ngModel)]="proyecto.personal.mestizo" placeholder="Mestizo">
+								<label for="txtMestizo" class="formulario__label">Mestizo</label>
+							</div>
+						</div>
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input id="txtMiskitu" class="formulario__control" type="number" name="miskitu" [(ngModel)]="proyecto.personal.miskitu" placeholder="Miskitu">
+								<label for="txtMestizo" class="formulario__label">Miskitu</label>
+							</div>
+						</div>
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input id="txtCreole" class="formulario__control" type="number" name="creole" [(ngModel)]="proyecto.personal.creole" placeholder="Creole">
+								<label for="txtCreole" class="formulario__label">Creole</label>
+							</div>
+						</div>
+					</div>
+					<div class="tabla-bloques__fila--flat" *ngIf="tipoProyecto=='gobierno'">
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input id="txtGarifuna" class="formulario__control" type="number" name="garifuna" [(ngModel)]="proyecto.personal.garifuna" placeholder="Garifuna">
+								<label for="txtGarifuna" class="formulario__label">Garifuna</label>
+							</div>
+						</div>
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input id="txtUlwa" class="formulario__control" type="number" name="ulwa" [(ngModel)]="proyecto.personal.ulwa" placeholder="Ulwa">
+								<label for="txtUlwa" class="formulario__label">Ulwa</label>
+							</div>
+						</div>
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input id="txtRama" class="formulario__control" type="number" name="rama" [(ngModel)]="proyecto.personal.rama" placeholder="Rama">
+								<label for="txtRama" class="formulario__label">Rama</label>
+							</div>
+						</div>
+					</div>
+					<div class="tabla-bloques__fila--flat">
+						<div class="tabla-bloques__columna">
+							<input class="btn" type="button" name="guardar" value="{{ nuevo==true ? 'Ingresar':'Guardar' }}" [disabled]="!formProyecto.form.valid" >
+						</div>
+					</div>
 				</div>
 			</div>
 		</form>

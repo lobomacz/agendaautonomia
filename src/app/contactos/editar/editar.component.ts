@@ -22,7 +22,7 @@ export class EditarComponent implements OnInit {
 	private _id:string;
 	private funcionarioObs:Observable<any>;
   private organizaciones:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-  private regiones:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+  //private regiones:Observable<AngularFireAction<DatabaseSnapshot>[]>;
   private munisipiosSub:BehaviorSubject<string | null>;
   private municipios:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private funcionario:Funcionario;
@@ -37,7 +37,8 @@ export class EditarComponent implements OnInit {
   constructor(private _service:ContactoService, private router:Router, private route:ActivatedRoute, private _institService:InstitucionService) {
   	this._id = this.route.snapshot.paramMap.get('id');
     this.funcionario = new Funcionario();
-    this.foto_old_nombre,this.foto_temp_nombre = "";
+    this.foto_old_nombre = "";
+    this.foto_temp_nombre = "";
   	this.dialogo_mensaje = false;
   	this.mensaje = new Mensaje();
     this.guardado = false;
@@ -47,7 +48,7 @@ export class EditarComponent implements OnInit {
   ngOnInit() {
     this.funcionarioObs = this._service.GetContactoObservable(this._id);
   	this.funcionarioObs.subscribe(item => {
-      this.funcionario.Populate(item);
+      this.funcionario = new Funcionario(item);
       if(this.funcionario.foto.indexOf("assets") < 0){
         let foto$:Observable<string> = this._service.GetFotoContacto(this.funcionario.foto);
         foto$.subscribe(imgUrl => {
@@ -63,7 +64,7 @@ export class EditarComponent implements OnInit {
       this.dialogo_mensaje = true;
     });
 
-    this.munisipiosSub = new BehaviorSubject(null);
+    //this.munisipiosSub = new BehaviorSubject(null);
 
     this.GetListas();
   }
@@ -76,13 +77,14 @@ export class EditarComponent implements OnInit {
 
   GetListas():void{
     this.organizaciones = this._institService.GetInstituciones();
-    this.regiones = this._service.GetRegiones();
-    this.municipios = this._service.GetMunicipiosPorRegion(this.munisipiosSub);
+    //this.regiones = this._service.GetRegiones();
+    this.municipios = this._service.GetMunicipios(); //this._service.GetMunicipiosPorRegion(this.munisipiosSub);
   }
 
+  /*
   OnSelectRegion(){
     this.munisipiosSub.next(this.funcionario.region);
-  }
+  }*/
 
   OnFotoChange(foto:any){
 

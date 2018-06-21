@@ -1,8 +1,9 @@
 <macz-nav-bar [usuario]="usuario"></macz-nav-bar>
 <section class="seccion-nuevo-usuario">
-	<div class="formulario-container">
+	<h2 class="encabezado-secundario u-center-text">{{ nuevo == true ? 'Ingresar':'Editar' }} Contacto</h2>
+	<div class="formulario__container u-margin-top-medium">
 		<form #contactForm="ngForm" accept-charset="utf-8">
-			<div class="tabla-bloques">
+			<div class="tabla-bloques--form">
 				<div class="tabla-bloques__filas">
 					<div class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
@@ -18,7 +19,7 @@
 							<div class="formulario__group">
 								<label for="organizacion">Institución</label>
 								<select class="formulario__control" name="organizacion" [(ngModel)]="funcionario.organizacion" required>
-									<option *ngFor="let org of organizaciones | async" value="{{ org.key }}">{{ org.key | uppercase }}</option>
+									<option *ngFor="let org of organizaciones | async" value="{{ org.key }}">{{ org.payload.val().nombre_corto | uppercase }}</option>
 								</select>
 							</div>
 							<div class="formulario__group">
@@ -42,12 +43,12 @@
 					</div>
 					<div class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
-							<div class="formulario__group">
+							<!--<div class="formulario__group">
 								<label for="region">Región</label>
 								<select class="formulario__control" name="region" id="region" required #region [(ngModel)]="funcionario.region" (change)="OnSelectRegion()">
 									<option *ngFor="let region of regiones | async" value="{{ region.key }}">{{ region.key | uppercase }}</option>
 								</select>
-							</div>
+							</div>-->
 							<div class="formulario__group">
 								<label for="municipio">Municipio</label>
 								<select class="formulario__control" name="municipio" id="municipio" required [(ngModel)]="funcionario.municipio" placeholder="Seleccione">

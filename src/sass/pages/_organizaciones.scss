@@ -1,8 +1,3 @@
-.seccion-organizaciones {
-	@extend %extension_de_seccion;
-	text-align: center;
-}
-
-.seccion-formulario-institucion {
+.seccion-organizaciones, .seccion-formulario-institucion {
 	@extend %extension_de_seccion;
 }

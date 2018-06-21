@@ -3,7 +3,7 @@
 		display: inline-block;
 		padding: 1rem;
 		text-align: left;
-		@include centra-elemento;
+		//@include centra-elemento;
 		background-color: rgba($color-gris-claro, .7);
 		border-radius: 1rem;
 	}
@@ -22,7 +22,7 @@
 	&__control {
 		color: $color-gris-oscuro;
 		width: 25rem;
-		height: 2.5rem;
+		height: 3rem;
 		margin-left: 1rem;
 		padding-left: 1rem;
 		font-family: inherit;

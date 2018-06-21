@@ -6,6 +6,8 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+import { Proyecto } from '../clases/proyecto';
+
 
 @Injectable()
 export class ProyectosService extends AgendaService {
@@ -28,6 +30,18 @@ export class ProyectosService extends AgendaService {
 
 	GetProyectosPorInstitucion(subject:BehaviorSubject<string>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
 		return subject.switchMap(instit => this._db.list('/proyectos', ref => ref.orderByChild('id_organizacion').equalTo(instit)).snapshotChanges());
+	}
+
+	IngresaProyecto(proyecto:Proyecto):any{
+		return this._db.list('/proyectos').push(proyecto.ToJSon());
+	}
+
+	ActualizaProyecto(proyecto:Proyecto, _id:string):Promise<void>{
+		return this._db.object('/proyectos/'.concat(_id)).update(proyecto.ToJSon());
+	}
+
+	BorraProyecto(_id:string):Promise<void>{
+		return this._db.object('/proyectos/'.concat(_id)).remove();
 	}
 
 }

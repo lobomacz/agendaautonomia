@@ -21,29 +21,45 @@ export class NuevoProyectoComponent implements OnInit {
 	private nuevo:boolean;
 	private tipoProyecto:string;
 	private proyecto:Proyecto;
-	private institucionesSub:BehaviorSubject<string | null>;
-	private institucione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+	private organizacionesSub:BehaviorSubject<string | null>;
+	private organizacione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private sectore$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-	private personalProyecto:any;
+	private municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+	private comunidadesSub:BehaviorSubject<string | null>;
+	private comunidade$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 
 
-  constructor(private _service:ProyectosService, private _institService:InstitucionService) { 
+  constructor(private _service:ProyectosService, private _institService:InstitucionService, private _router:Router) { 
   	this.nuevo = true;
   	this.usuario = false;
   	this.proyecto = new Proyecto();
   	this.tipoProyecto = "gobierno";
-  	this.personalProyecto = {"f":0,"m":0,"mestizo":0,"miskitu":0,"creole":0,"garifuna":0,"ulwa":0,"rama":0};
   }
 
   ngOnInit() {
-  	this.institucionesSub = new BehaviorSubject(this.tipoProyecto);
-  	this.institucione$ = this._institService.GetInstitucionesPorTipo(this.institucionesSub);
+  	this.organizacionesSub = new BehaviorSubject(this.tipoProyecto);
+  	this.organizacione$ = this._institService.GetInstitucionesPorTipo(this.organizacionesSub);
   	this.sectore$ = this._service.GetSectores();
+  	this.municipio$ = this._service.GetMunicipios();
   }
 
   setTipoProyecto(tipo:string):void{
   	this.tipoProyecto = tipo;
-  	this.institucionesSub.next(this.tipoProyecto);
+  	this.organizacionesSub.next(this.tipoProyecto);
+  }
+
+  OnMunicipio_Select(){
+  	if(this.comunidadesSub == null){
+	  	this.comunidadesSub = new BehaviorSubject(this.proyecto.municipio);
+	  	this.comunidade$ = this._service.GetComunidadesPorMunicipio(this.comunidadesSub);
+  	}else{
+  		this.comunidadesSub.next(this.proyecto.municipio);
+  	}
+  }
+
+  OnGuardar_Listener(){
+  	this.proyecto.tipo = this.tipoProyecto;
+    this._service.IngresaProyecto(this.proyecto).then(()=>this._router.navigateByUrl('/proyectos'));
   }
 
 }

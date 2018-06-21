@@ -5,26 +5,31 @@ export class Funcionario {
 	organizacion:string;
 	cargo:string;
 	municipio:string;
-	region:string;
+	//region:string;
 	correo:string;
 	telefono:string;
 	movil:string;
 
-	constructor (Foto:string = "assets/img/unknown-user.png"){
-		this.foto = Foto;
-	}
-
-	public Populate(datos:any){
-		if(datos!=null){
-			this.foto = datos.foto;
-			this.nombre = datos.nombre;
-			this.organizacion = datos.organizacion;
-			this.cargo = datos.cargo;
-			this.municipio = datos.municipio;
-			this.region = datos.region;
-			this.correo = datos.correo;
-			this.telefono = datos.telefono;
-			this.movil = datos.movil;
+	constructor (dato?:any, Foto:string = "assets/img/unknown-user.png"){
+		if(dato != null){
+			this.foto = dato.foto;
+			this.nombre = dato.nombre;
+			this.organizacion = dato.organizacion;
+			this.cargo = dato.cargo;
+			this.municipio = dato.municipio;
+			this.correo = dato.correo;
+			this.telefono = dato.telefono;
+			this.movil = dato.movil;
+		}else{
+			this.foto = Foto;
+			this.nombre = '';
+		  	this.organizacion = '';
+		  	this.cargo = '';
+		  	//this.region = '';
+		  	this.municipio = '';
+		  	this.correo = '';
+		  	this.telefono = '';
+		  	this.movil = '';
 		}
 	}
 
@@ -35,7 +40,7 @@ export class Funcionario {
 			"organizacion":this.organizacion,
 			"cargo":this.cargo.toUpperCase(),
 			"municipio":this.municipio,
-			"region":this.region,
+			//"region":this.region,
 			"correo":this.correo,
 			"telefono":this.telefono,
 			"movil":this.movil

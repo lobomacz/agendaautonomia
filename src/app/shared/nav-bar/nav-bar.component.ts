@@ -43,7 +43,6 @@ export class NavBarComponent implements OnInit {
   }
 
   OnNavLink_Click(event:any,ruta:string){
-    console.log(ruta);
     this.router.navigateByUrl(ruta);
     event.preventDefault();
   }

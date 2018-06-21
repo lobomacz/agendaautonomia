@@ -19,8 +19,8 @@ export class NuevaOrganizacionComponent implements OnInit {
 
 	private usuario:boolean;
 	private organizacion:Organizacion;
-	private regione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-	private municipiosSubject:BehaviorSubject<string | null>;
+	//private regione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+	//private municipiosSubject:BehaviorSubject<string | null>;
 	private municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private lista_niveles:string[];
 	private lista_tipos:string[];
@@ -29,22 +29,23 @@ export class NuevaOrganizacionComponent implements OnInit {
 
   constructor(private _service:InstitucionService, private _router:Router) {
   	this.nuevo = true;
-  	this.municipiosSubject = new BehaviorSubject(null);
+  	//this.municipiosSubject = new BehaviorSubject(null);
   	this.usuario = false;
   }
 
   ngOnInit() {
   	this.lista_niveles = ["regional","municipal","territorial","comunal"];
   	this.lista_tipos = ["gobierno","ong","privado"];
-  	this.regione$ = this._service.GetRegiones();
-  	this.municipio$ = this._service.GetMunicipiosPorRegion(this.municipiosSubject);
+  	//this.regione$ = this._service.GetRegiones();
+  	this.municipio$ = this._service.GetMunicipios(); //this._service.GetMunicipiosPorRegion(this.municipiosSubject);
   	this.organizacion = new Organizacion();
   }
 
+  /*
   OnSelectRegion(){
   	let region:string = this.organizacion.region;
   	this.municipiosSubject.next(region);
-  }
+  }*/
 
   OnGuardar(){
     let that = this;

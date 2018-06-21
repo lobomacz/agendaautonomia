@@ -9,7 +9,7 @@
 				<div class="tarjeta-contacto--detalle__texto">
 					<h3 class="titulo__tarjeta">{{ contacto.nombre }}</h3>
 					<p>
-						Institución: {{ contacto.organizacion }}
+						Institución: {{ organizacion.nombre_largo }}
 					</p>
 					<p>
 						Cargo: {{ contacto.cargo }}
@@ -21,7 +21,7 @@
 						Correo: <a href="mailto:{{ contacto.correo }}" class="correo">{{ contacto.correo }}</a>
 					</p>
 					<p>
-						Región: {{ contacto.region }} Municipio: {{ contacto.municipio }}
+						Municipio: {{ contacto.municipio }}
 					</p>
 					<p><a routerLink="/contactos/editar/{{ _id }}" class="btn-texto">Editar</a><a href="#" class="btn-texto" (click)="OnEliminarClick($event)">Eliminar</a></p>
 				</div>

@@ -4,7 +4,7 @@ export class Organizacion {
 	direccion:string;
 	municipio:string;
 	nivel:string;
-	region:string;
+	//region:string;
 	sitio:string;
 	tipo:string;
 	descripcion:string;
@@ -17,11 +17,11 @@ export class Organizacion {
 			this.nombre_largo = datos.nombre_largo;
 			this.direccion = datos.direccion;
 			this.municipio = datos.municipio;
-			this.region = datos.region;
+			//this.region = datos.region;
 			this.nivel = datos.nivel;
 			this.tipo = datos.tipo;
 			this.sitio = datos.sitio;
-			this.descripcion = datos.descripcion;
+			this.descripcion = datos.descripcion || "";
 			this.telefono = datos.telefono;
 		}else{
 			this.tipo = _tipo;
@@ -37,7 +37,7 @@ export class Organizacion {
 			"nombre_largo": this.nombre_largo.toUpperCase(),
 			"direccion": this.direccion.toUpperCase(),
 			"municipio": this.municipio,
-			"region": this.region,
+			//"region": this.region,
 			"nivel": this.nivel,
 			"sitio": this.sitio.toLowerCase(),
 			"tipo": this.tipo.toLowerCase(),

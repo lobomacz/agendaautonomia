@@ -16,16 +16,16 @@ export class OrganizacionesComponent implements OnInit {
 
 	public usuario:any;
 	public tipo_filtro:string;
+  private organizacionesSub:BehaviorSubject<string | null>;
 	private organizaciones$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-	private organizacionesSub:BehaviorSubject<string | null>;
 
 
   constructor(private _service:InstitucionService) {
-  	this.organizacionesSub = new BehaviorSubject(null);
   	this.tipo_filtro = 'todas';
   }
 
   ngOnInit() {
+    this.organizacionesSub = new BehaviorSubject(null);
     this.organizaciones$ = this._service.GetInstitucionesPorTipo(this.organizacionesSub);
   }
 

@@ -27,32 +27,23 @@ export class NuevoComponent implements OnInit {
   private foto_temp_nombre:string;
 	private funcionario:Funcionario;
   private organizaciones:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-  private regiones:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-  private municipiosSub:BehaviorSubject<string | null>;
+  //private regiones:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+  //private municipiosSub:BehaviorSubject<string | null>;
   private municipios:Observable<AngularFireAction<DatabaseSnapshot>[]>;
   
 
   constructor(private _service:ContactoService, private router:Router, private _institService:InstitucionService) { 
-    this.municipiosSub = new BehaviorSubject(null);
+    //this.municipiosSub = new BehaviorSubject(null);
     this.foto_temp_nombre = "assets/img/unknown-user.png";
     this.guardado = false;
     this.nuevo = true;
+    this.funcionario = new Funcionario();
   }
 
   ngOnInit() {
-  	this.funcionario = new Funcionario();
-  	this.funcionario.nombre = '';
-  	this.funcionario.organizacion = '';
-  	this.funcionario.cargo = '';
-  	this.funcionario.region = '';
-  	this.funcionario.municipio = '';
-  	this.funcionario.correo = '';
-  	this.funcionario.telefono = '';
-  	this.funcionario.movil = '';
-
     this.organizaciones = this._institService.GetInstituciones();
-    this.regiones = this._service.GetRegiones();
-    this.municipios = this._service.GetMunicipiosPorRegion(this.municipiosSub);
+    //this.regiones = this._service.GetRegiones();
+    this.municipios = this._service.GetMunicipios(); //this._service.GetMunicipiosPorRegion(this.municipiosSub);
   }
 
   ngOnDestroy() {
@@ -95,9 +86,10 @@ export class NuevoComponent implements OnInit {
 
   }
 
+  /*
   OnSelectRegion(){
     this.municipiosSub.next(this.funcionario.region);
-  }
+  }*/
 
   OnGuardar() {
     let clave:string = this.funcionario.foto.split(".")[0];
@@ -106,15 +98,7 @@ export class NuevoComponent implements OnInit {
         function(){
           that.Redirect();
         }
-      ).catch(error => {
-        if(error.message.indexOf('object_not_found')>=0){
-          let nueva_clave = '/contactos';
-          let item = {clave:that.funcionario.ToJSon()};
-          that._service.GetDb().object(nueva_clave).set(item).then(_ => {
-            that.Redirect();
-          });
-        }
-      });
+      );
   }
 
   Redirect(){

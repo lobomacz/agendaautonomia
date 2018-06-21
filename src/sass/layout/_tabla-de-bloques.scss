@@ -6,6 +6,10 @@
 	border: 1px solid $color-gris-claro-2;
 	margin: 5rem auto;
 
+	&--form {
+		border-spacing: 3rem;
+	}
+
 	&__header {
 		
 		display: table-header-group;

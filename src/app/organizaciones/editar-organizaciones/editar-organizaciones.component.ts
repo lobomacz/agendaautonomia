@@ -19,8 +19,8 @@ export class EditarOrganizacionesComponent implements OnInit {
 	private _id:string;
 	private organizacion:Organizacion;
 	private nuevo:boolean;
-	private regione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-	private municipiosSubject:BehaviorSubject<string | null>;
+	//private regione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+	//private municipiosSubject:BehaviorSubject<string | null>;
 	private municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private lista_niveles:string[];
 	private lista_tipos:string[];
@@ -28,24 +28,26 @@ export class EditarOrganizacionesComponent implements OnInit {
   constructor(private _service:InstitucionService, private _router:Router, private route:ActivatedRoute) { 
   	this.usuario = false;
   	this._id = this.route.snapshot.paramMap.get('id');
-  	this.municipiosSubject = new BehaviorSubject(null);
+  	//this.municipiosSubject = new BehaviorSubject(null);
   	this.nuevo = false;
+    this.organizacion = new Organizacion();
   }
 
   ngOnInit() {
   	this.lista_niveles = ["regional","municipal","territorial","comunal"];
   	this.lista_tipos = ["gobierno","ong","privado"];
-  	this.regione$ = this._service.GetRegiones();
-  	this.municipio$ = this._service.GetMunicipiosPorRegion(this.municipiosSubject);
+  	//this.regione$ = this._service.GetRegiones();
+  	this.municipio$ = this._service.GetMunicipios(); //this._service.GetMunicipiosPorRegion(this.municipiosSubject);
   	this._service.GetInstitucion(this._id).subscribe(instit => {
   		this.organizacion = new Organizacion(instit);
   	});
   }
 
+  /*
   OnSelectRegion(){
   	let region:string = this.organizacion.region;
   	this.municipiosSubject.next(region);
-  }
+  }*/
 
   OnGuardar(){
   	let that = this;

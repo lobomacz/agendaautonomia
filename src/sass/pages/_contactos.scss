@@ -1,10 +1,4 @@
-.seccion-contactos {
-	text-align: center;
+.seccion-contactos, .seccion-nuevo-usuario, .seccion-editar-contacto {
 	@extend %extension_de_seccion;
-	//width: 100%;
 }
 
-.seccion-nuevo-usuario, .seccion-editar-contacto {
-	@extend %extension_de_seccion;
-	//width: 100%;
-}
