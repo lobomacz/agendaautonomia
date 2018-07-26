@@ -5,7 +5,6 @@ export class Funcionario {
 	organizacion:string;
 	cargo:string;
 	municipio:string;
-	//region:string;
 	correo:string;
 	telefono:string;
 	movil:string;
@@ -25,7 +24,6 @@ export class Funcionario {
 			this.nombre = '';
 		  	this.organizacion = '';
 		  	this.cargo = '';
-		  	//this.region = '';
 		  	this.municipio = '';
 		  	this.correo = '';
 		  	this.telefono = '';
@@ -40,7 +38,6 @@ export class Funcionario {
 			"organizacion":this.organizacion,
 			"cargo":this.cargo.toUpperCase(),
 			"municipio":this.municipio,
-			//"region":this.region,
 			"correo":this.correo,
 			"telefono":this.telefono,
 			"movil":this.movil

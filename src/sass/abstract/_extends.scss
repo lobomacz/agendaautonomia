@@ -42,4 +42,21 @@
 	height: 100%;
 	text-align: center;
 	position: relative;
+	/*
+	background-image: linear-gradient(to right bottom, rgba($color-gris-oscuro, .85), rgba($color-gris-oscuro-3, .85)), url("./assets/img/LittleCornIsland.jpg");
+	background-size: cover;
+	background-blend-mode: darken;*/
+}
+
+%control_label {
+	font-size: $fuente-por-default;
+	cursor: pointer;
+	position: relative;
+}
+
+%control_button {
+	height: 3rem;
+	width: 3rem;
+	display: inline-block;
+	border: 5px solid $color-gris-oscuro-3;
 }

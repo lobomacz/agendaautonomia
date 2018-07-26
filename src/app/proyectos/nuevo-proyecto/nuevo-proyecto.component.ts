@@ -27,6 +27,8 @@ export class NuevoProyectoComponent implements OnInit {
 	private municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private comunidadesSub:BehaviorSubject<string | null>;
 	private comunidade$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+  private min_fecha_inicio:any;
+  private min_fecha_final:any;
 
 
   constructor(private _service:ProyectosService, private _institService:InstitucionService, private _router:Router) { 
@@ -34,6 +36,8 @@ export class NuevoProyectoComponent implements OnInit {
   	this.usuario = false;
   	this.proyecto = new Proyecto();
   	this.tipoProyecto = "gobierno";
+    this.min_fecha_inicio = new Date();
+    this.min_fecha_final = new Date().setMonth(this.min_fecha_inicio.getMonth()+3);
   }
 
   ngOnInit() {
@@ -52,6 +56,7 @@ export class NuevoProyectoComponent implements OnInit {
   	if(this.comunidadesSub == null){
 	  	this.comunidadesSub = new BehaviorSubject(this.proyecto.municipio);
 	  	this.comunidade$ = this._service.GetComunidadesPorMunicipio(this.comunidadesSub);
+      console.log(this.comunidade$);
   	}else{
   		this.comunidadesSub.next(this.proyecto.municipio);
   	}
@@ -59,6 +64,10 @@ export class NuevoProyectoComponent implements OnInit {
 
   OnGuardar_Listener(){
   	this.proyecto.tipo = this.tipoProyecto;
+
+    if(this.proyecto.tipo == "gobierno"){
+      this.proyecto.monto = this.proyecto.cooperacion + this.proyecto.tesoro;
+    }
     this._service.IngresaProyecto(this.proyecto).then(()=>this._router.navigateByUrl('/proyectos'));
   }
 

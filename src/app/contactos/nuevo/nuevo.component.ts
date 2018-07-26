@@ -1,59 +1,71 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';
+import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AngularFireAction, DatabaseSnapshot, AngularFireDatabase } from 'angularfire2/database';
-import { AngularFireStorage } from 'angularfire2/storage';
-import { AngularFireAuth } from 'angularfire2/auth';
-
-import { ContactoService } from '../../servicios/contacto-service';
-import { InstitucionService } from '../../servicios/institucion-service';
-
+import { AngularFireAction, DatabaseSnapshot } from 'angularfire2/database';
 import { Funcionario } from '../../clases/funcionario';
-
+import { Usuario } from '../../clases/usuario';
+import { Mensaje } from '../../clases/mensaje';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+import { AuthserviceService } from '../../servicios/authservice.service';
+import { ContactoService } from '../../servicios/contacto-service';
+import { InstitucionService } from '../../servicios/institucion-service';
 
 @Component({
   selector: 'macz-nuevo',
-  templateUrl: '../contacto.plantilla.html',
+  templateUrl: '../contacto.plantilla.html', //'./nuevo.component.html',
   styleUrls: ['./nuevo.component.scss']
 })
 export class NuevoComponent implements OnInit {
 
 	private usuario:any;
-  private nuevo:boolean;
-  private guardado:boolean;
-  private foto_temp_nombre:string;
-	private funcionario:Funcionario;
-  private organizaciones:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-  //private regiones:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-  //private municipiosSub:BehaviorSubject<string | null>;
-  private municipios:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-  
+	private _id:string;
+	private nuevo:boolean;
+	private fotoFile:any;
+	private fotoUrl:string;
+	private nombreFoto:string;
+	private funcionario?:Funcionario;
+	private funcionarioGuardado:boolean;
+	private usuarioFuncionario?:Usuario;
+	private crearUsuario:boolean;
+	private resetPassword:boolean;
+	private contrasena:string;
+	private confirmaContrasena:string;
+	private usuarioGuardado:boolean;
+	private organizacione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+	private municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 
-  constructor(private _service:ContactoService, private router:Router, private _institService:InstitucionService) { 
-    //this.municipiosSub = new BehaviorSubject(null);
-    this.foto_temp_nombre = "assets/img/unknown-user.png";
-    this.guardado = false;
-    this.nuevo = true;
-    this.funcionario = new Funcionario();
+	private mostrarDialogo:boolean;
+	private mensajeDialogo:Mensaje;
+
+  constructor(private _auth:AuthserviceService, private _cService:ContactoService, private _iService:InstitucionService, private _router:Router) {
+  	this._id = '';
+  	this.nuevo = true;
+  	this.fotoFile = null;
+  	this.fotoUrl = 'assets/img/unknown-user.png';
+  	this.nombreFoto = '';
+  	this.funcionario = new Funcionario();
+  	this.funcionarioGuardado = false;
+  	this.usuarioFuncionario = null;
+  	this.crearUsuario = false;
+  	this.resetPassword = false;
+  	this.usuarioGuardado = false;
+
+  	this.mostrarDialogo = false;
+  	this.mensajeDialogo = new Mensaje();
   }
 
   ngOnInit() {
-    this.organizaciones = this._institService.GetInstituciones();
-    //this.regiones = this._service.GetRegiones();
-    this.municipios = this._service.GetMunicipios(); //this._service.GetMunicipiosPorRegion(this.municipiosSub);
+  	this.organizacione$ = this._iService.GetInstituciones();
+  	this.municipio$ = this._cService.GetMunicipios();
   }
 
   ngOnDestroy() {
-    if (this.guardado == false && this.funcionario.foto.indexOf("assets") < 0 && this.nuevo == true) {
-      let ruta:string = "/user_imgs/" + this.foto_temp_nombre;
-      this._service.BorraImagen(ruta);
-    }
+    this.Elimina_Foto_Temporal();
   }
 
-  OnFotoChange(foto:any) {
+  GetNombreArchivo():string{
     let tipo_archivo:string;
     let partes:string[];
     let nombre_archivo:string;
@@ -66,44 +78,103 @@ export class NuevoComponent implements OnInit {
     }else{
       nombre_archivo = partes[0].concat("_user");
     }
-    
-    switch (foto.files[0].type.split('/')[1]) {
-      case "jpeg":
-        nombre_archivo += ".jpg";
-        break;
-      case "png":
-        nombre_archivo += ".png";
-        break;
-      default:
-        // code...
-        break;
-    }
-    
-    this._service.GuardaFotoContacto(nombre_archivo,foto.files[0]).subscribe(imgUrl => {
-      this.funcionario.foto = nombre_archivo;
-      this.foto_temp_nombre = imgUrl;
-    });
 
+    tipo_archivo = this.fotoFile.type.split('/')[1];
+
+    if (tipo_archivo === "jpeg") {
+      nombre_archivo += ".jpg";
+    } else if (tipo_archivo === "png") {
+      nombre_archivo += ".png";
+    }
+
+    return nombre_archivo;
   }
 
-  /*
-  OnSelectRegion(){
-    this.municipiosSub.next(this.funcionario.region);
-  }*/
+  Elimina_Foto_Temporal(){
+  	if (this.fotoFile != null) {
+      let ruta:string = "/temp/".concat(this.nombreFoto);
+      this._cService.BorraImagen(ruta);
+    }
+  }
 
-  OnGuardar() {
-    let clave:string = this.funcionario.foto.split(".")[0];
+  On_Foto_Change(foto:any){
+  	this.Elimina_Foto_Temporal();
+  	this.fotoFile = foto.files[0];
+    this.nombreFoto = this.GetNombreArchivo();
+    //this.GuardarFoto("temp");
+  }
+
+  On_Guardar_Click(){
+
+  	if(this.fotoFile != null){
+      this.funcionario.foto = this.nombreFoto;
+    }
+    
     let that = this;
-    this._service.GuardaContacto(clave,this.funcionario).then(
-        function(){
-          that.Redirect();
+
+    //Si guardado es 'false' quiere decir que aún no se ha ingresado el funcionario.
+    //Caso contrario, habría que ingresar solo el usuario si así estuviera indicado.
+    if(this.funcionarioGuardado == false){
+      this._cService.GuardaContacto(this.funcionario).then(
+        (ref) => {
+          that._id = ref.key;
+          that.funcionarioGuardado = true;
+          if (that.fotoFile != null) {
+            that.Guardar_Foto("guardar",that._id);
+          }
+
+          //Guardamos el usuario si se marcó para generarle usuario al nuevo funcionario.
+          if (that.crearUsuario == true) {
+          	that.usuarioFuncionario.idFuncionario = that._id;
+            that.Guardar_Usuario().then(credenciales => {
+            	let uid:string = credenciales.user.uid;
+            	that._auth.CreaUsuario(uid, that.usuarioFuncionario).then(() => {
+            		that.Redirect();
+            	});
+            });
+          }else{
+            that.Redirect();
+          }
         }
       );
+    }else if(this.usuarioGuardado == false && this.crearUsuario == true){
+      this.Guardar_Usuario().then(credenciales => {
+	    	let uid:string = credenciales.user.uid;
+	    	that._auth.CreaUsuario(uid, that.usuarioFuncionario).then(() => {
+	    		that.Redirect();
+	    	});
+	    });
+    }
+  }
+
+  Guardar_Usuario():Promise<any>{
+  	return this._auth.GeneraCredencial(this.funcionario.correo, this.contrasena);
+  }
+
+  Guardar_Foto(accion:string, id?:string){
+
+  	if(accion === 'guardar'){
+  		this._cService.GuardaFotoContacto(id, this.nombreFoto, this.fotoFile).subscribe(imgUrl => this.fotoUrl = imgUrl);
+  	}else{
+  		this._cService.GuardaFotoTemp(this.nombreFoto, this.fotoFile).subscribe(imgUrl => this.fotoUrl = imgUrl);
+  	}
+  }
+
+  On_TipoUsuario_Check(tipo:string){
+  	if(this.usuarioFuncionario !== null){
+  		this.usuarioFuncionario.tipoUsuario = tipo;
+  	}
+  }
+
+  On_CreaUsuario_Click(elemento:any){
+    console.log(elemento.control.value);
+    if (this.usuarioFuncionario === null) {
+      this.usuarioFuncionario = new Usuario();
+    }
   }
 
   Redirect(){
-    this.guardado = true;
-    this.router.navigateByUrl('/contactos');
+  	this._router.navigateByUrl('/contactos');
   }
 
 }

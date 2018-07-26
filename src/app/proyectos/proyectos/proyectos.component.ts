@@ -27,31 +27,60 @@ export class ProyectosComponent implements OnInit {
 	private listaProyectos:AngularFireAction<DatabaseSnapshot>[];
 	private listaOpciones:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private listaSectores:AngularFireAction<DatabaseSnapshot>[];
+  private listaOrganizaciones:any;
 
 
-  constructor(private _service:ProyectosService, private _institService:InstitucionService) {
+  constructor(private _service:ProyectosService, private _institService:InstitucionService, private _router:Router) {
   	this.usuario = false;
   	this.opcionFiltro = 'todos';
   	this.aniosSubject = new BehaviorSubject(null);
   }
 
   ngOnInit() {
+
+    this._service.GetSectores().subscribe(lista => {
+      this.listaSectores = lista;
+    });
+
+
+    this._institService.GetInstitucionesAsObject().subscribe(objeto => {
+      this.listaOrganizaciones = objeto;
+    });
+
   	this.aniosSubject = new BehaviorSubject(null);
+
   	this.proyecto_anio$ = this._service.GetProyectosPorAnio(this.aniosSubject);
-  	this.LlenaLista();
-  	this._service.GetSectores().subscribe(lista => {
-  		this.listaSectores = lista;
-  	});
+
+  	this.LlenaProyectos();
+
   }
 
-  LlenaLista(){
+  BuscaOrganizacion(clave:string):string{
+    let nombre:string = "N/C";
+
+    if(this.listaOrganizaciones != null && this.listaOrganizaciones.length > 0){
+      for(let organizacion of this.listaOrganizaciones){
+        if(organizacion.key == clave){
+          nombre = organizacion.payload.val().nombre_corto;
+        }
+      }
+    }
+    
+    return nombre;
+  }
+
+  LlenaProyectos(){
 
   	switch (this.opcionFiltro) {
   		case "sector":
-  			this.proyecto_sector$.subscribe(lista => this.listaProyectos = lista);
+  			this.proyecto_sector$.subscribe(lista => {
+          this.listaProyectos = lista;
+        });
   			break;
   		case "institucion":
-  			this.proyecto_institucion$.subscribe(lista => this.listaProyectos = lista);
+  			this.proyecto_institucion$.subscribe(lista => {
+          this.listaProyectos = lista;
+        });
   			break;
   		default:
   			this.proyecto_anio$.subscribe(lista => {
@@ -62,11 +91,11 @@ export class ProyectosComponent implements OnInit {
 
   }
 
-  GetListaSectores(){
+  GetOpcionesSectores(){
   	this.listaOpciones = this._service.GetSectores();
   }
 
-  GetListaInstituciones(){
+  GetOpcionesInstituciones(){
   	this.listaOpciones = this._institService.GetInstituciones();
   }
 
@@ -75,10 +104,10 @@ export class ProyectosComponent implements OnInit {
 
   	switch (this.opcionFiltro) {
   		case "sector":
-  			this.GetListaSectores();
+  			this.GetOpcionesSectores();
   			break;
   		case "institucion":
-  			this.GetListaInstituciones();
+  			this.GetOpcionesInstituciones();
   			break;
   	}
   }
@@ -109,7 +138,7 @@ export class ProyectosComponent implements OnInit {
   			break;
   	}
 
-  	this.LlenaLista();
+  	this.LlenaProyectos();
   }
 
 }

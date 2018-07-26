@@ -23,6 +23,10 @@ export class InstitucionService extends AgendaService {
 	   return organizacionesSub.switchMap(tipo_org => this._db.list('/organizaciones', ref => tipo_org ? ref.orderByChild('tipo').equalTo(tipo_org) : ref).snapshotChanges());
 	}
 
+	public GetInstitucionesAsObject():Observable<any>{
+		return this._db.object('/organizaciones').valueChanges();
+	}
+
 	public GetInstitucion(_id:string):Observable<any>{
 	  return this._db.object('/organizaciones/'+_id).valueChanges();
 	}

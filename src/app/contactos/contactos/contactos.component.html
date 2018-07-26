@@ -4,23 +4,14 @@
 		<a class="fab-button__link" routerLink="nuevo">&#xe20d;</a>
 	</div>
 	<h2 class="encabezado-secundario u-margin-bottom-medium">Lista de contactos de instituciones</h2>
-	<div class="row">
-		<div class="col-1-de-3  u-margin-bottom-medium" *ngFor="let contacto of contactos | async">
+	<div class="row" *ngIf="contacto$ != null; else sindatos">
+		<div class="col-1-de-3  u-margin-bottom-medium" *ngFor="let contacto of contacto$">
 			<div class="tarjeta-contacto tarjeta-contacto--lista">
-				<!--
-				<figure class="tarjeta-contacto--lista__shape" *ngIf="contacto.payload.val().foto.indexOf('assets') < 0; else imagenAlterna">
-					<img src="{{ BuscaFoto(contacto.payload.val().foto) }}" class="tarjeta-contacto--lista__img" >
-				</figure>
-				<ng-template #imagenAlterna>
-					<figure class="tarjeta-contacto--lista__shape">
-						<img src="{{ contacto.payload.val().foto }}" class="tarjeta-contacto--lista__img">
-					</figure>
-				</ng-template> -->
 
 				<div class="tarjeta-contacto--lista__texto">
 					<h4 class="encabezado-terciario u-margin-bottom-small">{{ contacto.payload.val().nombre }}</h4>
 					<p>
-						Institución: {{ contacto.payload.val().organizacion }}
+						Institución: {{ organizaciones[contacto.payload.val().organizacion].nombre_corto }}
 					</p>
 					<p>
 						Cargo: {{ contacto.payload.val().cargo }}
@@ -30,4 +21,9 @@
 			</div>
 		</div>
 	</div>
+	<ng-template #sindatos>
+		<h3 class="encabezado-terciario">
+			No se encontraron datos de Contactos.
+		</h3>
+	</ng-template>
 </section>

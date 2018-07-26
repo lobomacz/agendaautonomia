@@ -6,6 +6,7 @@ import { ProyectosComponent } from './proyectos/proyectos.component';
 import { SharedModule } from './../shared/shared.module';
 import { NuevoProyectoComponent } from './nuevo-proyecto/nuevo-proyecto.component';
 import { EditaProyectoComponent } from './edita-proyecto/edita-proyecto.component';
+import { DetalleProyectoComponent } from './detalle-proyecto/detalle-proyecto.component';
 
 
 const routes:Routes = [
@@ -13,6 +14,10 @@ const routes:Routes = [
 		path: '',
 		component: ProyectosComponent
 	},
+  {
+    path: 'ver/:id',
+    component: DetalleProyectoComponent
+  },
   {
     path: 'nuevo',
     component: NuevoProyectoComponent
@@ -30,6 +35,6 @@ const routes:Routes = [
     SharedModule,
     FormsModule
   ],
-  declarations: [ProyectosComponent, NuevoProyectoComponent, EditaProyectoComponent]
+  declarations: [ProyectosComponent, NuevoProyectoComponent, EditaProyectoComponent, DetalleProyectoComponent]
 })
 export class ProyectosModule { }

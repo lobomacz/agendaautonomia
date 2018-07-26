@@ -1,0 +1,74 @@
+<macz-nav-bar [usuario]="usuario"></macz-nav-bar>
+<section class="seccion-detalle-proyecto">
+	<div class="detalle-elemento" >
+		<h2 class="encabezado-secundario">{{ proyecto.nombre | uppercase }}</h2>
+		<ul>
+			<li><span class="icon icon-macz-building"></span> {{ proyecto.tipo == 'gobierno'? 'Institución':'Organización' }}: {{ organizacion | uppercase }}</li>
+			<li><span class="icon icon-macz-asterisk"></span> Objetivo: {{ proyecto.objetivo | uppercase }}</li>
+			<li><span class="icon icon-macz-star"></span> Año: {{ proyecto.anio }}</li>
+			<li><span class="icon icon-macz-cubes"></span> Sector: {{ sector | uppercase }}</li>
+			<li><span class="icon icon-macz-map"></span>
+				Ubicación:
+				<ul>
+					<li><span class="icon icon-macz-map-signs"></span> Municipio: {{ municipio | uppercase }}</li>
+					<li><span class="icon icon-macz-pin"></span> Comunidad: {{ comunidad | uppercase }}</li>
+				</ul>
+			</li>
+			<li><span class="icon icon-macz-money"></span>
+			Financiamiento:
+				<ul *ngIf="proyecto.tipo == 'gobierno';else montoPrivado">
+					<li>
+						Cooperación Externa: {{ proyecto.cooperacion | currency:'NIO':'symbol-narrow':'4.2-2' }}
+					</li>
+					<li>
+						Fondos del Tesoro: {{ proyecto.tesoro | currency:'NIO':'symbol-narrow':'4.2-2' }}
+					</li>
+					<li>
+						Total: {{ proyecto.monto | currency:'NIO':'symbol-narrow':'4.2-2' }}
+					</li>
+				</ul>
+				<ng-template #montoPrivado>
+					Total: {{ proyecto.monto | currency:'NIO':'symbol-narrow':'4.2-2' }}
+				</ng-template>
+			</li>
+			<li><span class="icon icon-macz-calendar"></span> Fecha de inicio: {{ proyecto.fechaInicio | date:'dd-LLL-yyyy' }} <span class="icon icon-macz-calendar-o"></span> Fecha de culminación: {{ proyecto.fechaFinal | date:'dd-LLL-yyyy' }}</li>
+			<li>
+				<span class="icon icon-macz-users"></span> Protagonistas: {{ proyecto.protagonistas }}
+			</li>
+			<li>
+				<span class="icon icon-macz-rebel"></span> Personal Contratado:
+				<ul>
+					<li>
+						<span class="icon icon-macz-male"></span> Masculino = {{ proyecto.personal.masculino }}
+					</li>
+					<li>
+						<span class="icon icon-macz-female"></span> Femenino = {{ proyecto.personal.femenino }}
+					</li>
+					<li *ngIf="proyecto.tipo == 'ong'">Mestizo = {{ proyecto.personal.mestizo }}</li>
+					<li *ngIf="proyecto.tipo == 'ong'">Creole = {{ proyecto.personal.creole }}</li>
+					<li *ngIf="proyecto.tipo == 'ong'">Miskitu = {{ proyecto.personal.miskitu }}</li>
+					<li *ngIf="proyecto.tipo == 'ong'">Garifuna = {{ proyecto.personal.garifuna }}</li>
+					<li *ngIf="proyecto.tipo == 'ong'">Ulwa = {{ proyecto.personal.ulwa }}</li>
+					<li *ngIf="proyecto.tipo == 'ong'">Rama = {{ proyecto.personal.rama }}</li>
+				</ul>
+			</li>
+		</ul>
+		<p>
+			<a routerLink="/proyectos/editar/{{ _id }}" class="btn-texto">Editar</a>
+			<a href="#" class="btn-texto" (click)="OnEliminar_Click($event)" >Eliminar</a>
+		</p>
+	</div>
+</section>
+
+<div class="overlay" [class.overlay--active]="dialogo_borrar">
+	<div class="overlay__close" (click)="dialogo_borrar=false">
+		<span class="overlay__icon">&#xe00e;</span>
+	</div>
+	<div class="dialog">
+      <h3 class="dialog__titulo u-margin-bottom-medium">Eliminar Proyecto</h3>
+      <p>
+      	Se eliminará el proyecto de la base de datos. ¿Desea Continuar?
+      </p>
+      <a href="#" class="btn" (click)="OnEliminarProyecto_Click($event)">Si</a><a href="#" class="btn" (click)="CerrarModal($event)">No</a>
+    </div>
+</div>

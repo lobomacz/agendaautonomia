@@ -16,16 +16,16 @@ export class ContactoService extends AgendaService {
 	}
 
 	public GetContactosObservable(contactSubject:BehaviorSubject<string | null>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
-  	return contactSubject.switchMap(instit => this._db.list('/contactos', ref => instit ? ref.orderByChild('organización').equalTo(instit) : ref).snapshotChanges());
+  	return contactSubject.switchMap(instit => this._db.list('/contactos', ref => instit ? ref.orderByChild('organizacion').equalTo(instit) : ref).snapshotChanges());
   }
 
   public GetContactoObservable(_id:string):Observable<any>{
     return this._db.object('/contactos/'.concat(_id)).valueChanges();
   }
 
-  public GuardaContacto(clave:string, funcionario:Funcionario):any{
+  public GuardaContacto(funcionario:Funcionario):any{
     let item = funcionario.ToJSon();
-    return this._db.object('/contactos/'.concat(clave)).set(item);
+    return this._db.list('/contactos/').push(item);
     //return this._db.ref('/contactos/'.concat(clave)).set()
   }
 
@@ -37,20 +37,26 @@ export class ContactoService extends AgendaService {
     return this._db.object("/contactos/".concat(clave)).remove();
   }
 
-  public GetFotoContacto(nombre:string):Observable<string>{
-    return this._storage.ref('/user_imgs/'.concat(nombre)).getDownloadURL();
+  public GetFotoContacto(id:string, nombre:string):Observable<string>{
+    return this._storage.ref('/contactos/'.concat(id, "/foto/", nombre)).getDownloadURL();
   }
 
-  public GuardaFotoContacto(nombre:string, archivo:any):Observable<string>{
-    
-    let ref = this._storage.ref('/user_imgs/'+nombre);
+  public GuardaFotoContacto(id:string, nombre:string, archivo:any):Observable<string>{
+    this._storage.ref('/temp/'.concat(nombre)).delete();
+    let ref = this._storage.ref('/contactos/'.concat(id, "/foto/", nombre));
 
     return ref.put(archivo).downloadURL();
   }
 
-  public UpdateFotoContact(anterior:string, nuevo:string, archivo:any):Observable<string>{
-    this._storage.ref('/user_imgs/'.concat(anterior)).delete();
-    return this.GuardaFotoContacto(nuevo,archivo);
+  public GuardaFotoTemp(nombre:string, archivo:any):Observable<string>{
+    let ref = this._storage.ref('/temp/'.concat(nombre));
+
+    return ref.put(archivo).downloadURL();
+  }
+
+  public UpdateFotoContact(id:string, anterior:string, nuevo:string, archivo:any):Observable<string>{
+    this._storage.ref('/contactos/'.concat(id, "/foto/", anterior)).delete();
+    return this.GuardaFotoContacto(id,nuevo,archivo);
   }
 
   public BorraImagen(imagenUrl:string){

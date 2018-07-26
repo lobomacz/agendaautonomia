@@ -7,7 +7,7 @@
 	</div>
 	<nav class="header__navegacion">
 		<div class="navegacion__boton"  *ngFor="let link of link_list">
-			<a class="navegacion__link"(click)="OnNavLink_Click($event,link.ruta)" [innerHtml]="link.icono"></a>
+			<a class="navegacion__link" (click)="OnNavLink_Click($event,link.ruta)" [innerHtml]="link.icono"></a>
 			<span class="navegacion__hint">
 				{{ link.titulo }}
 			</span>

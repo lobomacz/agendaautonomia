@@ -1,5 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { OpcionNav } from '../../clases/opcion-nav';
+import { Component, OnInit } from '@angular/core';
 import { AngularFireAction, DatabaseSnapshot, AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { AngularFireAuth } from 'angularfire2/auth';
@@ -17,17 +16,22 @@ import { InstitucionService } from '../../servicios/institucion-service';
 })
 export class ContactosComponent implements OnInit {
  
-  public usuario:any;
+  private usuario:any;
 
+  private contactosSubject:BehaviorSubject<string | null>;
+  private contacto$?:AngularFireAction<DatabaseSnapshot>[];
+  private contactoVacio:boolean;
 
-  private contactos:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-  private contactosSubject: BehaviorSubject<string | null>;
+  private organizacione$?:Observable<any>;
+  private organizaciones?:any;
 
-  private organizaciones:Observable<any[]>;
-
-  constructor( private _service:ContactoService, private _institService:InstitucionService ) {
+  constructor(private _service:ContactoService, private _institService:InstitucionService) {
 
     this.contactosSubject = new BehaviorSubject(null);
+    this.contacto$ = null;
+    this.contactoVacio = false;
+    this.organizacione$ = null;
+    this.organizaciones = null;
     
   }
 
@@ -36,15 +40,15 @@ export class ContactosComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.contactos = this._service.GetContactosObservable(this.contactosSubject);
-    this.organizaciones = this._institService.GetInstituciones();
-  }
-
-  BuscaFoto(nombre:string):string{
-    let foto$:any = this._service.GetFotoContacto(nombre);
-    let fotoUrl:string;
-    foto$.subscribe(imgUrl => fotoUrl = imgUrl);
-    return fotoUrl;
+    this._service.GetContactosObservable(this.contactosSubject).subscribe(datos => {
+      if (datos.length > 0) {
+        this.contacto$ = datos;
+        this.organizacione$ = this._institService.GetInstitucionesAsObject();
+        this.organizacione$.subscribe(orgs => {
+          this.organizaciones = orgs;
+        });
+      }
+    });
   }
 
 }

@@ -17,7 +17,7 @@ export class ProyectosService extends AgendaService {
 	}
 
 	GetSectores():Observable<AngularFireAction<DatabaseSnapshot>[]>{
-		return this._db.list('/sectores-desarrollo').snapshotChanges();
+		return this._db.list('/sectoresDesarrollo').snapshotChanges();
 	}
 
 	GetProyectosPorAnio(subject:BehaviorSubject<string | null>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
@@ -29,7 +29,15 @@ export class ProyectosService extends AgendaService {
 	}
 
 	GetProyectosPorInstitucion(subject:BehaviorSubject<string>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
-		return subject.switchMap(instit => this._db.list('/proyectos', ref => ref.orderByChild('id_organizacion').equalTo(instit)).snapshotChanges());
+		return subject.switchMap(instit => this._db.list('/proyectos', ref => ref.orderByChild('idOrganizacion').equalTo(instit)).snapshotChanges());
+	}
+
+	GetProyecto(id:string):Observable<any>{
+		return this._db.object('/proyectos/'.concat(id)).valueChanges();
+	}
+
+	GetPersonalProyecto(id:string):Observable<any>{
+		return this._db.object('/personalProyectos/'.concat(id)).valueChanges();
 	}
 
 	IngresaProyecto(proyecto:Proyecto):any{

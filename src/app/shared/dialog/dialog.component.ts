@@ -8,12 +8,12 @@ import { Mensaje } from '../../clases/mensaje';
 })
 export class DialogComponent implements OnInit {
 
-	@Input() mensaje:Mensaje;
+	@Input() mostrarDialogo:boolean;
+	@Input() mensajeDialogo:Mensaje;
 
   constructor() { }
 
   ngOnInit() {
-  	
   }
 
 }

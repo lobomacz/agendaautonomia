@@ -15,14 +15,14 @@
 								</label>
 							</div>
 							<div class="form__group-option">
-								<input #ong id="optOng" class="form__radio-input" type="radio" name="tipoProy" value="ong" (click)="setTipoProyecto(ong.value)">
+								<input #ong id="optOng" class="form__radio-input" type="radio" name="tipoProy" [checked]="tipoProyecto=='ong'" value="ong" (click)="setTipoProyecto(ong.value)">
 								<label class="form__radio-label" for="optOng">
 									<span class="form__radio-button"></span>
 									ONG
 								</label>
 							</div>
 							<div class="form__group-option">
-								<input #privado class="form__radio-input" id="optPrivado" type="radio" name="tipoProy" value="privado" (click)="setTipoProyecto(privado.value)">
+								<input #privado class="form__radio-input" id="optPrivado" type="radio" name="tipoProy" [checked]="tipoProyecto=='privado'" value="privado" (click)="setTipoProyecto(privado.value)">
 								<label class="form__radio-label" for="optPrivado">
 									<span class="form__radio-button"></span>
 									Emp. Priv.
@@ -40,14 +40,14 @@
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
 								<label for="anio">Año</label>
-								<input class="formulario__control" type="number" name="anio" #anio="ngModel" [(ngModel)]="proyecto.anio" placeholder="2018" required id="anio">
+								<input class="formulario__control" type="number" name="anio" #anio="ngModel" [(ngModel)]="proyecto.anio" placeholder="Ej. 2018" required id="anio">
 								
 							</div>
 						</div>
 						<div class="tabla-bloques__columna tabla-bloques__columna--controls">
 							<div class="formulario__group">
 								<label for="cmbOrganizacion">{{ tipoOrg != 'privado' ? 'Institución':'Empresa' }}</label>
-								<select class="formulario__control" #idOrganizacion="ngModel" [(ngModel)]="proyecto.id_organizacion" name="cmbOrganizacion" id="cmbOrganizacion" required>
+								<select class="formulario__control" #idOrganizacion="ngModel" [(ngModel)]="proyecto.idOrganizacion" name="organizacion" id="cmbOrganizacion" required>
 									<option *ngFor="let organizacion of organizacione$ | async" value="{{ organizacion.key }}">{{ organizacion.payload.val().nombre_corto | uppercase }}</option>
 								</select>
 							</div>
@@ -55,7 +55,7 @@
 						<div class="tabla-bloques__columna tabla-bloques__columna--controls">
 							<div class="formulario__group">
 								<label for="nombre">Nombre Proy.</label>
-								<input id="nombre" class="formulario__control" type="text" name="nombre" #nombre placeholder="Nombre Proy." [(ngModel)]="proyecto.nombre" >
+								<input id="nombre" class="formulario__control" type="text" name="nombre" #nombre placeholder="Nombre Proy." [(ngModel)]="proyecto.nombre" required="true">
 								
 							</div>
 						</div>
@@ -87,14 +87,14 @@
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
 								<label for="dtFechaInicio">Fecha Inicio</label>
-								<input id="dtFechaInicio" class="formulario__control" type="date" name="fecha_inicio" [(ngModel)]="proyecto.fecha_inicio">
+								<input id="dtFechaInicio" class="formulario__control" type="date" name="fecha_inicio" min="{{ min_fecha_inicio | date:'longDate' }}" [(ngModel)]="proyecto.fechaInicio" [readonly]="!nuevo">
 							</div>
 							
 						</div>
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
 								<label for="dtFechaFinal">Fecha Final</label>
-								<input class="formulario__control" type="date" name="fecha_final" [(ngModel)]="proyecto.fecha_final">
+								<input min="{{ min_fecha_final | date:'longDate' }}" class="formulario__control" type="date" name="fecha_final" [(ngModel)]="proyecto.fechaFinal">
 							</div>
 						</div>
 					</div>
@@ -104,11 +104,11 @@
 					<div *ngIf="tipoProyecto == 'gobierno';else soloMonto" class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
 							<label for="txtCex">Cooperación Ext. C$</label>
-							<input class="formulario__control" type="number" name="cooperacion" [(ngModel)]="proyecto.cooperacion" placeholder="0.00" required>
+							<input id="txtCex" class="formulario__control" type="number" name="cooperacion" [(ngModel)]="proyecto.cooperacion" placeholder="0.00" required>
 						</div>
 						<div class="tabla-bloques__columna">
 							<label for="txtTesoro">Fondos del Tesoro C$</label>
-							<input class="formulario__control" type="number" name="tesoro" [(ngModel)]="proyecto.tesoro" placeholder="0.00" required>
+							<input id="txtTesoro" class="formulario__control" type="number" name="tesoro" [(ngModel)]="proyecto.tesoro" placeholder="0.00" required>
 						</div>
 						<div class="tabla-bloques__columna">
 							<label class="formulario__control">Monto</label>
@@ -128,6 +128,14 @@
 						</div>
 					</ng-template>
 					<div class="tabla-bloques__fila--flat">
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input name="finalizado" class="form__check-input" type="checkbox" #finalizado="ngModel" id="chkFinalizado" [(ngModel)]="proyecto.finalizado">
+								<label class="form__check-label" for="chkFinalizado">Finalizado <span class="form__check-button">&#xe012;</span></label>
+							</div>
+						</div>
+					</div>
+					<div class="tabla-bloques__fila--flat">
 						<h3 class="encabezado-terciario">Ubicación</h3>
 					</div>
 					<div class="tabla-bloques__fila--flat">
@@ -143,7 +151,7 @@
 							<div class="formulario__group">
 								<label for="cmbComunidad">Comunidad</label>
 								<select class="formulario__control" #cmbComunidad="ngModel" [(ngModel)]="proyecto.comunidad" name="comunidad" id="cmbComunidad" required>
-									<option *ngFor="let comunidad of comunidade$" value="{{ comunidad.key }}">{{ comunidad.payload.val().nombre }}</option>
+									<option *ngFor="let comunidad of comunidade$ | async" value="{{ comunidad.key }}">{{ comunidad.payload.val().nombre }}</option>
 								</select>
 							</div>
 						</div>
@@ -207,7 +215,7 @@
 					</div>
 					<div class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
-							<input class="btn" type="button" name="guardar" value="{{ nuevo==true ? 'Ingresar':'Guardar' }}" [disabled]="!formProyecto.form.valid" >
+							<input class="btn" type="button" (click)="OnGuardar_Listener()" name="guardar" value="{{ nuevo==true ? 'Ingresar':'Guardar' }}" [disabled]="!formProyecto.form.valid" >
 						</div>
 					</div>
 				</div>

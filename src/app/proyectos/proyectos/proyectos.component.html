@@ -63,25 +63,28 @@
 			<div class="tabla-bloques__header-cell">Proyecto</div>
 			<div class="tabla-bloques__header-cell">Organización</div>
 			<div class="tabla-bloques__header-cell">Sector</div>
+			<div class="tabla-bloques__header-cell--small">Año</div>
 			<div class="tabla-bloques__header-cell--small">Monto C$</div>
-			<div class="tabla-bloques__header-cell--small"></div>
+			
 		</div>
 		<div class="tabla-bloques__filas">
 			<div class="tabla-bloques__fila" [ngClass]="{'fila-impar':impar}" *ngFor="let proyecto of listaProyectos; odd as impar">
-				<div class="tabla-bloques__columna">
+				<div *ngIf="proyecto != null" class="tabla-bloques__columna">
+					<a routerLink="ver/{{proyecto.key}}" class="btn-texto" >
 					{{ proyecto.payload.val().nombre | uppercase }}
+					</a>
 				</div>
-				<div class="tabla-bloques__columna">
-					{{ listaSectores[proyecto.payload.val().sector].payload.val() }}
+				<div *ngIf="listaOrganizaciones != null" class="tabla-bloques__columna">
+					{{ listaOrganizaciones[proyecto.payload.val().id_organizacion].nombre_corto | uppercase }}
 				</div>
-				<div class="tabla-bloques__columna">
+				<div *ngIf="proyecto != null" class="tabla-bloques__columna">
+					{{ listaSectores[proyecto.payload.val().sector].payload.val() | uppercase }}
+				</div>
+				<div *ngIf="proyecto != null" class="tabla-bloques__columna">
 					{{ proyecto.payload.val().anio }}
 				</div>
-				<div class="tabla-bloques__columna">
-					{{ proyecto.payload.val().monto | currency:'NIO':'symbol' }}
-				</div>
-				<div class="tabla-bloques__columna">
-					<a href="#" class="btn-texto" (click)="VerProyecto($event, proyecto.key)" >Ver</a>
+				<div *ngIf="proyecto != null" class="tabla-bloques__columna">
+					{{ proyecto.payload.val().monto | currency:'NIO':'symbol-narrow' }}
 				</div>
 			</div>
 		</div>

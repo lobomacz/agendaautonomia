@@ -80,24 +80,18 @@
 		display: inline-block;
 	}
 
-	&__radio-input {
+	&__radio-input, &__check-input {
 		display: none;
 	}
 
 	&__radio-label {
-		font-size: $fuente-por-default;
-		cursor: pointer;
-		position: relative;
+		@extend %control_label;
 		padding-left: 4rem;
 		margin-left: 2rem;
 	}
 
 	&__radio-button {
-
-		height: 3rem;
-		width: 3rem;
-		display: inline-block;
-		border: 5px solid $color-gris-oscuro-3;
+		@extend %control_button;
 		border-radius: 50%;
 		position: absolute;
 		top: -.4rem;
@@ -115,10 +109,44 @@
 			opacity: 0;
 			transition: opacity .2s;
 		}
-
 	}
 
 	&__radio-input:checked + &__radio-label &__radio-button::after {
 		opacity: 1;
+	}
+
+	&__check-label {
+		@extend %control_label;
+		padding-right: 4rem;
+		margin-right: 2rem;
+	}
+
+	&__check-button {
+		@extend %control_button;
+		background-color: $color-gris-claro;
+		border-radius: 3px;
+		position: absolute;
+		top: -.4rem;
+		right: 0;
+		backface-visibility: hidden;
+		font-size: 1.5rem;
+		font-family: $fuente-macz;
+		color: $color-verde-musgo;
+		text-align: center;
+
+		&::after {
+			content: "";
+			display: block;
+			@include centra-elemento;
+			background-color: $color-gris-claro;
+			opacity: 1;
+			width: 2rem;
+			height: 2rem;
+			transition: opacity .2s;
+		}
+	}
+
+	&__check-input:checked + &__check-label &__check-button::after {
+		opacity: 0;
 	}
 }

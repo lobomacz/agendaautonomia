@@ -36,14 +36,41 @@ export class AgendaService {
     return municipioSubject.switchMap(reg => this._db.list('/municipios', ref => reg ? ref.orderByChild('region').equalTo(reg) : ref).snapshotChanges());
   }
 
+  public GetMunicipio(id:string):Observable<any>{
+    return this._db.object('/municipios/'.concat(id)).valueChanges();
+  }
+
   public GetComunidadesPorMunicipio(comunidadSubject:BehaviorSubject<string | null>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
     return comunidadSubject.switchMap(municipio => this._db.list('/comunidades', ref => municipio ? ref.orderByChild('municipio').equalTo(municipio):ref).snapshotChanges());
   }
 
-  public AuthUser():Observable<any>{
+  public GetComunidad(id:string):Observable<any>{
+    return this._db.object('/comunidades/'.concat(id)).valueChanges();
+  }
 
-  	return this._auth.authState;
-  	
+  public IngresaComunidades(comunidades:any[]):boolean{
+    let exito = true;
+
+    for(let comunidad of comunidades){
+      this._db.list('/comunidades').push(comunidad).then(()=>{}, error=>{exito = false; return exito;});
+    }
+
+    return exito;
+  }
+
+  public LimpiaNombres():boolean{
+    let limpio = true;
+    let that = this;
+
+    this._db.list('/comunidades').snapshotChanges().subscribe(lista => {
+      for(let item of lista){
+        let clave:string = item.key;
+        let nombre:string = item.payload.val().nombre.trim();
+        that._db.object('/comunidades/'.concat(clave)).update({"nombre":nombre}).then().catch(error => {return false});
+      }
+    });
+
+    return limpio;
   }
   
 }
