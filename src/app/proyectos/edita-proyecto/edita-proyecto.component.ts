@@ -6,6 +6,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 
 import { Proyecto } from '../../clases/proyecto';
+import { PersonalProyecto } from '../../clases/personal-proyecto';
 import { ProyectosService } from '../../servicios/proyectos-service';
 import { InstitucionService } from '../../servicios/institucion-service';
 
@@ -22,6 +23,7 @@ export class EditaProyectoComponent implements OnInit {
 	private _id:string;
 	private tipoProyecto:string;
 	private proyecto:Proyecto;
+  private personalProyecto:PersonalProyecto;
 	private organizacionesSub:BehaviorSubject<string | null>;
 	private organizacione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private sectore$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
@@ -38,11 +40,15 @@ export class EditaProyectoComponent implements OnInit {
   	this._id = this._activatedRoute.snapshot.paramMap.get('id');
   	this.tipoProyecto = "gobierno";
   	this.proyecto = new Proyecto();
+    this.personalProyecto = new PersonalProyecto();
   }
 
   ngOnInit() {
   	this._service.GetProyecto(this._id).subscribe(datos => {
   		this.proyecto = new Proyecto(datos);
+      this._service.GetPersonalProyecto(this._id).subscribe(datos => {
+        this.personalProyecto = new PersonalProyecto(datos);
+      });
   		this.min_fecha_inicio = this.proyecto.fechaInicio;
   		this.min_fecha_final = this.proyecto.fechaFinal;
   		this.tipoProyecto = this.proyecto.tipo;

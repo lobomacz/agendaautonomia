@@ -20,7 +20,7 @@ export class ProyectosService extends AgendaService {
 		return this._db.list('/sectoresDesarrollo').snapshotChanges();
 	}
 
-	GetProyectosPorAnio(subject:BehaviorSubject<string | null>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
+	GetProyectosPorAnio(subject:BehaviorSubject<number>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
 		return subject.switchMap(anio => this._db.list('/proyectos', ref => anio ? ref.orderByChild('anio').equalTo(anio):ref).snapshotChanges());
 	}
 

@@ -13,7 +13,7 @@ export class Proyecto {
 	fechaInicio:string;
 	fechaFinal:string;
 	protagonistas:number;
-	finalizado:boolean;
+	
 
 	constructor(datos?:any) {
 		if(datos != null){
@@ -31,7 +31,7 @@ export class Proyecto {
 			this.fechaInicio = datos.fechaInicio;
 			this.fechaFinal = datos.fechaFinal;
 			this.protagonistas = datos.protagonistas;
-			this.finalizado = datos.finalizado;
+			
 		}else{
 			let fecha = new Date();
 			this.fechaInicio = fecha.toDateString();
@@ -41,7 +41,7 @@ export class Proyecto {
 			this.tesoro = 0.00;
 			this.monto = 0.00;
 			this.protagonistas = 0.00;
-			this.finalizado = false;
+			
 		}
 	}
 
@@ -60,7 +60,6 @@ export class Proyecto {
 			"fecha_inicio": this.fechaInicio,
 			"fecha_final": this.fechaFinal,
 			"protagonistas": this.protagonistas,
-			"finalizado": this.finalizado,
 			"tipo": this.tipo.toLowerCase()
 		};
 	}

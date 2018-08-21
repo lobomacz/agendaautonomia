@@ -1,3 +1,27 @@
-<p>
-  monitoreo works!
-</p>
+<macz-nav-bar [usuario]="usuario"></macz-nav-bar>
+<section class="seccion-monitoreo">
+	<h1 class="encabezado-primario u-center-text">
+		Monitoreo de la Inversión
+	</h1>
+	<div class="tabla-bloques u-margin-top-small">
+		<div class="tabla-bloques__filas">
+			<div class="tabla-bloques__fila--flat">
+				<form action="" #formulario="ngForm" accept-charset="utf-8">
+					<div class="formulario__group">
+						<label for="txtAnio">Año</label>
+						<input class="formulario__control" type="text" #anio="ngModel" id="txtAnio" name="anno" [(ngModel)]="annio">
+						<a href="#" class="btn btn--white u-margin-top-small" (click)="BuscarDatos($event)">Buscar</a>
+					</div>
+				</form>
+			</div>
+			<div class="tabla-bloques__fila--flat">
+				<canvas #chartPorInstitucion id="gPorInstitucion">{{ cPorInstituciones }}</canvas>
+			</div>
+			<div class="tabla-bloques__fila--flat u-margin-top-medium">
+				<canvas #chartPorSector id="gPorSector">{{ cPorSector }}</canvas>
+			</div>
+		</div>
+	</div>
+</section>
+
+

@@ -1,6 +1,7 @@
 .tarjeta-contacto {
 
 	background-color: $color-blanco;
+	text-align: center;
 	
 	&--lista {
 
@@ -41,7 +42,8 @@
 		background-color: rgba($color-blanco, .7);
 		border: 1px solid $color-negro;
 		border-radius: 3px;
-		@include centra-elemento;
+		display: inline-block;
+		//@include centra-elemento;
 		padding: 2rem;
 
 		&__shape {

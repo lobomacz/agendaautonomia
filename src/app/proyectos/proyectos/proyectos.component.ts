@@ -18,7 +18,8 @@ export class ProyectosComponent implements OnInit {
 	private usuario:boolean;
 	private opcionFiltro:string;
 	private filtro:string;
-	private aniosSubject:BehaviorSubject<string | null>;
+  private annio:number;
+	private aniosSubject:BehaviorSubject<number>;
 	private sectorSubject:BehaviorSubject<string>;
 	private institucionSubject:BehaviorSubject<string>;
 	private proyecto_anio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
@@ -33,7 +34,7 @@ export class ProyectosComponent implements OnInit {
   constructor(private _service:ProyectosService, private _institService:InstitucionService, private _router:Router) {
   	this.usuario = false;
   	this.opcionFiltro = 'todos';
-  	this.aniosSubject = new BehaviorSubject(null);
+    this.annio = new Date().getFullYear();
   }
 
   ngOnInit() {
@@ -47,7 +48,8 @@ export class ProyectosComponent implements OnInit {
       this.listaOrganizaciones = objeto;
     });
 
-  	this.aniosSubject = new BehaviorSubject(null);
+  	//this.aniosSubject = new BehaviorSubject(null);
+    this.aniosSubject = new BehaviorSubject(this.annio);
 
   	this.proyecto_anio$ = this._service.GetProyectosPorAnio(this.aniosSubject);
 
@@ -115,7 +117,7 @@ export class ProyectosComponent implements OnInit {
   UpdateLista(){
   	switch (this.opcionFiltro) {
   		case "anio":
-  			this.aniosSubject.next(this.filtro);
+  			this.aniosSubject.next(Number.parseInt(this.filtro));
   			break;
   		case "sector":
   			if(this.sectorSubject == null){

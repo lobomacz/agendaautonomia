@@ -128,14 +128,6 @@
 						</div>
 					</ng-template>
 					<div class="tabla-bloques__fila--flat">
-						<div class="tabla-bloques__columna">
-							<div class="formulario__group">
-								<input name="finalizado" class="form__check-input" type="checkbox" #finalizado="ngModel" id="chkFinalizado" [(ngModel)]="proyecto.finalizado">
-								<label class="form__check-label" for="chkFinalizado">Finalizado <span class="form__check-button">&#xe012;</span></label>
-							</div>
-						</div>
-					</div>
-					<div class="tabla-bloques__fila--flat">
 						<h3 class="encabezado-terciario">Ubicación</h3>
 					</div>
 					<div class="tabla-bloques__fila--flat">
@@ -162,13 +154,13 @@
 					<div class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input id="txtMasculino" class="formulario__control" type="number" name="masculino" [(ngModel)]="proyecto.personal.masculino" placeholder="Masculino">
+								<input id="txtMasculino" class="formulario__control" type="number" name="masculino" [(ngModel)]="personalProyecto.masculino" placeholder="Masculino">
 								<label class="formulario__label" for="txtMasculino">Masculino</label>
 							</div>
 						</div>
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input class="formulario__control" id="txtFemenino" type="number" name="femenino" [(ngModel)]="proyecto.personal.femenino" placeholder="Femenino">
+								<input class="formulario__control" id="txtFemenino" type="number" name="femenino" [(ngModel)]="personalProyecto.femenino" placeholder="Femenino">
 								<label class="formulario__label" for="txtFemenino">Femenino</label>
 							</div>
 						</div>
@@ -176,19 +168,19 @@
 					<div class="tabla-bloques__fila--flat" *ngIf="tipoProyecto=='gobierno'">
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input id="txtMestizo" class="formulario__control" type="number" name="mestizo" [(ngModel)]="proyecto.personal.mestizo" placeholder="Mestizo">
+								<input id="txtMestizo" class="formulario__control" type="number" name="mestizo" [(ngModel)]="personalProyecto.mestizo" placeholder="Mestizo">
 								<label for="txtMestizo" class="formulario__label">Mestizo</label>
 							</div>
 						</div>
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input id="txtMiskitu" class="formulario__control" type="number" name="miskitu" [(ngModel)]="proyecto.personal.miskitu" placeholder="Miskitu">
+								<input id="txtMiskitu" class="formulario__control" type="number" name="miskitu" [(ngModel)]="personalProyecto.miskitu" placeholder="Miskitu">
 								<label for="txtMestizo" class="formulario__label">Miskitu</label>
 							</div>
 						</div>
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input id="txtCreole" class="formulario__control" type="number" name="creole" [(ngModel)]="proyecto.personal.creole" placeholder="Creole">
+								<input id="txtCreole" class="formulario__control" type="number" name="creole" [(ngModel)]="personalProyecto.creole" placeholder="Creole">
 								<label for="txtCreole" class="formulario__label">Creole</label>
 							</div>
 						</div>
@@ -196,26 +188,26 @@
 					<div class="tabla-bloques__fila--flat" *ngIf="tipoProyecto=='gobierno'">
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input id="txtGarifuna" class="formulario__control" type="number" name="garifuna" [(ngModel)]="proyecto.personal.garifuna" placeholder="Garifuna">
+								<input id="txtGarifuna" class="formulario__control" type="number" name="garifuna" [(ngModel)]="personalProyecto.garifuna" placeholder="Garifuna">
 								<label for="txtGarifuna" class="formulario__label">Garifuna</label>
 							</div>
 						</div>
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input id="txtUlwa" class="formulario__control" type="number" name="ulwa" [(ngModel)]="proyecto.personal.ulwa" placeholder="Ulwa">
+								<input id="txtUlwa" class="formulario__control" type="number" name="ulwa" [(ngModel)]="personalProyecto.ulwa" placeholder="Ulwa">
 								<label for="txtUlwa" class="formulario__label">Ulwa</label>
 							</div>
 						</div>
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input id="txtRama" class="formulario__control" type="number" name="rama" [(ngModel)]="proyecto.personal.rama" placeholder="Rama">
+								<input id="txtRama" class="formulario__control" type="number" name="rama" [(ngModel)]="personalProyecto.rama" placeholder="Rama">
 								<label for="txtRama" class="formulario__label">Rama</label>
 							</div>
 						</div>
 					</div>
 					<div class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
-							<input class="btn" type="button" (click)="OnGuardar_Listener()" name="guardar" value="{{ nuevo==true ? 'Ingresar':'Guardar' }}" [disabled]="!formProyecto.form.valid" >
+							<input class="btn" type="button" (click)="OnGuardar_Listener()" name="guardar" value="{{ nuevo === true ? 'Ingresar':'Guardar' }}" [disabled]="!formProyecto.form.valid" >
 						</div>
 					</div>
 				</div>

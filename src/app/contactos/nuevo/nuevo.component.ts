@@ -101,7 +101,7 @@ export class NuevoComponent implements OnInit {
   	this.Elimina_Foto_Temporal();
   	this.fotoFile = foto.files[0];
     this.nombreFoto = this.GetNombreArchivo();
-    //this.GuardarFoto("temp");
+    this.Guardar_Foto("temp");
   }
 
   On_Guardar_Click(){
@@ -174,7 +174,9 @@ export class NuevoComponent implements OnInit {
   }
 
   Redirect(){
-  	this._router.navigateByUrl('/contactos');
+  	this._router.navigateByUrl('/contactos/ver/'.concat(this._id));
   }
+
+
 
 }

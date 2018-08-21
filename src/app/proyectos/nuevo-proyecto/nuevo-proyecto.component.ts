@@ -9,6 +9,8 @@ import { ProyectosService } from '../../servicios/proyectos-service';
 import { InstitucionService } from '../../servicios/institucion-service';
 
 import { Proyecto } from '../../clases/proyecto';
+import { PersonalProyecto } from '../../clases/personal-proyecto';
+import { Usuario } from '../../clases/usuario';
 
 @Component({
   selector: 'macz-nuevo-proyecto',
@@ -17,10 +19,11 @@ import { Proyecto } from '../../clases/proyecto';
 })
 export class NuevoProyectoComponent implements OnInit {
 
-	private usuario:boolean;
+	private usuario:any;
 	private nuevo:boolean;
 	private tipoProyecto:string;
 	private proyecto:Proyecto;
+  private personalProyecto:any;
 	private organizacionesSub:BehaviorSubject<string | null>;
 	private organizacione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private sectore$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
@@ -33,8 +36,8 @@ export class NuevoProyectoComponent implements OnInit {
 
   constructor(private _service:ProyectosService, private _institService:InstitucionService, private _router:Router) { 
   	this.nuevo = true;
-  	this.usuario = false;
   	this.proyecto = new Proyecto();
+    this.personalProyecto = new PersonalProyecto();
   	this.tipoProyecto = "gobierno";
     this.min_fecha_inicio = new Date();
     this.min_fecha_final = new Date().setMonth(this.min_fecha_inicio.getMonth()+3);

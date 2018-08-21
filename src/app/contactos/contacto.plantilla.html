@@ -69,6 +69,14 @@
 							</div>
 						</div>
 					</div>
+					<div class="tabla-bloques__fila--flat" *ngIf="usuarioFuncionario !== null">
+						<div class="tabla-bloques__columna">
+							<h3 class="encabezado-terciario">Cambiar Contraseña</h3>
+						</div>
+						<div class="tabla-bloques__columna">
+							<a href="#" class="btn-texto" (click)="On_Cambia_Contrasenna_Click($event)" >Cambiar</a>
+						</div>
+					</div>
 					<div class="tabla-bloques__fila--flat" *ngIf="crearUsuario == true">
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
@@ -83,7 +91,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="tabla-bloques__fila--flat" *ngIf="crearUsuario == true">
+					<div class="tabla-bloques__fila--flat" *ngIf="crearUsuario == true || usuarioFuncionario !== null">
 						<div class="tabla-bloques__columna">
 							<h3>Tipo de usuario</h3>
 						</div>
