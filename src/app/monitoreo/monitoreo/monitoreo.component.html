@@ -3,24 +3,59 @@
 	<h1 class="encabezado-primario u-center-text">
 		Monitoreo de la Inversión
 	</h1>
+	<div class="row">
+		<div class="col-1-de-4">
+			<form action="" #formulario="ngForm" accept-charset="utf-8">
+				<div class="formulario__group">
+					<label for="txtAnio">Año</label>
+					<input class="formulario__control" type="text" #anio="ngModel" id="txtAnio" name="anno" [(ngModel)]="annio">
+					<a href="#" class="btn btn--white u-margin-top-small" (click)="BuscarDatos($event)">Buscar</a>
+				</div>
+			</form>
+		</div>
+		
+	</div>
 	<div class="tabla-bloques u-margin-top-small">
 		<div class="tabla-bloques__filas">
 			<div class="tabla-bloques__fila--flat">
-				<form action="" #formulario="ngForm" accept-charset="utf-8">
-					<div class="formulario__group">
-						<label for="txtAnio">Año</label>
-						<input class="formulario__control" type="text" #anio="ngModel" id="txtAnio" name="anno" [(ngModel)]="annio">
-						<a href="#" class="btn btn--white u-margin-top-small" (click)="BuscarDatos($event)">Buscar</a>
+				<div class="tabla-bloques__columna">
+					<div class="chart">
+						<canvas class="chart__canvas" #chartPorInstitucion id="gPorInstitucion">{{ cPorInstituciones }}</canvas>
+						<a href="#" class="btn-texto" (click)="VerReporte($event,'instituciones')">Ver Reporte <span class="icon icon-macz-file-text-o"></span></a>
 					</div>
-				</form>
+				</div>
+				<div class="tabla-bloques__columna">
+					<div class="chart">
+						<canvas class="chart__canvas" #chartPorSector id="gPorSector">{{ cPorSector }}</canvas>
+						<a href="#" class="btn-texto" (click)="VerReporte($event,'sector')">Ver Reporte <span class="icon icon-macz-file-text-o"></span></a>
+					</div>
+				</div>
 			</div>
 			<div class="tabla-bloques__fila--flat">
-				<canvas #chartPorInstitucion id="gPorInstitucion">{{ cPorInstituciones }}</canvas>
-			</div>
-			<div class="tabla-bloques__fila--flat u-margin-top-medium">
-				<canvas #chartPorSector id="gPorSector">{{ cPorSector }}</canvas>
+				<div class="tabla-bloques__columna">
+					<div class="chart">
+						<canvas #chartPorFuente class="chart__canvas">{{ cPorFuente }}</canvas>
+						<a href="#" class="btn-texto" (click)="VerReporte($event,'fuente')">Ver Reporte <span class="icon icon-macz-file-text-o"></span></a>
+					</div>
+				</div>
+				<div class="tabla-bloques__columna tabla-bloques__columna--controls">
+					
+					<div class="chart">
+						<form #formFiltro="ngForm" accept-charset="utf-8" class="form" >
+							<div class="formulario__group">
+								<label for="cmbInstitucion">Institución</label>
+								<select #filtroOrg="ngModel" class="formulario__control" [(ngModel)]="filtroInstitucion" name="institucion" id="cmbInstitucion" (change)="ChartPorIS()" >
+									<option *ngFor="let org of institucionesProyectos" value="{{ org.key }}">{{ org.payload.val().nombre_corto }}</option>
+								</select>
+							</div>
+						</form>
+						<canvas #chartIS class="chart__canvas">{{ cPorIS }}</canvas>
+						<a href="#" class="btn-texto" (click)="VerReporteInstitucion($event)">Ver Reporte <span class="icon icon-macz-file-text-o"></span></a>
+					</div>
+				</div>
 			</div>
 		</div>
+		
 	</div>
 </section>
 

@@ -4,6 +4,7 @@ import { RouterModule,Routes } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MonitoreoComponent } from './monitoreo/monitoreo.component';
 import { SharedModule } from '../shared/shared.module';
+import { ReporteComponent } from './reporte/reporte.component';
 
 const rutas:Routes = [
 	{
@@ -19,6 +20,6 @@ const rutas:Routes = [
     FormsModule,
     SharedModule
   ],
-  declarations: [MonitoreoComponent]
+  declarations: [MonitoreoComponent, ReporteComponent]
 })
 export class MonitoreoModule { }
