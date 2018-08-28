@@ -30,17 +30,23 @@ export class NuevoProyectoComponent implements OnInit {
 	private municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private comunidadesSub:BehaviorSubject<string | null>;
 	private comunidade$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+  private municipioUbicacion:string;
+  private comunidadUbicacion:string;
   private min_fecha_inicio:any;
   private min_fecha_final:any;
+  private listaSitios:any[];
+  private listaNombreSitios:string[];
 
 
   constructor(private _service:ProyectosService, private _institService:InstitucionService, private _router:Router) { 
   	this.nuevo = true;
   	this.proyecto = new Proyecto();
     this.personalProyecto = new PersonalProyecto();
-  	this.tipoProyecto = "gobierno";
+  	this.tipoProyecto = "publico";
     this.min_fecha_inicio = new Date();
     this.min_fecha_final = new Date().setMonth(this.min_fecha_inicio.getMonth()+3);
+    this.listaSitios = [];
+    this.listaNombreSitios = [];
   }
 
   ngOnInit() {
@@ -57,21 +63,56 @@ export class NuevoProyectoComponent implements OnInit {
 
   OnMunicipio_Select(){
   	if(this.comunidadesSub == null){
-	  	this.comunidadesSub = new BehaviorSubject(this.proyecto.municipio);
+	  	this.comunidadesSub = new BehaviorSubject(this.municipioUbicacion);
 	  	this.comunidade$ = this._service.GetComunidadesPorMunicipio(this.comunidadesSub);
       console.log(this.comunidade$);
   	}else{
-  		this.comunidadesSub.next(this.proyecto.municipio);
+  		this.comunidadesSub.next(this.municipioUbicacion);
   	}
   }
 
   OnGuardar_Listener(){
+    let that = this;
   	this.proyecto.tipo = this.tipoProyecto;
 
-    if(this.proyecto.tipo == "gobierno"){
+    if(this.proyecto.tipo == "publico"){
       this.proyecto.monto = this.proyecto.cooperacion + this.proyecto.tesoro;
     }
-    this._service.IngresaProyecto(this.proyecto).then(()=>this._router.navigateByUrl('/proyectos'));
+    
+    this._service.IngresaProyecto(this.proyecto).then((clave) => {
+      this._service.IngresaSitiosProyecto(clave.toString(),this.listaSitios);
+      this._router.navigateByUrl('/proyectos');
+    });
+  }
+
+  
+  OnAgregarUbicacion_Listener(){
+    let ubicacion:any = {};
+    let nombre:string = '';
+    ubicacion.municipio = this.municipioUbicacion;
+    ubicacion.comunidad = this.comunidadUbicacion;
+
+    this.listaSitios.push(ubicacion);
+
+    nombre = this.municipioUbicacion;
+
+    this._service.GetComunidad(this.comunidadUbicacion).subscribe((comu) => {
+      nombre = nombre.concat('-',comu.nombre);
+      this.listaNombreSitios.push(nombre);
+    });
+  }
+
+  BorraSitio(indice:number){
+    if(indice == this.listaSitios.length - 1){
+      this.listaSitios.pop();
+      this.listaNombreSitios.pop();
+    }else if(indice === 0){
+      this.listaSitios.shift();
+      this.listaNombreSitios.shift();
+    }else{
+      this.listaSitios.splice(indice,1);
+      this.listaNombreSitios.splice(indice,1);
+    }
   }
 
 }

@@ -332,7 +332,7 @@ export class MonitoreoComponent implements OnInit {
   	let ctx = this.porFuente.nativeElement.getContext('2d');
 
   	this.cPorFuente = new Chart(ctx,{
-  		type:'pie',
+  		type:'doughnut',
   		data:{
   			labels:etiquetas,
   			datasets:[{
@@ -382,7 +382,7 @@ export class MonitoreoComponent implements OnInit {
   	let ctx = this.porIS.nativeElement.getContext('2d');
 
   	this.cPorIS = new Chart(ctx,{
-  		type:'pie',
+  		type:'doughnut',
   		data:{
   			labels:etiquetas,
   			datasets:[{

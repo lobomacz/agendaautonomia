@@ -30,15 +30,19 @@ export class EditaProyectoComponent implements OnInit {
 	private municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private comunidadesSub:BehaviorSubject<string | null>;
 	private comunidade$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+  private municipioUbicacion:string;
+  private comunidadUbicacion:string;
 	private min_fecha_inicio:any;
 	private min_fecha_final:any;
+  private listaSitios:any[];
+  private listaNombreSitios:string[];
 
 
   constructor(private _activatedRoute:ActivatedRoute, private _router:Router, private _service:ProyectosService, private _institService:InstitucionService) {
   	this.usuario = false;
   	this.nuevo = false;
   	this._id = this._activatedRoute.snapshot.paramMap.get('id');
-  	this.tipoProyecto = "gobierno";
+  	this.tipoProyecto = "publico";
   	this.proyecto = new Proyecto();
     this.personalProyecto = new PersonalProyecto();
   }
@@ -62,7 +66,7 @@ export class EditaProyectoComponent implements OnInit {
   }
 
   OnMunicipio_Select(){
-  	this.comunidadesSub.next(this.proyecto.municipio);
+  	this.comunidadesSub.next(this.municipioUbicacion);
   }
 
   OnGuardar_Listener(){

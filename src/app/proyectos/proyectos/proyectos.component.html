@@ -49,7 +49,7 @@
 							<div class="formulario__group" *ngIf="opcionFiltro != 'todos'">
 								<label for="cmbFiltro">Seleccione:</label>
 								<select class="formulario__control" [(ngModel)]="filtro" name="filtro" id="cmbFiltro" #cmbFiltro (change)="UpdateLista()">
-									<option *ngFor="let opcion of listaOpciones | async" value="{{ opcion.key }}">{{ (opcionFiltro == 'sector' ? opcion.payload.val():opcion.payload.val().nombre) | uppercase }}</option>
+									<option *ngFor="let opcion of listaOpciones | async" value="{{ opcion.key }}">{{ (opcionFiltro == 'sector' ? opcion.payload.val():opcion.payload.val().nombre_corto) | uppercase }}</option>
 								</select>
 							</div>
 						</ng-template>

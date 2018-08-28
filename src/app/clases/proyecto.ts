@@ -8,8 +8,6 @@ export class Proyecto {
 	cooperacion:number;
 	tesoro:number;
 	monto:number;
-	municipio:string;
-	comunidad:string;
 	fechaInicio:string;
 	fechaFinal:string;
 	protagonistas:number;
@@ -26,8 +24,6 @@ export class Proyecto {
 			this.cooperacion = datos.cooperacion;
 			this.tesoro = datos.tesoro;
 			this.monto = datos.monto;
-			this.municipio = datos.municipio;
-			this.comunidad = datos.comunidad;
 			this.fechaInicio = datos.fechaInicio;
 			this.fechaFinal = datos.fechaFinal;
 			this.protagonistas = datos.protagonistas;
@@ -36,7 +32,7 @@ export class Proyecto {
 			let fecha = new Date();
 			this.fechaInicio = fecha.toDateString();
 			this.fechaFinal = fecha.toDateString();
-			this.tipo = "gobierno";
+			this.tipo = "publico";
 			this.cooperacion = 0.00;
 			this.tesoro = 0.00;
 			this.monto = 0.00;
@@ -55,8 +51,6 @@ export class Proyecto {
 			"cooperacion": this.cooperacion,
 			"tesoro": this.tesoro,
 			"monto": this.monto,
-			"municipio": this.municipio,
-			"comunidad": this.comunidad,
 			"fecha_inicio": this.fechaInicio,
 			"fecha_final": this.fechaFinal,
 			"protagonistas": this.protagonistas,

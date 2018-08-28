@@ -8,7 +8,7 @@
 						<fieldset>
 							<legend>Tipo de Proyecto:</legend>
 							<div class="form__group-option">
-								<input #publico class="form__radio-input" id="optPublico" type="radio" name="tipoProy" [checked]="tipoProyecto=='gobierno'" value="gobierno" (click)="setTipoProyecto(publico.value)" >
+								<input #tipo class="form__radio-input" id="optPublico" type="radio" name="tipoProy" [checked]="tipoProyecto=='publico'" value="publico" (click)="setTipoProyecto(tipo.value)" >
 								<label class="form__radio-label" for="optPublico">
 									<span class="form__radio-button"></span>
 									Inv. Pub.
@@ -40,7 +40,7 @@
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
 								<label for="anio">Año</label>
-								<input class="formulario__control" type="number" name="anio" #anio="ngModel" [(ngModel)]="proyecto.anio" placeholder="Ej. 2018" required id="anio">
+								<input class="formulario__control" type="number" name="anio" #anio="ngModel" [(ngModel)]="proyecto.anio" placeholder="Año" required id="anio">
 								
 							</div>
 						</div>
@@ -101,7 +101,7 @@
 					<div class="tabla-bloques__fila--flat">
 						<h3 class="encabezado-terciario">Fuente de Financiamiento</h3>
 					</div>
-					<div *ngIf="tipoProyecto == 'gobierno';else soloMonto" class="tabla-bloques__fila--flat">
+					<div *ngIf="tipoProyecto == 'publico';else soloMonto" class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
 							<label for="txtCex">Cooperación Ext. C$</label>
 							<input id="txtCex" class="formulario__control" type="number" name="cooperacion" [(ngModel)]="proyecto.cooperacion" placeholder="0.00" required>
@@ -134,7 +134,7 @@
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
 								<label for="cmbMunicipio">Municipio</label>
-								<select class="formulario__control" name="municipio" [(ngModel)]="proyecto.municipio" id="cmbMunicipio" #cmbMunicipio="ngModel" (change)="OnMunicipio_Select()" required>
+								<select class="formulario__control" name="municipio" [(ngModel)]="municipioUbicacion" id="cmbMunicipio" #cmbMunicipio="ngModel" (change)="OnMunicipio_Select()" required>
 									<option *ngFor="let municipio of municipio$ | async" value="{{ municipio.key }}">{{ municipio.payload.val().nombre }}</option>
 								</select>
 							</div>
@@ -142,11 +142,28 @@
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
 								<label for="cmbComunidad">Comunidad</label>
-								<select class="formulario__control" #cmbComunidad="ngModel" [(ngModel)]="proyecto.comunidad" name="comunidad" id="cmbComunidad" required>
+								<select class="formulario__control" #cmbComunidad="ngModel" [(ngModel)]="comunidadUbicacion" name="comunidad" id="cmbComunidad" required>
 									<option *ngFor="let comunidad of comunidade$ | async" value="{{ comunidad.key }}">{{ comunidad.payload.val().nombre }}</option>
 								</select>
+								<input class="btn u-margin-top-small u-item-end" type="button" name="" value="Agregar" (click)="OnAgregarUbicacion_Listener()" >
 							</div>
 						</div>
+						
+					</div>
+					<div class="tabla-bloques__fila--flat">
+						<div class="tabla-bloques__columna">
+							<h4>Ubicaciones:</h4>
+						</div>
+						<div class="tabla-bloques__columna" *ngIf="listaSitios !== undefined && listaSitios.length > 0; else sinUbicaciones" >
+							<ul>
+								<li class="tabla-bloques__fila--flat" *ngFor="let sitio of listaNombreSitios;index as i">
+									<div>{{ sitio | uppercase }}<span (click)="BorraSitio(i)" class="btn icon icon-macz-trash btn-text u-item-end"></span></div>
+								</li>
+							</ul>
+						</div>
+						<ng-template #sinUbicaciones>
+							<h3 class="encabezado-terciario">Sin Ubicaciones</h3>
+						</ng-template>
 					</div>
 					<div class="tabla-bloques__fila--flat">
 						<h3 class="encabezado-terciario">Personal</h3>
@@ -165,7 +182,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="tabla-bloques__fila--flat" *ngIf="tipoProyecto=='gobierno'">
+					<div class="tabla-bloques__fila--flat" *ngIf="tipoProyecto=='publico'">
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
 								<input id="txtMestizo" class="formulario__control" type="number" name="mestizo" [(ngModel)]="personalProyecto.mestizo" placeholder="Mestizo">
@@ -185,7 +202,7 @@
 							</div>
 						</div>
 					</div>
-					<div class="tabla-bloques__fila--flat" *ngIf="tipoProyecto=='gobierno'">
+					<div class="tabla-bloques__fila--flat" *ngIf="tipoProyecto=='publico'">
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
 								<input id="txtGarifuna" class="formulario__control" type="number" name="garifuna" [(ngModel)]="personalProyecto.garifuna" placeholder="Garifuna">
@@ -208,6 +225,7 @@
 					<div class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
 							<input class="btn" type="button" (click)="OnGuardar_Listener()" name="guardar" value="{{ nuevo === true ? 'Ingresar':'Guardar' }}" [disabled]="!formProyecto.form.valid" >
+							<input class="btn" type="reset" name="limpiaFormato" value="Limpiar">
 						</div>
 					</div>
 				</div>

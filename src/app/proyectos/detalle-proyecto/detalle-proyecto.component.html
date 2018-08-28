@@ -7,13 +7,13 @@
 			<li><span class="icon icon-macz-asterisk"></span> Objetivo: {{ proyecto.objetivo | uppercase }}</li>
 			<li><span class="icon icon-macz-star"></span> Año: {{ proyecto.anio }}</li>
 			<li><span class="icon icon-macz-cubes"></span> Sector: {{ sector | uppercase }}</li>
-			<li><span class="icon icon-macz-map"></span>
+			<!--<li><span class="icon icon-macz-map"></span>
 				Ubicación:
 				<ul>
-					<li><span class="icon icon-macz-map-signs"></span> Municipio: {{ municipio | uppercase }}</li>
-					<li><span class="icon icon-macz-pin"></span> Comunidad: {{ comunidad | uppercase }}</li>
+					<li><span class="icon icon-macz-map-signs"></span> Municipio: {{ //municipio | uppercase }}</li>
+					<li><span class="icon icon-macz-pin"></span> Comunidad: {{ //comunidad | uppercase }}</li>
 				</ul>
-			</li>
+			</li>-->
 			<li><span class="icon icon-macz-money"></span>
 			Financiamiento:
 				<ul *ngIf="proyecto.tipo == 'gobierno';else montoPrivado">

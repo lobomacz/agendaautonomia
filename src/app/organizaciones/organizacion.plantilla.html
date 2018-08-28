@@ -8,7 +8,7 @@
 					<div class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group" *ngIf="nuevo == true; else siglasRO">
-								<input class="formulario__control" type="text" #nombreCorto="ngModel" name="nombre_corto" required="true" id="nombreCorto" [(ngModel)]="organizacion.nombre_corto" placeholder="Ej.MITRAB" required>
+								<input class="formulario__control" type="text" #nombreCorto="ngModel" name="nombre_corto" required="true" id="nombreCorto" [(ngModel)]="organizacion.nombre_corto" placeholder="Nombre Corto" required>
 								<label class="formulario__label" for="nombreCorto">Nombre Corto</label>
 								<div class="mensaje mensaje--error" *ngIf="nombreCorto.invalid && (nombreCorto.dirty || nombreCorto.touched)">
 									<div *ngIf="nombreCorto.errors.required">

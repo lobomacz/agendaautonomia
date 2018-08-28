@@ -52,4 +52,20 @@ export class ProyectosService extends AgendaService {
 		return this._db.object('/proyectos/'.concat(_id)).remove();
 	}
 
+	GetSitiosProyecto(proyecto:string):Observable<any[]>{
+		return this._db.list('/sitiosProyectos/'.concat(proyecto)).valueChanges();
+	}
+
+	IngresaSitiosProyecto(proyecto:string, sitios:any[]):Promise<void>{
+		return this._db.object('/sitiosProyectos/'.concat(proyecto)).set(sitios);
+	}
+
+	ActualizaSitioProyecto(proyecto:string, sitio:any[]):Promise<void>{
+		return this._db.object('/sitiosProyectos/'.concat(proyecto)).update(sitio);
+	}
+
+	BorraSitioProyecto(proyecto:string, indiceSitio:number):Promise<void>{
+		return this._db.object('/sitiosProyectos/'.concat(proyecto,'/',indiceSitio.toString(),'/',)).remove();
+	}
+
 }

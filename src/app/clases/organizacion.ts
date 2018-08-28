@@ -10,7 +10,7 @@ export class Organizacion {
 	descripcion:string;
 	telefono:string;
 
-	constructor(datos?:any, _tipo:string = "gobierno"){
+	constructor(datos?:any, _tipo:string = "publico"){
 
 		if(datos != null){
 			this.nombre_corto = datos.nombre_corto;

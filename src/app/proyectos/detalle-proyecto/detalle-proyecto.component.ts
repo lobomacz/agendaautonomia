@@ -42,14 +42,14 @@ export class DetalleProyectoComponent implements OnInit {
   		this._service.GetSectores().subscribe(sectores => {
   			this.sector = sectores[this.proyecto.sector].payload.val();
   		});
-
+      /*
   		this._service.GetMunicipio(this.proyecto.municipio).subscribe(muni => {
   			this.municipio = muni.nombre;
   		});
 
   		this._service.GetComunidad(this.proyecto.comunidad).subscribe(comun => {
   			this.comunidad = comun.nombre;
-  		});
+  		});*/
 
   	});
   }
