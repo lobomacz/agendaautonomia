@@ -45,6 +45,8 @@ export class EditaProyectoComponent implements OnInit {
   	this.tipoProyecto = "publico";
   	this.proyecto = new Proyecto();
     this.personalProyecto = new PersonalProyecto();
+    this.listaSitios = [];
+    this.listaNombreSitios = [];
   }
 
   ngOnInit() {
@@ -62,6 +64,16 @@ export class EditaProyectoComponent implements OnInit {
   		this.municipio$ = this._service.GetMunicipios();
   		this.comunidadesSub = new BehaviorSubject(null);
   		this.comunidade$ = this._service.GetComunidadesPorMunicipio(this.comunidadesSub);
+      this._service.GetSitiosProyecto(this._id).subscribe((sitios) => {
+        this.listaSitios = sitios;
+        for(let sitio of this.listaSitios){
+          let nombre:string = '';
+          this._service.GetComunidad(sitio.comunidad).subscribe((comu) => {
+            nombre = sitio.municipio.concat(' - ', comu.nombre);
+            this.listaNombreSitios.push(nombre);
+          });
+        }
+      });
   	});
   }
 
@@ -72,8 +84,38 @@ export class EditaProyectoComponent implements OnInit {
   OnGuardar_Listener(){
   	let that = this;
   	this._service.ActualizaProyecto(this.proyecto, this._id).then(() => {
+      that._service.ActualizaSitiosProyecto(that._id,that.listaSitios);
   		that._router.navigateByUrl('/proyectos/ver/'.concat(that._id));
   	});
+  }
+
+  OnAgregarUbicacion_Listener(){
+    let ubicacion:any = {};
+    let nombre:string = '';
+    ubicacion.municipio = this.municipioUbicacion;
+    ubicacion.comunidad = this.comunidadUbicacion;
+
+    this.listaSitios.push(ubicacion);
+
+    nombre = this.municipioUbicacion;
+
+    this._service.GetComunidad(this.comunidadUbicacion).subscribe((comu) => {
+      nombre = nombre.concat('-',comu.nombre);
+      this.listaNombreSitios.push(nombre);
+    });
+  }
+
+  BorraSitio(indice:number){
+    if(indice == this.listaSitios.length - 1){
+      this.listaSitios.pop();
+      this.listaNombreSitios.pop();
+    }else if(indice === 0){
+      this.listaSitios.shift();
+      this.listaNombreSitios.shift();
+    }else{
+      this.listaSitios.splice(indice,1);
+      this.listaNombreSitios.splice(indice,1);
+    }
   }
 
 }

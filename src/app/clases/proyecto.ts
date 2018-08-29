@@ -1,7 +1,7 @@
 export class Proyecto {
 	anio:string;
 	tipo:string;
-	idOrganizacion:string;
+	id_organizacion:string;
 	nombre:string;
 	sector:string;
 	objetivo:string;
@@ -17,7 +17,7 @@ export class Proyecto {
 		if(datos != null){
 			this.anio = datos.anio;
 			this.tipo = datos.tipo;
-			this.idOrganizacion = datos.idOrganizacion;
+			this.id_organizacion = datos.id_organizacion;
 			this.nombre = datos.nombre;
 			this.sector = datos.sector;
 			this.objetivo = datos.objetivo;
@@ -44,7 +44,7 @@ export class Proyecto {
 	ToJSon():any{
 		return {
 			"anio": this.anio,
-			"id_organizacion": this.idOrganizacion,
+			"id_organizacion": this.id_organizacion,
 			"nombre": this.nombre.toUpperCase(),
 			"sector": this.sector,
 			"objetivo": this.objetivo.toUpperCase(),

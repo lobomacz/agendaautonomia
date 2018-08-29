@@ -60,7 +60,7 @@ export class ProyectosService extends AgendaService {
 		return this._db.object('/sitiosProyectos/'.concat(proyecto)).set(sitios);
 	}
 
-	ActualizaSitioProyecto(proyecto:string, sitio:any[]):Promise<void>{
+	ActualizaSitiosProyecto(proyecto:string, sitio:any[]):Promise<void>{
 		return this._db.object('/sitiosProyectos/'.concat(proyecto)).update(sitio);
 	}
 

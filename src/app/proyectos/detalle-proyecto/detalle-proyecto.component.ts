@@ -22,6 +22,7 @@ export class DetalleProyectoComponent implements OnInit {
 	private proyect0:Observable<any>;
 	private proyecto:Proyecto;
 	private dialogo_borrar:boolean;
+  private listaSitios:string[];
 
 
   constructor(private _activatedRoute:ActivatedRoute, private _router:Router, private _service:ProyectosService, private _institService:InstitucionService) {
@@ -29,19 +30,30 @@ export class DetalleProyectoComponent implements OnInit {
   	this.dialogo_borrar = false;
   	this._id = this._activatedRoute.snapshot.paramMap.get('id');
   	this.proyect0 = this._service.GetProyecto(this._id);
+    this.listaSitios = [];
   }
 
   ngOnInit() {
   	this.proyect0.subscribe(datos => {
   		this.proyecto = new Proyecto(datos);
 
-  		this._institService.GetInstitucion(this.proyecto.idOrganizacion).subscribe(instituc => {
+  		this._institService.GetInstitucion(this.proyecto.id_organizacion).subscribe(instituc => {
   			this.organizacion = instituc.nombre_corto;
   		});
 
   		this._service.GetSectores().subscribe(sectores => {
   			this.sector = sectores[this.proyecto.sector].payload.val();
   		});
+
+      this._service.GetSitiosProyecto(this._id).subscribe((datos) => {
+        for(let sitio of datos){
+          let nombre:string = '';
+          this._service.GetComunidad(sitio.comunidad).subscribe((comu) => {
+            nombre = sitio.municipio.concat(' - ',comu.nombre);
+            this.listaSitios.push(nombre);
+          });
+        }
+      });
       /*
   		this._service.GetMunicipio(this.proyecto.municipio).subscribe(muni => {
   			this.municipio = muni.nombre;

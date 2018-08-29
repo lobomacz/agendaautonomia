@@ -7,6 +7,17 @@
 			<li><span class="icon icon-macz-asterisk"></span> Objetivo: {{ proyecto.objetivo | uppercase }}</li>
 			<li><span class="icon icon-macz-star"></span> Año: {{ proyecto.anio }}</li>
 			<li><span class="icon icon-macz-cubes"></span> Sector: {{ sector | uppercase }}</li>
+			<li><span class="icon icon-macz-map"></span>
+				Sitios:
+				<ul *ngIf="listaSitios !== undefined && listaSitios.length > 0; else sinSitios">
+					<li><span *ngFor="let sitio of listaSitios" class="icon icon-macz-pin"></span>
+						{{ sitio | uppercase }}
+					</li>
+				</ul>
+				<ng-template #sinSitios>
+					<h3 class="titulo-terciario">No se registraron sitios</h3>
+				</ng-template>
+			</li>
 			<!--<li><span class="icon icon-macz-map"></span>
 				Ubicación:
 				<ul>

@@ -97,7 +97,7 @@ export class NuevoProyectoComponent implements OnInit {
     nombre = this.municipioUbicacion;
 
     this._service.GetComunidad(this.comunidadUbicacion).subscribe((comu) => {
-      nombre = nombre.concat('-',comu.nombre);
+      nombre = nombre.concat(' - ',comu.nombre);
       this.listaNombreSitios.push(nombre);
     });
   }
