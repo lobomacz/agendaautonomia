@@ -1,5 +1,5 @@
 export class Proyecto {
-	anio:string;
+	anio:number;
 	tipo:string;
 	id_organizacion:string;
 	nombre:string;
@@ -51,8 +51,8 @@ export class Proyecto {
 			"cooperacion": this.cooperacion,
 			"tesoro": this.tesoro,
 			"monto": this.monto,
-			"fecha_inicio": this.fechaInicio,
-			"fecha_final": this.fechaFinal,
+			"fechaInicio": this.fechaInicio,
+			"fechaFinal": this.fechaFinal,
 			"protagonistas": this.protagonistas,
 			"tipo": this.tipo.toLowerCase()
 		};

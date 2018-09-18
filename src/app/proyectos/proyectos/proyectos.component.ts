@@ -102,6 +102,7 @@ export class ProyectosComponent implements OnInit {
   }
 
   setTipoFiltro(opcion:string){
+    this.filtro = '';
   	this.opcionFiltro = opcion;
 
   	switch (this.opcionFiltro) {
@@ -112,6 +113,7 @@ export class ProyectosComponent implements OnInit {
   			this.GetOpcionesInstituciones();
   			break;
   	}
+    this.UpdateLista();
   }
 
   UpdateLista(){
@@ -120,7 +122,7 @@ export class ProyectosComponent implements OnInit {
   			this.aniosSubject.next(Number.parseInt(this.filtro));
   			break;
   		case "sector":
-  			if(this.sectorSubject == null){
+  			if(this.sectorSubject == undefined){
   				this.sectorSubject = new BehaviorSubject(this.filtro);
   				this.proyecto_sector$ = this._service.GetProyectosPorSector(this.sectorSubject);
   			}else{
@@ -128,7 +130,7 @@ export class ProyectosComponent implements OnInit {
   			}
   			break;
   		case "institucion":
-  			if(this.institucionSubject == null){
+  			if(this.institucionSubject == undefined){
   				this.institucionSubject = new BehaviorSubject(this.filtro);
   				this.proyecto_institucion$ = this._service.GetProyectosPorInstitucion(this.institucionSubject);
   			}else{

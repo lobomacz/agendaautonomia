@@ -15,6 +15,13 @@
 								</label>
 							</div>
 							<div class="form__group-option">
+								<input #alcaldia id="optAlcaldia" class="form__radio-input" type="radio" name="tipoProy" value="alcaldia" placeholder="" [checked]="tipoProyecto=='alcaldia'" (click)="setTipoProyecto(alcaldia.value)" >
+								<label for="optAlcaldia" class="form__radio-label">
+									<span class="form__radio-button"></span>
+									Alcaldía
+								</label>
+							</div>
+							<div class="form__group-option">
 								<input #ong id="optOng" class="form__radio-input" type="radio" name="tipoProy" [checked]="tipoProyecto=='ong'" value="ong" (click)="setTipoProyecto(ong.value)">
 								<label class="form__radio-label" for="optOng">
 									<span class="form__radio-button"></span>
@@ -101,7 +108,7 @@
 					<div class="tabla-bloques__fila--flat">
 						<h3 class="encabezado-terciario">Fuente de Financiamiento</h3>
 					</div>
-					<div *ngIf="tipoProyecto == 'publico';else soloMonto" class="tabla-bloques__fila--flat">
+					<div *ngIf="tipoProyecto == 'publico' || tipoProyecto == 'alcaldia';else soloMonto" class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
 							<label for="txtCex">Cooperación Ext. C$</label>
 							<input id="txtCex" class="formulario__control" type="number" name="cooperacion" [(ngModel)]="proyecto.cooperacion" placeholder="0.00" required>
@@ -125,6 +132,11 @@
 									<input class="formulario__control" id="txtMonto" #monto="ngModel" type="number" name="monto" [(ngModel)]="proyecto.monto" placeholder="0.00" required>
 								</div>
 							</div>
+							<div class="tabla-bloques__columna">
+							<label class="formulario__control" for="">
+								{{ proyecto.monto | currency : 'NIO' : 'symbol-narrow':'4.2-2' }}
+							</label>
+						</div>
 						</div>
 					</ng-template>
 					<div class="tabla-bloques__fila--flat">
@@ -134,7 +146,7 @@
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
 								<label for="cmbMunicipio">Municipio</label>
-								<select class="formulario__control" name="municipio" [(ngModel)]="municipioUbicacion" id="cmbMunicipio" #cmbMunicipio="ngModel" (change)="OnMunicipio_Select()" required>
+								<select class="formulario__control" name="municipio" [(ngModel)]="municipioUbicacion" id="cmbMunicipio" #cmbMunicipio="ngModel" (change)="OnMunicipio_Select()">
 									<option *ngFor="let municipio of municipio$ | async" value="{{ municipio.key }}">{{ municipio.payload.val().nombre }}</option>
 								</select>
 							</div>
@@ -142,10 +154,10 @@
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
 								<label for="cmbComunidad">Comunidad</label>
-								<select class="formulario__control" #cmbComunidad="ngModel" [(ngModel)]="comunidadUbicacion" name="comunidad" id="cmbComunidad" required>
+								<select class="formulario__control" #cmbComunidad="ngModel" [(ngModel)]="comunidadUbicacion" name="comunidad" id="cmbComunidad" (change)="OnComunidad_Select()" >
 									<option *ngFor="let comunidad of comunidade$ | async" value="{{ comunidad.key }}">{{ comunidad.payload.val().nombre }}</option>
 								</select>
-								<input class="btn u-margin-top-small u-item-end" type="button" name="" value="Agregar" (click)="OnAgregarUbicacion_Listener()" >
+								<input class="btn u-margin-top-small u-item-end" type="button" name="" value="Agregar" (click)="OnAgregarUbicacion_Listener()" [disabled]="disableUbicacion" >
 							</div>
 						</div>
 						
@@ -154,7 +166,7 @@
 						<div class="tabla-bloques__columna">
 							<h4>Ubicaciones:</h4>
 						</div>
-						<div class="tabla-bloques__columna" *ngIf="listaSitios !== undefined && listaSitios.length > 0; else sinUbicaciones" >
+						<div class="tabla-bloques__columna" *ngIf="listaSitios !== null && listaSitios.length > 0; else sinUbicaciones" >
 							<ul>
 								<li class="tabla-bloques__fila--flat" *ngFor="let sitio of listaNombreSitios;index as i">
 									<div>{{ sitio | uppercase }}<span (click)="BorraSitio(i)" class="btn icon icon-macz-trash btn-text u-item-end"></span></div>
@@ -171,13 +183,13 @@
 					<div class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input id="txtMasculino" class="formulario__control" type="number" name="masculino" [(ngModel)]="personalProyecto.masculino" placeholder="Masculino">
+								<input id="txtMasculino" class="formulario__control" type="number" name="masculino" [(ngModel)]="personal.masculino" placeholder="Masculino">
 								<label class="formulario__label" for="txtMasculino">Masculino</label>
 							</div>
 						</div>
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input class="formulario__control" id="txtFemenino" type="number" name="femenino" [(ngModel)]="personalProyecto.femenino" placeholder="Femenino">
+								<input class="formulario__control" id="txtFemenino" type="number" name="femenino" [(ngModel)]="personal.femenino" placeholder="Femenino">
 								<label class="formulario__label" for="txtFemenino">Femenino</label>
 							</div>
 						</div>
@@ -185,19 +197,19 @@
 					<div class="tabla-bloques__fila--flat" *ngIf="tipoProyecto=='publico'">
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input id="txtMestizo" class="formulario__control" type="number" name="mestizo" [(ngModel)]="personalProyecto.mestizo" placeholder="Mestizo">
+								<input id="txtMestizo" class="formulario__control" type="number" name="mestizo" [(ngModel)]="personal.mestizo" placeholder="Mestizo">
 								<label for="txtMestizo" class="formulario__label">Mestizo</label>
 							</div>
 						</div>
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input id="txtMiskitu" class="formulario__control" type="number" name="miskitu" [(ngModel)]="personalProyecto.miskitu" placeholder="Miskitu">
+								<input id="txtMiskitu" class="formulario__control" type="number" name="miskitu" [(ngModel)]="personal.miskitu" placeholder="Miskitu">
 								<label for="txtMestizo" class="formulario__label">Miskitu</label>
 							</div>
 						</div>
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input id="txtCreole" class="formulario__control" type="number" name="creole" [(ngModel)]="personalProyecto.creole" placeholder="Creole">
+								<input id="txtCreole" class="formulario__control" type="number" name="creole" [(ngModel)]="personal.creole" placeholder="Creole">
 								<label for="txtCreole" class="formulario__label">Creole</label>
 							</div>
 						</div>
@@ -205,19 +217,19 @@
 					<div class="tabla-bloques__fila--flat" *ngIf="tipoProyecto=='publico'">
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input id="txtGarifuna" class="formulario__control" type="number" name="garifuna" [(ngModel)]="personalProyecto.garifuna" placeholder="Garifuna">
+								<input id="txtGarifuna" class="formulario__control" type="number" name="garifuna" [(ngModel)]="personal.garifuna" placeholder="Garifuna">
 								<label for="txtGarifuna" class="formulario__label">Garifuna</label>
 							</div>
 						</div>
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input id="txtUlwa" class="formulario__control" type="number" name="ulwa" [(ngModel)]="personalProyecto.ulwa" placeholder="Ulwa">
+								<input id="txtUlwa" class="formulario__control" type="number" name="ulwa" [(ngModel)]="personal.ulwa" placeholder="Ulwa">
 								<label for="txtUlwa" class="formulario__label">Ulwa</label>
 							</div>
 						</div>
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input id="txtRama" class="formulario__control" type="number" name="rama" [(ngModel)]="personalProyecto.rama" placeholder="Rama">
+								<input id="txtRama" class="formulario__control" type="number" name="rama" [(ngModel)]="personal.rama" placeholder="Rama">
 								<label for="txtRama" class="formulario__label">Rama</label>
 							</div>
 						</div>

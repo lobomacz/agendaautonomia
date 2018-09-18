@@ -26,6 +26,10 @@ const routes: Routes = [
 		loadChildren: './../proyectos/proyectos.module#ProyectosModule'
 	},
 	{
+		path: 'transferencias',
+		loadChildren: './../transferencias/transferencias.module#TransferenciasModule'
+	},
+	{
 		path: 'documentos',
 		loadChildren: './../documentos/documentos.module#DocumentosModule'
 	},

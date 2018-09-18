@@ -20,40 +20,43 @@ export class EditaProyectoComponent implements OnInit {
 
 	private usuario:boolean;
 	private nuevo:boolean;
+  	private disableUbicacion:boolean;
 	private _id:string;
 	private tipoProyecto:string;
 	private proyecto:Proyecto;
-  private personalProyecto:PersonalProyecto;
+  	private personal:PersonalProyecto;
 	private organizacionesSub:BehaviorSubject<string | null>;
 	private organizacione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private sectore$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private comunidadesSub:BehaviorSubject<string | null>;
 	private comunidade$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-  private municipioUbicacion:string;
-  private comunidadUbicacion:string;
+  	private municipioUbicacion:string;
+  	private comunidadUbicacion:string;
 	private min_fecha_inicio:any;
 	private min_fecha_final:any;
-  private listaSitios:any[];
-  private listaNombreSitios:string[];
+  	private listaSitios:any[];
+  	private listaNombreSitios:string[];
 
 
   constructor(private _activatedRoute:ActivatedRoute, private _router:Router, private _service:ProyectosService, private _institService:InstitucionService) {
   	this.usuario = false;
   	this.nuevo = false;
+    this.disableUbicacion = true;
   	this._id = this._activatedRoute.snapshot.paramMap.get('id');
   	this.tipoProyecto = "publico";
   	this.proyecto = new Proyecto();
-    this.personalProyecto = new PersonalProyecto();
-    this.listaSitios = [];
+    this.personal = new PersonalProyecto();
+    this.listaSitios = null;
     this.listaNombreSitios = [];
   }
 
   ngOnInit() {
   	this._service.GetProyecto(this._id).subscribe(datos => {
   		this.proyecto = new Proyecto(datos);
+      console.log(this.proyecto.fechaInicio);
       this._service.GetPersonalProyecto(this._id).subscribe(datos => {
-        this.personalProyecto = new PersonalProyecto(datos);
+        this.personal = new PersonalProyecto(datos);
       });
   		this.min_fecha_inicio = this.proyecto.fechaInicio;
   		this.min_fecha_final = this.proyecto.fechaFinal;
@@ -65,14 +68,18 @@ export class EditaProyectoComponent implements OnInit {
   		this.comunidadesSub = new BehaviorSubject(null);
   		this.comunidade$ = this._service.GetComunidadesPorMunicipio(this.comunidadesSub);
       this._service.GetSitiosProyecto(this._id).subscribe((sitios) => {
-        this.listaSitios = sitios;
-        for(let sitio of this.listaSitios){
-          let nombre:string = '';
-          this._service.GetComunidad(sitio.comunidad).subscribe((comu) => {
-            nombre = sitio.municipio.concat(' - ', comu.nombre);
-            this.listaNombreSitios.push(nombre);
-          });
+
+        if (sitios !== null) {
+          this.listaSitios = sitios;
+          for(let sitio of this.listaSitios){
+            let nombre:string = '';
+            this._service.GetComunidad(sitio.comunidad).subscribe((comu) => {
+              nombre = sitio.municipio.concat(' - ', comu.nombre);
+              this.listaNombreSitios.push(nombre);
+            });
+          }
         }
+        
       });
   	});
   }
@@ -81,28 +88,59 @@ export class EditaProyectoComponent implements OnInit {
   	this.comunidadesSub.next(this.municipioUbicacion);
   }
 
+  OnComunidad_Select(){
+    this.disableUbicacion = false;
+  }
+
+  setTipoProyecto(tipo:string):void{
+  	this.tipoProyecto = tipo;
+  	this.organizacionesSub.next(this.tipoProyecto);
+  }
+
   OnGuardar_Listener(){
   	let that = this;
+
+  	if(this.proyecto.tipo !== this.tipoProyecto){
+  		this.proyecto.tipo = this.tipoProyecto;
+  	}
+
+  	if(this.proyecto.tipo === "publico" || this.proyecto.tipo === "alcaldia"){
+  		this.proyecto.monto = this.proyecto.cooperacion + this.proyecto.tesoro;
+  	}
+
   	this._service.ActualizaProyecto(this.proyecto, this._id).then(() => {
       that._service.ActualizaSitiosProyecto(that._id,that.listaSitios);
+      that._service.ActualizaPersonalProyecto(that._id,that.personal);
   		that._router.navigateByUrl('/proyectos/ver/'.concat(that._id));
   	});
   }
 
   OnAgregarUbicacion_Listener(){
-    let ubicacion:any = {};
-    let nombre:string = '';
-    ubicacion.municipio = this.municipioUbicacion;
-    ubicacion.comunidad = this.comunidadUbicacion;
 
-    this.listaSitios.push(ubicacion);
+    if (this.listaSitios === null) {
+      this.listaSitios = [];
+    }
 
-    nombre = this.municipioUbicacion;
+    if (this.municipioUbicacion !== null && this.comunidadUbicacion !== null) {
+      let ubicacion:any = {};
+      let nombre:string = '';
+      ubicacion.municipio = this.municipioUbicacion;
+      ubicacion.comunidad = this.comunidadUbicacion;
 
-    this._service.GetComunidad(this.comunidadUbicacion).subscribe((comu) => {
-      nombre = nombre.concat('-',comu.nombre);
-      this.listaNombreSitios.push(nombre);
-    });
+      this.listaSitios.push(ubicacion);
+
+      nombre = this.municipioUbicacion;
+
+      this._service.GetComunidad(this.comunidadUbicacion).subscribe((comu) => {
+        nombre = nombre.concat('-',comu.nombre);
+        this.listaNombreSitios.push(nombre);
+        this.municipioUbicacion = null;
+        this.comunidadUbicacion = null;
+        this.disableUbicacion = true;
+      });
+    }
+
+    
   }
 
   BorraSitio(indice:number){

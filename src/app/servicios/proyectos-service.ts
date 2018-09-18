@@ -29,15 +29,11 @@ export class ProyectosService extends AgendaService {
 	}
 
 	GetProyectosPorInstitucion(subject:BehaviorSubject<string>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
-		return subject.switchMap(instit => this._db.list('/proyectos', ref => ref.orderByChild('idOrganizacion').equalTo(instit)).snapshotChanges());
+		return subject.switchMap(instit => this._db.list('/proyectos', ref => ref.orderByChild('id_organizacion').equalTo(instit)).snapshotChanges());
 	}
 
 	GetProyecto(id:string):Observable<any>{
 		return this._db.object('/proyectos/'.concat(id)).valueChanges();
-	}
-
-	GetPersonalProyecto(id:string):Observable<any>{
-		return this._db.object('/personalProyectos/'.concat(id)).valueChanges();
 	}
 
 	IngresaProyecto(proyecto:Proyecto):any{
@@ -52,12 +48,28 @@ export class ProyectosService extends AgendaService {
 		return this._db.object('/proyectos/'.concat(_id)).remove();
 	}
 
+	GetPersonalProyecto(id:string):Observable<any>{
+		return this._db.object('/personalProyectos/'.concat(id)).valueChanges();
+	}
+
+	IngresaPersonalProyecto(id:string,personal:any):Promise<void>{
+		return this._db.object('/personalProyectos/'.concat(id)).set(personal);
+	}
+
+	ActualizaPersonalProyecto(id:string,personal:any):Promise<void>{
+		return this._db.object('/personalProyectos/'.concat(id)).update(personal);
+	}
+
+	BorraPersonalProyecto(id:string):Promise<void>{
+		return this._db.object('/personalProyectos/'.concat(id)).remove();
+	}
+
 	GetSitiosProyecto(proyecto:string):Observable<any[]>{
 		return this._db.list('/sitiosProyectos/'.concat(proyecto)).valueChanges();
 	}
 
 	IngresaSitiosProyecto(proyecto:string, sitios:any[]):Promise<void>{
-		return this._db.object('/sitiosProyectos/'.concat(proyecto)).set(sitios);
+		return this._db.object('/sitiosProyectos/'.concat(proyecto,'/')).set(sitios);
 	}
 
 	ActualizaSitiosProyecto(proyecto:string, sitio:any[]):Promise<void>{
@@ -66,6 +78,10 @@ export class ProyectosService extends AgendaService {
 
 	BorraSitioProyecto(proyecto:string, indiceSitio:number):Promise<void>{
 		return this._db.object('/sitiosProyectos/'.concat(proyecto,'/',indiceSitio.toString(),'/',)).remove();
+	}
+
+	BorraSitiosProyecto(id:string):Promise<void>{
+		return this._db.object('/sitiosProyectos/'.concat(id)).remove();
 	}
 
 }

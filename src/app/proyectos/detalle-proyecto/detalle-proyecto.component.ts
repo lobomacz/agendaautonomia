@@ -3,6 +3,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 
 import { Proyecto } from '../../clases/proyecto';
+import { PersonalProyecto } from '../../clases/personal-proyecto';
 import { ProyectosService } from '../../servicios/proyectos-service';
 import { InstitucionService } from '../../servicios/institucion-service';
 
@@ -23,6 +24,7 @@ export class DetalleProyectoComponent implements OnInit {
 	private proyecto:Proyecto;
 	private dialogo_borrar:boolean;
   private listaSitios:string[];
+  private personal:PersonalProyecto;
 
 
   constructor(private _activatedRoute:ActivatedRoute, private _router:Router, private _service:ProyectosService, private _institService:InstitucionService) {
@@ -54,6 +56,10 @@ export class DetalleProyectoComponent implements OnInit {
           });
         }
       });
+
+      this._service.GetPersonalProyecto(this._id).subscribe((personal) => {
+        this.personal = new PersonalProyecto(personal);
+      });
       /*
   		this._service.GetMunicipio(this.proyecto.municipio).subscribe(muni => {
   			this.municipio = muni.nombre;
@@ -72,8 +78,13 @@ export class DetalleProyectoComponent implements OnInit {
   }
 
   OnEliminarProyecto_Click(evento:Event){
-  	this._service.BorraProyecto(this._id);
-  	this._router.navigateByUrl('/proyectos');
+    let that = this;
+  	this._service.BorraProyecto(this._id).then(() => {
+      that._service.BorraPersonalProyecto(that._id);
+      that._service.BorraSitiosProyecto(that._id);
+      that._router.navigateByUrl('/proyectos');
+    });
+    evento.preventDefault();
   }
 
   CerrarModal(evento:Event){

@@ -19,6 +19,7 @@ export class MonitoreoComponent implements OnInit {
 	@ViewChild("chartPorSector") porSector:any;
 	@ViewChild("chartPorFuente") porFuente:any;
 	@ViewChild("chartIS") porIS:any;
+  @ViewChild("chartPorInversion") porInversion:any;
 
 	private usuario:any;
 	private annio:number;
@@ -33,11 +34,13 @@ export class MonitoreoComponent implements OnInit {
 	private cPorSector:Chart;
 	private cPorFuente:Chart;
 	private cPorIS:Chart;
+  private cPorInversion:Chart;
 
 	private datosPorI:any;
 	private datosPorS:any;
 	private datosPorF:any;
 	private datosPorIS:any;
+  private datosPorInv:any;
 
 	private colores:string[];
 
@@ -47,20 +50,20 @@ export class MonitoreoComponent implements OnInit {
   	this.colores = [
   		"#1e90ff",
   		"#9b59b6",
-  		"#bc1339",
+      "#87d369",
+      "#e67e22",
   		"#E63183",
-  		"#e67e22",
   		"#060",
   		"#ff6b81",
-  		"#ff7730",
   		"#ffb900",
   		"#f7f7f7",
   		"#28b485",
   		"#33f",
-  		"#87d369",
+  		"#bc1339",
   		"#ffeb56",
   		"#2ed573",
   		"#777",
+      "#ff7730",
   		"#bc3cb4",
   		"#5eeded",
   		"#2998ff",
@@ -97,6 +100,7 @@ export class MonitoreoComponent implements OnInit {
   			console.log(this.institucionesProyectos);
 
   			this.pService.GetSectores().subscribe(res => {
+
 	  			this.sectores = res;
 	  			this.datosPorS = this.ProcesaPorSector(this.proyectos.map(this.ArrayPorSector));
 	  			this.ChartPorSector();
@@ -105,8 +109,13 @@ export class MonitoreoComponent implements OnInit {
 	  			this.ChartPorFuente();
 
 	  			this.datosPorIS = this.ProcesaInstitucionSector(this.proyectos.map(this.ArrayPorInstitucionSector));
-	  			this.ChartsPorIS();
+	  			this.ChartPorIS();
+
 	  		});
+
+        this.datosPorInv = this.ProcesaPorInversion(this.proyectos.map(this.ArrayPorFuente));
+        this.ChartPorInversion();
+
   		});
   		
 
@@ -135,9 +144,16 @@ export class MonitoreoComponent implements OnInit {
   }
 
   ArrayPorFuente(dato:any,indice:number):any{
-  	let clave = dato.payload.val().tipo;
-  	let valor = dato.payload.val().monto;
-  	return {'fuente':clave,'monto':valor};
+  	let clave:string;// = dato.payload.val().tipo;
+  	let valor:number;// = dato.payload.val().monto;
+    let valor2:number;// = dato.payload.val().cooperacion;
+
+    clave = dato.payload.val().tipo;
+    valor = dato.payload.val().cooperacion;
+    valor2 = dato.payload.val().monto;
+
+
+  	return {'fuente':clave, 'cext':valor, 'monto':valor2};
   }
 
   ProcesaPorInstitucion(datos:any[]):any{
@@ -161,6 +177,7 @@ export class MonitoreoComponent implements OnInit {
   }
 
   ProcesaPorSector(datos:any[]):any{
+    
   	let seleccion = {};
 
   	if(datos !== null && datos.length > 0){
@@ -206,16 +223,70 @@ export class MonitoreoComponent implements OnInit {
 
   	if(datos !== null && datos.length > 0){
   		datos.forEach((valor) => {
-  			let clave = valor.fuente.toUpperCase();
-  			if(seleccion[clave] === undefined){
-  				seleccion[clave] = valor.monto;
-  			}else{
-  				seleccion[clave] += valor.monto;
-  			}
+
+        let AddSeleccion:any = function(fuente:string,monto:number){
+          if(seleccion[fuente.toUpperCase()] === undefined){
+            seleccion[fuente.toUpperCase()] = monto;
+          }else{
+            seleccion[fuente.toUpperCase()] += monto;
+          }
+        };
+
+  			let clave:string = valor.fuente;
+        let fuente:string;
+        let monto:number;
+
+        if(clave === 'privado'){
+
+          fuente = clave;
+          monto = valor.monto;
+          AddSeleccion(fuente,monto);
+
+        }else if(clave === 'ong'){
+
+          fuente = 'cooperacion';
+          monto = valor.monto;
+          AddSeleccion(fuente,monto);
+
+        }else{
+
+          if(valor.cext > 0){
+            fuente = 'cooperacion';
+            monto = valor.cext;
+            AddSeleccion(fuente,monto);
+          }
+
+          if(valor.monto > valor.cext){
+            fuente = 'tesoro';
+            monto = valor.monto - valor.cext;
+            AddSeleccion(fuente,monto);
+          }
+        }
+
+  			
   		});
   	}
 
   	return seleccion;
+  }
+
+  ProcesaPorInversion(datos:any[]):any{
+
+    let seleccion:any = {};
+
+    datos.forEach((valor) => {
+      let tipo = valor.fuente.toUpperCase();
+
+      if(seleccion[tipo] === undefined){
+        seleccion[tipo] = valor.monto;
+      }else{
+        seleccion[tipo] += valor.monto;
+      }
+
+    });
+
+    return seleccion;
+
   }
 
   InstitucionesConProyectos():AngularFireAction<DatabaseSnapshot>[]{
@@ -262,7 +333,7 @@ export class MonitoreoComponent implements OnInit {
   	let ctx = this.porInstitucion.nativeElement.getContext('2d');
 
   	this.cPorInstituciones = new Chart(ctx,{
-  		type:'pie',
+  		type:'doughnut',
   		data:{
   			labels:etiquetas,
   			datasets:[
@@ -300,7 +371,7 @@ export class MonitoreoComponent implements OnInit {
   	let ctx = this.porSector.nativeElement.getContext('2d');
 
   	this.cPorSector = new Chart(ctx,{
-  		type:'pie',
+  		type:'doughnut',
   		data:{
   			labels:etiquetas,
   			datasets:[{
@@ -361,7 +432,7 @@ export class MonitoreoComponent implements OnInit {
   	});
   }
 
-  ChartsPorIS(){
+  ChartPorIS(){
 
   	let nombre:string;
 
@@ -409,6 +480,44 @@ export class MonitoreoComponent implements OnInit {
   			}
   		}
   	});
+
+  }
+
+  ChartPorInversion(){
+
+    let etiquetas:string[] = Object.keys(this.datosPorInv);
+    let valores:number[] = Object.values(this.datosPorInv);
+
+    let ctx = this.porInversion.nativeElement.getContext('2d');
+
+    this.cPorInversion = new Chart(ctx,{
+      type:'doughnut',
+      data:{
+        labels:etiquetas,
+        datasets:[{
+          data:valores,
+          backgroundColor:this.colores
+        }]
+      },
+      options:{
+        animation:{
+          animateRotate:true
+        },
+        legend:{
+          display:true,
+          position:'bottom',
+          labels:{
+            fontColor:'#f7f7f7'
+          }
+        },
+        title:{
+          text:"Inversiones en el Caribe Sur ".concat(this.annio.toString()),
+          fontColor:'#f7f7f7',
+          fontSize:14,
+          display:true
+        }
+      }
+    });
 
   }
 

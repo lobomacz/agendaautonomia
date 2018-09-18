@@ -21,9 +21,10 @@ export class NuevoProyectoComponent implements OnInit {
 
 	private usuario:any;
 	private nuevo:boolean;
+  private disableUbicacion:boolean;
 	private tipoProyecto:string;
 	private proyecto:Proyecto;
-  private personalProyecto:any;
+  private personal:PersonalProyecto;
 	private organizacionesSub:BehaviorSubject<string | null>;
 	private organizacione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private sectore$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
@@ -40,12 +41,14 @@ export class NuevoProyectoComponent implements OnInit {
 
   constructor(private _service:ProyectosService, private _institService:InstitucionService, private _router:Router) { 
   	this.nuevo = true;
+    this.disableUbicacion = true;
   	this.proyecto = new Proyecto();
-    this.personalProyecto = new PersonalProyecto();
+    this.personal = new PersonalProyecto();
+    this.proyecto.anio = new Date().getFullYear();
   	this.tipoProyecto = "publico";
     this.min_fecha_inicio = new Date();
     this.min_fecha_final = new Date().setMonth(this.min_fecha_inicio.getMonth()+3);
-    this.listaSitios = [];
+    this.listaSitios = null;
     this.listaNombreSitios = [];
   }
 
@@ -65,41 +68,56 @@ export class NuevoProyectoComponent implements OnInit {
   	if(this.comunidadesSub == null){
 	  	this.comunidadesSub = new BehaviorSubject(this.municipioUbicacion);
 	  	this.comunidade$ = this._service.GetComunidadesPorMunicipio(this.comunidadesSub);
-      console.log(this.comunidade$);
   	}else{
   		this.comunidadesSub.next(this.municipioUbicacion);
   	}
+  }
+
+  OnComunidad_Select(){
+    this.disableUbicacion = false;
   }
 
   OnGuardar_Listener(){
     let that = this;
   	this.proyecto.tipo = this.tipoProyecto;
 
-    if(this.proyecto.tipo == "publico"){
+    if(this.proyecto.tipo === "publico" || this.proyecto.tipo === "alcaldia"){
       this.proyecto.monto = this.proyecto.cooperacion + this.proyecto.tesoro;
     }
     
-    this._service.IngresaProyecto(this.proyecto).then((clave) => {
-      this._service.IngresaSitiosProyecto(clave.toString(),this.listaSitios);
+    this._service.IngresaProyecto(this.proyecto).then((ref) => {
+      let clave = ref.key;
+      this._service.IngresaSitiosProyecto(clave,this.listaSitios);
+      this._service.IngresaPersonalProyecto(clave,this.personal);
       this._router.navigateByUrl('/proyectos');
     });
   }
 
   
   OnAgregarUbicacion_Listener(){
-    let ubicacion:any = {};
-    let nombre:string = '';
-    ubicacion.municipio = this.municipioUbicacion;
-    ubicacion.comunidad = this.comunidadUbicacion;
+    if (this.listaSitios === null) {
+      this.listaSitios = [];
+    }
 
-    this.listaSitios.push(ubicacion);
+    if(this.municipioUbicacion !== null && this.comunidadUbicacion !== null){
+      let ubicacion:any = {};
+      let nombre:string = '';
+      ubicacion.municipio = this.municipioUbicacion;
+      ubicacion.comunidad = this.comunidadUbicacion;
 
-    nombre = this.municipioUbicacion;
+      this.listaSitios.push(ubicacion);
 
-    this._service.GetComunidad(this.comunidadUbicacion).subscribe((comu) => {
-      nombre = nombre.concat(' - ',comu.nombre);
-      this.listaNombreSitios.push(nombre);
-    });
+      nombre = this.municipioUbicacion;
+
+      this._service.GetComunidad(this.comunidadUbicacion).subscribe((comu) => {
+        nombre = nombre.concat(' - ',comu.nombre);
+        this.listaNombreSitios.push(nombre);
+        this.municipioUbicacion = null;
+        this.comunidadUbicacion = null;
+        this.disableUbicacion = true;
+      });
+    }
+    
   }
 
   BorraSitio(indice:number){

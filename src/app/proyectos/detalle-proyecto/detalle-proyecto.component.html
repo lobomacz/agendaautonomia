@@ -1,6 +1,6 @@
 <macz-nav-bar [usuario]="usuario"></macz-nav-bar>
 <section class="seccion-detalle-proyecto">
-	<div class="detalle-elemento" >
+	<div class="detalle-elemento" *ngIf="proyecto !== undefined" >
 		<h2 class="encabezado-secundario">{{ proyecto.nombre | uppercase }}</h2>
 		<ul>
 			<li><span class="icon icon-macz-building"></span> {{ proyecto.tipo == 'gobierno'? 'Institución':'Organización' }}: {{ organizacion | uppercase }}</li>
@@ -8,9 +8,11 @@
 			<li><span class="icon icon-macz-star"></span> Año: {{ proyecto.anio }}</li>
 			<li><span class="icon icon-macz-cubes"></span> Sector: {{ sector | uppercase }}</li>
 			<li><span class="icon icon-macz-map"></span>
-				Sitios:
+				<h3 class="encabezado-terciario">
+					Ubicación:
+				</h3>
 				<ul *ngIf="listaSitios !== undefined && listaSitios.length > 0; else sinSitios">
-					<li><span *ngFor="let sitio of listaSitios" class="icon icon-macz-pin"></span>
+					<li *ngFor="let sitio of listaSitios"><span class="icon icon-macz-pin"></span>
 						{{ sitio | uppercase }}
 					</li>
 				</ul>
@@ -26,8 +28,10 @@
 				</ul>
 			</li>-->
 			<li><span class="icon icon-macz-money"></span>
-			Financiamiento:
-				<ul *ngIf="proyecto.tipo == 'gobierno';else montoPrivado">
+				<h3 class="encabezado-terciario">
+					Financiamiento:
+				</h3>
+				<ul *ngIf="proyecto.tipo == 'publico';else montoPrivado">
 					<li>
 						Cooperación Externa: {{ proyecto.cooperacion | currency:'NIO':'symbol-narrow':'4.2-2' }}
 					</li>
@@ -47,21 +51,29 @@
 				<span class="icon icon-macz-users"></span> Protagonistas: {{ proyecto.protagonistas }}
 			</li>
 			<li>
-				<span class="icon icon-macz-rebel"></span> Personal Contratado:
-				<ul>
+				<span class="icon icon-macz-rebel"></span> 
+				<h3 class="encabezado-terciario">
+					Personal Contratado:
+				</h3>
+				<ul *ngIf="personal !== undefined;else sinPersonal">
 					<li>
-						<span class="icon icon-macz-male"></span> Masculino = {{ proyecto.personal.masculino }}
+						<span class="icon icon-macz-male"></span> Masculino = {{ personal.masculino }}
 					</li>
 					<li>
-						<span class="icon icon-macz-female"></span> Femenino = {{ proyecto.personal.femenino }}
+						<span class="icon icon-macz-female"></span> Femenino = {{ personal.femenino }}
 					</li>
-					<li *ngIf="proyecto.tipo == 'ong'">Mestizo = {{ proyecto.personal.mestizo }}</li>
-					<li *ngIf="proyecto.tipo == 'ong'">Creole = {{ proyecto.personal.creole }}</li>
-					<li *ngIf="proyecto.tipo == 'ong'">Miskitu = {{ proyecto.personal.miskitu }}</li>
-					<li *ngIf="proyecto.tipo == 'ong'">Garifuna = {{ proyecto.personal.garifuna }}</li>
-					<li *ngIf="proyecto.tipo == 'ong'">Ulwa = {{ proyecto.personal.ulwa }}</li>
-					<li *ngIf="proyecto.tipo == 'ong'">Rama = {{ proyecto.personal.rama }}</li>
+					<ng-template *ngIf="proyecto.tipo == 'ong'">
+						<li>Mestizo = {{ personal.mestizo }}</li>
+						<li>Creole = {{ personal.creole }}</li>
+						<li>Miskitu = {{ personal.miskitu }}</li>
+						<li>Garifuna = {{ personal.garifuna }}</li>
+						<li>Ulwa = {{ personal.ulwa }}</li>
+						<li>Rama = {{ personal.rama }}</li>
+					</ng-template>
 				</ul>
+				<ng-template #sinPersonal>
+					<h3 class="encabezado-terciario">No hay datos sobre personal</h3>
+				</ng-template>
 			</li>
 		</ul>
 		<p>

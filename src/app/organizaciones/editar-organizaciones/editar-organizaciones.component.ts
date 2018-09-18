@@ -35,7 +35,7 @@ export class EditarOrganizacionesComponent implements OnInit {
 
   ngOnInit() {
   	this.lista_niveles = ["regional","municipal","territorial","comunal"];
-  	this.lista_tipos = ["publico","ong","privado"];
+  	this.lista_tipos = ["publico","alcaldia","ong","privado"];
   	//this.regione$ = this._service.GetRegiones();
   	this.municipio$ = this._service.GetMunicipios(); //this._service.GetMunicipiosPorRegion(this.municipiosSubject);
   	this._service.GetInstitucion(this._id).subscribe(instit => {

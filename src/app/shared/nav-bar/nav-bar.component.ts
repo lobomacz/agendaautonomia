@@ -24,13 +24,16 @@ export class NavBarComponent implements OnInit {
         titulo:'Instituciones',icono:'&#xe028;',ruta:'instituciones'
       },
       {
-        titulo:'Contactos',icono:'o',ruta:'contactos'
+        titulo:'Contactos',icono:'{',ruta:'contactos'
       },
       {
         titulo:'Proyectos',icono:'?',ruta:'proyectos'
       },
+      {
+        titulo:'Transferencias',icono:'o',ruta:'transferencias'
+      },
     	{
-    		titulo:'Documentos',icono:'N',ruta:'documentos'
+    		titulo:'Reportes',icono:'&#xe00b;',ruta:'documentos'
     	},
       {
         titulo:'Monitoreo',icono:'a',ruta:'monitoreo'

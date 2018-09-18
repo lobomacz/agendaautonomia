@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireObject, AngularFireAction, DatabaseSnapshot} from 'angularfire2/database';
 import { AngularFireStorage } from 'angularfire2/storage';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { User } from 'firebase';
 import { Observable } from 'rxjs/Observable';
 
 import { Usuario } from '../clases/usuario';
@@ -11,15 +12,16 @@ import { AgendaService } from './agenda.service';
 @Injectable()
 export class AuthserviceService extends AgendaService {
 
+  private usuario:Usuario;
+  private authUser:User;
+
   constructor(_db:AngularFireDatabase, _storage:AngularFireStorage, _auth:AngularFireAuth) { 
   	super(_db, _storage, _auth);
   }
 
 
   public AuthUser():Observable<any>{
-
   	return this._auth.authState;
-  	
   }
 
   public GeneraCredencial(correo:string, contrasena:string):Promise<any>{
