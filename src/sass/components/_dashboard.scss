@@ -5,25 +5,33 @@
 	grid-template-columns: 50% 50%;
 	grid-template-rows: 10rem;
 	grid-gap: 1rem;
+	border: 2px solid $color-negro;
 	
 	&__col-1 {
 		&-row-1 {
 			grid-column: 1 / 2;
 			grid-row: 1 / span 3;
+			@extend %dashboard-block;
 		}
 
 		&-row-2 {
-
+			grid-column: 1 / 2;
+			grid-row: 2 / 3;
+			@extend %dashboard-block;
 		}
 	}
 
 	&__col-2 {
 		&-row-1 {
-
+			grid-column: 2 / 3;
+			grid-row: 1 / 2;
+			@extend %dashboard-block;
 		}
 
 		&-row-2 {
-
+			grid-column: 2 / 3;
+			grid-row: 2 / span 3;
+			@extend %dashboard-block;
 		}
 	}
 }

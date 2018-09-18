@@ -60,3 +60,10 @@
 	display: inline-block;
 	border: 5px solid $color-gris-oscuro-3;
 }
+
+%dashboard-block {
+	border: 1px solid $color-negro;
+	&:hover {
+		background-color: rgba($color-gris-oscuro, .8);
+	}
+}
