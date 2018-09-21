@@ -43,4 +43,32 @@ export class InstitucionService extends AgendaService {
 	public EliminaInstitucion(clave:string):Promise<void>{
 	  return this._db.object("/organizaciones/".concat(clave)).remove();
 	}
+
+	public InstitucionesConProyectos(anio:number):AngularFireAction<DatabaseSnapshot>[]{
+		let lista:AngularFireAction<DatabaseSnapshot>[] = [];
+
+		this._db.list('/proyectos/').snapshotChanges().subscribe((proyectos) => {
+			let listaClaves:string[] = [];
+
+			for(let proyecto of proyectos){
+				if(listaClaves.indexOf(proyecto.payload.val().id_organizacion) < 0){
+					listaClaves.push(proyecto.key);
+				}
+			}
+
+			this._db.list('/organizaciones').snapshotChanges().subscribe((datos) => {
+				for(let org of datos){
+					if(listaClaves.indexOf(org.key) >= 0){
+						lista.push(org);
+					}
+				}
+			});
+		});
+
+		return lista;
+	}
+
+	public GetAlcaldias():Observable<AngularFireAction<DatabaseSnapshot>[]>{
+		return this._db.list('/organizaciones',ref => ref.orderByChild('tipo').equalTo('alcaldia')).snapshotChanges();
+	}
 }

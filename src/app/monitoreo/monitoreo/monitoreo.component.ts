@@ -28,6 +28,7 @@ export class MonitoreoComponent implements OnInit {
 	private proyectos:AngularFireAction<DatabaseSnapshot>[];
 	private instituciones:AngularFireAction<DatabaseSnapshot>[];
 	private institucionesProyectos:AngularFireAction<DatabaseSnapshot>[];
+  private alcaldias:AngularFireAction<DatabaseSnapshot>[];
 	private sectores:AngularFireAction<DatabaseSnapshot>[];
 
 	private cPorInstituciones:Chart;
@@ -91,13 +92,17 @@ export class MonitoreoComponent implements OnInit {
   	this.pService.GetProyectosPorAnio(this.annioSubject).subscribe(res => {
   		this.proyectos = res;
 
+      this.iService.GetAlcaldias().subscribe(res => {
+        this.alcaldias = res;
+      });
+
   		this.iService.GetInstituciones().subscribe(res => {
+        console.log(this.alcaldias);
   			this.instituciones = res;
   			this.datosPorI = this.ProcesaPorInstitucion(this.proyectos.map(this.ArrayPorInstitucion));
   			this.ChartPorInstitucion();
   			this.institucionesProyectos = this.InstitucionesConProyectos();
   			this.filtroInstitucion = this.institucionesProyectos[0].key;
-  			console.log(this.institucionesProyectos);
 
   			this.pService.GetSectores().subscribe(res => {
 
@@ -191,8 +196,21 @@ export class MonitoreoComponent implements OnInit {
   		});
   	}
 
-  	return seleccion;
+    //AGREGADOS PARA PRESENTAR GRÁFICO DE BARRAS
 
+    let dataset:any[] = [];
+
+    for (let sector in seleccion) {
+      let dato:any = {};
+      dato['x'] = sector;
+      dato['y'] = seleccion[sector];
+      dataset.push(dato);
+    }
+
+    
+    //Reemplazado por dataset para gráfico de barras
+  	return seleccion;
+    //return dataset;
   }
 
   ProcesaInstitucionSector(datos:any[]):any{
@@ -301,7 +319,6 @@ export class MonitoreoComponent implements OnInit {
   		});
   	}
 
-  	console.log(lista);
   	return lista;
   }
 
@@ -363,28 +380,27 @@ export class MonitoreoComponent implements OnInit {
   }
 
   ChartPorSector(){
+
   	let etiquetas:string[] = Object.keys(this.datosPorS);
   	let valores:number[] = Object.values(this.datosPorS);
 
-  	//etiquetas = etiquetas.map(this.NombreSector);
 
   	let ctx = this.porSector.nativeElement.getContext('2d');
 
   	this.cPorSector = new Chart(ctx,{
-  		type:'doughnut',
+  		type:'bar',
   		data:{
   			labels:etiquetas,
   			datasets:[{
+          label:'Inversión por sector',
   				data:valores,
   				backgroundColor:this.colores
   			}]
   		},
   		options:{
-  			animation:{animateRotate:true},
+  			//animation:{animateRotate:true},
   			legend:{
-  				display:true,
-  				position:'bottom',
-  				labels:{fontColor:'#f7f7f7'}
+  				display:false,
   			},
   			title:{
   				text:"Distribución de la Inversión por Sector en la RACCS.",
@@ -403,18 +419,20 @@ export class MonitoreoComponent implements OnInit {
   	let ctx = this.porFuente.nativeElement.getContext('2d');
 
   	this.cPorFuente = new Chart(ctx,{
-  		type:'doughnut',
+  		type:'bar',
   		data:{
   			labels:etiquetas,
   			datasets:[{
+          label:'Fuente de Financ.',
   				data:valores,
   				backgroundColor:this.colores
   			}]
   		},
   		options:{
-  			animation:{
-  				animateRotate:true
-  			},
+  			/*animation:{
+  				animateRotate:true,
+          animateScale:true
+  			},*/
   			title:{
   				text:"Distribución de la Inversión por Fuente de Financiamiento.",
   				fontColor:'#f7f7f7',
@@ -422,11 +440,7 @@ export class MonitoreoComponent implements OnInit {
   				fontSize:14
   			},
   			legend:{
-  				display:true,
-  				position:'bottom',
-  				labels:{
-  					fontColor:'#f7f7f7'
-  				}
+  				display:false,
   			}
   		}
   	});
@@ -491,7 +505,7 @@ export class MonitoreoComponent implements OnInit {
     let ctx = this.porInversion.nativeElement.getContext('2d');
 
     this.cPorInversion = new Chart(ctx,{
-      type:'doughnut',
+      type:'polarArea',
       data:{
         labels:etiquetas,
         datasets:[{

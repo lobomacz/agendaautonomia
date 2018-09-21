@@ -94,7 +94,7 @@
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
 								<label for="dtFechaInicio">Fecha Inicio</label>
-								<input id="dtFechaInicio" class="formulario__control" type="date" name="fecha_inicio" min="{{ min_fecha_inicio | date:'longDate' }}" [(ngModel)]="proyecto.fechaInicio" [readonly]="!nuevo">
+								<input id="dtFechaInicio" class="formulario__control" type="date" name="fecha_inicio" min="{{ min_fecha_inicio | date:'longDate' }}" [(ngModel)]="proyecto.fechaInicio" >
 							</div>
 							
 						</div>

@@ -15,29 +15,37 @@
 		</div>
 		
 	</div>
+	<div class="dashboard">
+		<div class="dashboard__col-1-row-1">
+			<div class="chart">
+				<canvas class="chart__canvas" #chartPorInstitucion id="gPorInstitucion">{{ cPorInstituciones }}</canvas>
+				<a href="#" class="btn-texto" (click)="VerReporte($event,'instituciones')">Ver Reporte <span class="icon icon-macz-file-text-o"></span></a>
+			</div>
+		</div>
+		<div class="dashboard__col-2-row-1">
+			<div class="chart">
+				<canvas class="chart__canvas" #chartPorSector id="gPorSector">{{ cPorSector }}</canvas>
+				<a href="#" class="btn-texto" (click)="VerReporte($event,'sector')">Ver Reporte <span class="icon icon-macz-file-text-o"></span></a>
+			</div>
+		</div>
+		<div class="dashboard__col-1-row-2">
+			<div class="chart">
+				<canvas #chartPorFuente class="chart__canvas">{{ cPorFuente }}</canvas>
+				<a href="#" class="btn-texto" (click)="VerReporte($event,'fuente')">Ver Reporte <span class="icon icon-macz-file-text-o"></span></a>
+			</div>
+		</div>
+		<div class="dashboard__col-2-row-2">
+			<div class="chart">
+				<canvas #chartPorInversion class="chart__canvas">{{ cPorInversion }}</canvas>
+				<a href="#" class="btn-texto" (click)="VerReporte($event,'inversion')">Ver Reporte <span class="icon icon-macz-file-text-o"></span></a>
+			</div>
+		</div>
+	</div>
+
+
 	<div class="tabla-bloques u-margin-top-small">
 		<div class="tabla-bloques__filas">
 			<div class="tabla-bloques__fila--flat">
-				<div class="tabla-bloques__columna">
-					<div class="chart">
-						<canvas class="chart__canvas" #chartPorInstitucion id="gPorInstitucion">{{ cPorInstituciones }}</canvas>
-						<a href="#" class="btn-texto" (click)="VerReporte($event,'instituciones')">Ver Reporte <span class="icon icon-macz-file-text-o"></span></a>
-					</div>
-				</div>
-				<div class="tabla-bloques__columna">
-					<div class="chart">
-						<canvas class="chart__canvas" #chartPorSector id="gPorSector">{{ cPorSector }}</canvas>
-						<a href="#" class="btn-texto" (click)="VerReporte($event,'sector')">Ver Reporte <span class="icon icon-macz-file-text-o"></span></a>
-					</div>
-				</div>
-			</div>
-			<div class="tabla-bloques__fila--flat">
-				<div class="tabla-bloques__columna">
-					<div class="chart">
-						<canvas #chartPorFuente class="chart__canvas">{{ cPorFuente }}</canvas>
-						<a href="#" class="btn-texto" (click)="VerReporte($event,'fuente')">Ver Reporte <span class="icon icon-macz-file-text-o"></span></a>
-					</div>
-				</div>
 				<div class="tabla-bloques__columna tabla-bloques__columna--controls">
 					
 					<div class="chart">
@@ -54,15 +62,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="tabla-bloques__fila--flat">
-				<div class="tabla-bloques__columna">
-					<div class="chart">
-						<canvas #chartPorInversion class="chart__canvas">{{ cPorInversion }}</canvas>
-					</div>
-				</div>
-			</div>
 		</div>
-		
 	</div>
 </section>
 
