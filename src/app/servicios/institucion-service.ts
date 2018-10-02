@@ -71,4 +71,8 @@ export class InstitucionService extends AgendaService {
 	public GetAlcaldias():Observable<AngularFireAction<DatabaseSnapshot>[]>{
 		return this._db.list('/organizaciones',ref => ref.orderByChild('tipo').equalTo('alcaldia')).snapshotChanges();
 	}
+
+	public GetTransferenciaPip(annio:number,id:string):Observable<any>{
+		return this._db.object('/transferenciasPip/'.concat(annio.toString(),'/',id)).valueChanges();
+	}
 }

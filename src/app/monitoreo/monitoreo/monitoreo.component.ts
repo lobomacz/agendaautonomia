@@ -97,7 +97,6 @@ export class MonitoreoComponent implements OnInit {
       });
 
   		this.iService.GetInstituciones().subscribe(res => {
-        console.log(this.alcaldias);
   			this.instituciones = res;
   			this.datosPorI = this.ProcesaPorInstitucion(this.proyectos.map(this.ArrayPorInstitucion));
   			this.ChartPorInstitucion();
@@ -177,6 +176,14 @@ export class MonitoreoComponent implements OnInit {
 	  	});
 
   	}
+
+    for(let alcaldia of this.alcaldias){
+      if(!(alcaldia.key in Object.keys(seleccion))){
+        this.iService.GetTransferenciaPip(this.annio,alcaldia.key).subscribe((trans) => {
+          
+        });
+      }
+    }
 
   	return seleccion;
   }
