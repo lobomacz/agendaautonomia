@@ -29,12 +29,12 @@ export class NavBarComponent implements OnInit {
       {
         titulo:'Proyectos',icono:'?',ruta:'proyectos'
       },
-      {
+      /*{
         titulo:'Transferencias',icono:'o',ruta:'transferencias'
       },
     	{
     		titulo:'Reportes',icono:'&#xe00b;',ruta:'documentos'
-    	},
+    	},*/
       {
         titulo:'Monitoreo',icono:'a',ruta:'monitoreo'
       }
