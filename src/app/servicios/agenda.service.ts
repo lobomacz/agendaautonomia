@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireObject, AngularFireAction, DatabaseSnapshot } from 'angularfire2/database';
 import { AngularFireStorage } from 'angularfire2/storage';
-import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 //import * as firebase from 'firebase/app';
@@ -12,12 +11,10 @@ export class AgendaService {
 
 	protected _db:AngularFireDatabase;
 	protected _storage:AngularFireStorage;
-	protected _auth:AngularFireAuth;
 
-  constructor(db:AngularFireDatabase,storage:AngularFireStorage,auth:AngularFireAuth) {
+  constructor(db:AngularFireDatabase,storage:AngularFireStorage) {
   	this._db = db;
   	this._storage = storage;
-  	this._auth = auth;
   }
 
   public GetDb():AngularFireDatabase{

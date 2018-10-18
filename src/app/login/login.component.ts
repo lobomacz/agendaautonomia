@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router,ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';//28022018 Se removió FormsModule de los imports
-import { AngularFireAuth } from 'angularfire2/auth';
 import { NavBarComponent } from '../shared/nav-bar/nav-bar.component';
-import * as firebase from 'firebase/app';
+
+import { AuthserviceService } from '../servicios/authservice.service';
+
+import { Observable } from 'rxjs/Observable';
 
 
 @Component({
@@ -13,32 +15,38 @@ import * as firebase from 'firebase/app';
 })
 export class LoginComponent implements OnInit {
 
-  private usuario:boolean;
+  private ruta:string;
 
-  constructor(private afAuth:AngularFireAuth, private router:Router) {
-    
-		this.revisaSesion();
+  constructor(private router:Router, private _auth:AuthserviceService, private route:ActivatedRoute) {
+    this.ruta = this.route.snapshot.paramMap.get('ruta');
   }
 
   ngOnInit() {
 
   }
 
-  revisaSesion():any{
+  revisaSesion():boolean{
+    let res:boolean = false;
 
-      this.usuario = false;
+    if(this._auth.GetUsuario().uid != undefined){
+      res = true;
+    }
 
-      let suscripcion = this.afAuth.authState.forEach(value => {
-        console.log(value);
-      });
+    return res;
   }
 
   loginCheck(event:any, loginform:NgForm):any{
     
     let valores:any = loginform.value;
 
+    this._auth.Login(valores.correo, valores.password);
 
-    this.router.navigateByUrl('home');
+    if (this.revisaSesion() === true) {
+      this.router.navigateByUrl(this.ruta);
+    }else{
+      //CODIGO PARA MOSTRAR ERROR DE VALIDACION
+    }
+    
 
     event.preventDefault();
   }

@@ -2,7 +2,6 @@ import { AgendaService } from './agenda.service';
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, AngularFireObject, AngularFireAction, DatabaseSnapshot } from 'angularfire2/database';
 import { AngularFireStorage } from 'angularfire2/storage';
-import { AngularFireAuth } from 'angularfire2/auth';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -12,8 +11,8 @@ import { Proyecto } from '../clases/proyecto';
 @Injectable()
 export class ProyectosService extends AgendaService {
 
-	constructor(db:AngularFireDatabase,storage:AngularFireStorage,auth:AngularFireAuth){
-		super(db,storage,auth);
+	constructor(db:AngularFireDatabase,storage:AngularFireStorage){
+		super(db,storage);
 	}
 
 	GetSectores():Observable<AngularFireAction<DatabaseSnapshot>[]>{

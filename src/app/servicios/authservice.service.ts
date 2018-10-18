@@ -15,13 +15,14 @@ export class AuthserviceService extends AgendaService {
   private usuario:Usuario;
   private authUser:User;
 
-  constructor(_db:AngularFireDatabase, _storage:AngularFireStorage, _auth:AngularFireAuth) { 
-  	super(_db, _storage, _auth);
+  constructor(_db:AngularFireDatabase, _storage:AngularFireStorage,private _auth:AngularFireAuth) { 
+  	super(_db, _storage);
+    this.usuario = new Usuario();
   }
 
 
-  public AuthUser():Observable<any>{
-  	return this._auth.authState;
+  public AuthUser():User{
+  	return this.authUser;
   }
 
   public GeneraCredencial(correo:string, contrasena:string):Promise<any>{
@@ -35,19 +36,42 @@ export class AuthserviceService extends AgendaService {
 
   public CreaUsuario(uid:string, usuario:Usuario):Promise<void>{
     let tipo:string = usuario.tipoUsuario == 'admin' ? 'admins':'usuarios';
-    return this._db.object('/'.concat(tipo, '/', uid)).set(usuario.ToJSon());
+    const ruta:string = `/${tipo}/${uid}`;
+    return this._db.object(ruta).set(usuario.ToJSon());
   }
 
-  public GetUsuario(tipoUsuario:string, _id:string):Observable<any[]>{
-  	let fuente:string;
+  private GetUsuarioObservable(tipoUsuario:string, _id:string):Observable<any>{
+  	let fuente:string = tipoUsuario == 'admin' ? 'admins':'usuarios';
+  	const ruta:string = `/${fuente}/${_id}`;
+  	return this._db.object(ruta).valueChanges();
+  }
 
-  	if (tipoUsuario == "usuario") {
-  		fuente = "/usuarios/";
-  	}else if(tipoUsuario == "admin"){
-  		fuente = "/admins/";
-  	}
-  	
-  	return this._db.list(fuente, ref => ref.orderByChild("idFuncionario").equalTo(_id)).valueChanges();
+  public Login(email:string,contrasena:string):void{
+
+    this._auth.auth.signInWithEmailAndPassword(email,contrasena).then((cred) => {
+      if (cred != null && cred.user.uid != undefined) {
+        //this._auth.auth.setPersistence()
+        this.authUser = cred.user;
+        this.GetUsuarioObservable('usuario',this.authUser.uid).subscribe((v) => {
+          if (v != undefined) {
+            this.usuario = new Usuario(v);
+          }else{
+            this.GetUsuarioObservable('admin',this.authUser.uid).subscribe((dato) => {
+              this.usuario = new Usuario(dato);
+            });
+          }
+        });
+      }
+    });
+
+  }
+
+  public Logout(){
+    this._auth.auth.signOut();
+  }
+
+  public GetUsuario():Usuario{
+    return this.usuario;
   }
 
 }

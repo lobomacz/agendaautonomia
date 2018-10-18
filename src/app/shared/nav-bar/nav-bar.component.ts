@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Router, Routes } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { OpcionNav } from '../../clases/opcion-nav';
 import { environment } from '../../../environments/environment';
 
@@ -15,7 +15,7 @@ export class NavBarComponent implements OnInit {
 	private link_list:Array<OpcionNav>;
 
 
-  constructor(private router:Router) {
+  constructor(private router:Router, private route:ActivatedRoute) {
   	
   	this.titulo_sitio = environment.sitetitle;
 
