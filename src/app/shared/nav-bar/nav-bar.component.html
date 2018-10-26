@@ -5,7 +5,7 @@
 			{{ titulo_sitio }}
 		</p>
 	</div>
-	<nav class="header__navegacion">
+	<nav class="header__navegacion" *ngIf="link_list != null">
 		<div class="navegacion__boton"  *ngFor="let link of link_list">
 			<a class="navegacion__link" (click)="OnNavLink_Click($event,link.ruta)" [innerHtml]="link.icono"></a>
 			<span class="navegacion__hint">
@@ -14,14 +14,22 @@
 		</div>
 		
 	</nav>
-	
-	<div class="avatar" *ngIf="usuario; else visitante">
+	<div *ngIf="usuario != null" class="navegacion__boton--login">
+		<a class="navegacion__link--login" (click)="OnNavLink_Click($event,'logout')">&#xe1ec;</a>
+		<span class="navegacion__hint">Salir</span>
+	</div>
+	<div class="avatar" *ngIf="usuario != null; else visitante">
 		<figure class="avatar__figure">
-			<img class="avatar__img" src="./assets/img/unknown-user.png" alt="Avatar del usuario">
-			<figcaption class="avatar__caption">[</figcaption>
+			<img class="avatar__img" src="{{ foto }}" alt="Avatar del usuario">
+			<figcaption class="avatar__caption">`</figcaption>
 		</figure>
 		<div class="avatar__text">
-			<h4>Juan Pérez</h4>
+			<h4 *ngIf="usuario.tipoUsuario === 'usuario';else admintext">
+				{{ funcionarioUsuario.nombre }}
+			</h4>
+			<ng-template #admintext>
+				<h4>{{ usuario.idFuncionario | uppercase }}</h4>
+			</ng-template>
 		</div>
 	</div>
 	<ng-template #visitante>

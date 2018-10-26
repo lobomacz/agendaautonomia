@@ -12,17 +12,13 @@ import { AgendaService } from './agenda.service';
 @Injectable()
 export class AuthserviceService extends AgendaService {
 
-  private usuario:Usuario;
-  private authUser:User;
-
   constructor(_db:AngularFireDatabase, _storage:AngularFireStorage,private _auth:AngularFireAuth) { 
   	super(_db, _storage);
-    this.usuario = new Usuario();
   }
 
 
   public AuthUser():User{
-  	return this.authUser;
+  	return this._auth.auth.currentUser;
   }
 
   public GeneraCredencial(correo:string, contrasena:string):Promise<any>{
@@ -40,38 +36,20 @@ export class AuthserviceService extends AgendaService {
     return this._db.object(ruta).set(usuario.ToJSon());
   }
 
-  private GetUsuarioObservable(tipoUsuario:string, _id:string):Observable<any>{
+  public GetUsuarioObservable(tipoUsuario:string, _id:string):Observable<AngularFireAction<DatabaseSnapshot>>{
   	let fuente:string = tipoUsuario == 'admin' ? 'admins':'usuarios';
   	const ruta:string = `/${fuente}/${_id}`;
-  	return this._db.object(ruta).valueChanges();
+  	return this._db.object(ruta).snapshotChanges();
   }
 
-  public Login(email:string,contrasena:string):void{
-
-    this._auth.auth.signInWithEmailAndPassword(email,contrasena).then((cred) => {
-      if (cred != null && cred.user.uid != undefined) {
-        //this._auth.auth.setPersistence()
-        this.authUser = cred.user;
-        this.GetUsuarioObservable('usuario',this.authUser.uid).subscribe((v) => {
-          if (v != undefined) {
-            this.usuario = new Usuario(v);
-          }else{
-            this.GetUsuarioObservable('admin',this.authUser.uid).subscribe((dato) => {
-              this.usuario = new Usuario(dato);
-            });
-          }
-        });
-      }
-    });
+  public Login(email:string,contrasena:string):Promise<any>{
+    
+    return this._auth.auth.signInWithEmailAndPassword(email,contrasena);
 
   }
 
   public Logout(){
     this._auth.auth.signOut();
-  }
-
-  public GetUsuario():Usuario{
-    return this.usuario;
   }
 
 }

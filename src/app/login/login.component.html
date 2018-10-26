@@ -1,21 +1,21 @@
-<macz-nav-bar [usuario]="usuario"></macz-nav-bar>
+
 <div class="login">
 	<div class="login-container">
 		<div class="u-center-text u-margin-bottom-small">
 			<h3 class="titulo--terciario">Ingreso</h3>
 		</div>
-		<form class="login-form" #loginForm="ngForm" accept-charset="utf-8">
+		<div class="login-form"  accept-charset="utf-8">
 			<div class="login-form__group">
-				<input class="login-form__input" #correo="ngModel" ngModel name="correo" type="email" required placeholder="Correo-e" id="correo">
+				<input class="login-form__input" #correoe="ngModel" [(ngModel)]="correo" name="correoe" type="email" required placeholder="Correo-e" id="correo">
 				<label class="login-form__label" for="correo">Correo-e</label>
-				<div class="mensaje mensaje--error" *ngIf="correo.invalid && (correo.dirty || correo.touched)" >
-					<div *ngIf="correo.errors.required">
+				<div class="mensaje mensaje--error" *ngIf="correoe.invalid && (correoe.dirty || correoe.touched)" >
+					<div *ngIf="correoe.errors.required">
 						El campo correo-e es requerido
 					</div>
 				</div>
 			</div>
 			<div class="login-form__group">
-				<input class="login-form__input" type="password" #password="ngModel" ngModel name="password" value="" placeholder="Contraseña" required minlength="8" id="password">
+				<input class="login-form__input" type="password" #password="ngModel" [(ngModel)]="contrasena" name="password" value="" placeholder="Contraseña" required minlength="8" id="password">
 				<label class="login-form__label" for="password">Contraseña</label>
 				<div class="mensaje mensaje--error" *ngIf="password.invalid && (password.dirty || password.touched)" >
 					<div *ngIf="password.errors.required">
@@ -27,9 +27,9 @@
 				</div>
 			</div>
 			<div class="login__button">
-				<a href="#" *ngIf="loginForm.form.valid" class="btn btn--white" (click)="loginCheck($event, loginForm)">Entrar</a>
+				<a href="#" *ngIf="correoe.valid && password.valid" class="btn btn--white" (click)="LoginCheck($event)">Entrar</a>
 			</div>
-		</form>
+		</div>
 
 		<p class="login__info">Llene los campos correctamente para que se active el botón de ingreso.</p>
 		<p class="login__info">Si olvida su contraseña, comuniquese con el administrador en sigc@graccs.gob.ni</p>

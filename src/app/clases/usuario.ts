@@ -5,20 +5,16 @@ export class Usuario {
 	activo:boolean;
 	tipoUsuario:string;
 	ultimoIngreso:string;
-	email:string;
-	uid:string;
 
 	constructor(datos?:any, tipo:string = 'usuario'){
 		if(datos != undefined){
-			const {idFuncionario,fechaIngreso,activo,ultimoIngreso,email,uid,tipoUsuario} = datos;
+			const {idFuncionario,fechaIngreso,activo,ultimoIngreso,tipoUsuario} = datos;
 
 			this.idFuncionario = idFuncionario;
 			this.fechaIngreso = fechaIngreso;
 			this.activo = activo;
 			this.ultimoIngreso = ultimoIngreso;
 			this.tipoUsuario = tipoUsuario;
-			this.email = email;
-			this.uid = uid;
 
 		}else{
 			this.idFuncionario = '';
@@ -27,8 +23,6 @@ export class Usuario {
 			this.tipoUsuario = tipo;
 			this.activo = false;
 		}
-
-		this.tipoUsuario = tipo;
 	}
 
 	public ToJSon(){
@@ -38,8 +32,6 @@ export class Usuario {
 			'activo':this.activo,
 			'ultimoIngreso':this.ultimoIngreso,
 			'tipoUsuario':this.tipoUsuario,
-			'email':this.email,
-			'uid':this.uid
 		};
 	}
 }

@@ -67,15 +67,15 @@ export class EditarComponent implements OnInit {
   		this._cService.GetFotoContacto(this._id,this.funcionario.foto).subscribe(imgUrl =>{
   			this.fotoUrl = imgUrl;
   		});
-  		this._auth.GetUsuario('admin',this._id).subscribe(datos => {
+  		this._auth.GetUsuarioObservable('admin',this._id).subscribe(datos => {
   			if (datos != null) {
-  				this.usuarioFuncionario = new Usuario(datos);
+  				this.usuarioFuncionario = new Usuario(datos.payload.val());
   				this.crearUsuario = false;
   				this.oldTipoUsuario = 'admin';
   			}else{
-  				this._auth.GetUsuario('usuario',this._id).subscribe(datos1 => {
+  				this._auth.GetUsuarioObservable('usuario',this._id).subscribe(datos1 => {
   					if (datos1 != null) {
-  						this.usuarioFuncionario = new Usuario(datos1);
+  						this.usuarioFuncionario = new Usuario(datos1.payload.val());
   						this.crearUsuario = false;
   						this.oldTipoUsuario = 'usuario';
   					}

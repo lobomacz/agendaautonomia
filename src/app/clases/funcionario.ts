@@ -11,14 +11,15 @@ export class Funcionario {
 
 	constructor (dato?:any, Foto:string = "assets/img/unknown-user.png"){
 		if(dato != null){
-			this.foto = dato.foto;
-			this.nombre = dato.nombre;
-			this.organizacion = dato.organizacion;
-			this.cargo = dato.cargo;
-			this.municipio = dato.municipio;
-			this.correo = dato.correo;
-			this.telefono = dato.telefono;
-			this.movil = dato.movil;
+			const {foto,nombre,organizacion,cargo,municipio,correo,telefono,movil} = dato;
+			this.foto = foto;
+			this.nombre = nombre;
+			this.organizacion = organizacion;
+			this.cargo = cargo;
+			this.municipio = municipio;
+			this.correo = correo;
+			this.telefono = telefono;
+			this.movil = movil;
 		}else{
 			this.foto = Foto;
 			this.nombre = '';
