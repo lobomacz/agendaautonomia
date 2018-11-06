@@ -6,6 +6,7 @@ import { Proyecto } from '../../clases/proyecto';
 import { PersonalProyecto } from '../../clases/personal-proyecto';
 import { ProyectosService } from '../../servicios/proyectos-service';
 import { InstitucionService } from '../../servicios/institucion-service';
+import { AuthserviceService } from "../../servicios/authservice.service";
 
 @Component({
   selector: 'macz-detalle-proyecto',
@@ -14,7 +15,8 @@ import { InstitucionService } from '../../servicios/institucion-service';
 })
 export class DetalleProyectoComponent implements OnInit {
 
-	private usuario:boolean;
+	private usuarioId:string;
+  private esAdmin:boolean;
 	private _id:string;
 	private organizacion:string;
 	private sector:string;
@@ -27,15 +29,27 @@ export class DetalleProyectoComponent implements OnInit {
   private personal:PersonalProyecto;
 
 
-  constructor(private _activatedRoute:ActivatedRoute, private _router:Router, private _service:ProyectosService, private _institService:InstitucionService) {
-  	this.usuario = false;
+  constructor(private _activatedRoute:ActivatedRoute, private _router:Router, private _service:ProyectosService, private _institService:InstitucionService, private _auth:AuthserviceService) {
   	this.dialogo_borrar = false;
   	this._id = this._activatedRoute.snapshot.paramMap.get('id');
   	this.proyect0 = this._service.GetProyecto(this._id);
     this.listaSitios = [];
+    this.esAdmin = false;
   }
 
   ngOnInit() {
+    this.usuarioId = this._auth.AuthUser() !== null ? this._auth.AuthUser().uid:null;
+
+    if(this.usuarioId === null){
+      this.Redirect('/error');
+    }
+
+    this._auth.IsAdmin(this.usuarioId).subscribe((v) => {
+      if(v.key !== null){
+        this.esAdmin = true;
+      }
+    });
+    
   	this.proyect0.subscribe(datos => {
   		this.proyecto = new Proyecto(datos);
 
@@ -90,6 +104,15 @@ export class DetalleProyectoComponent implements OnInit {
   CerrarModal(evento:Event){
   	this.dialogo_borrar = false;
   	evento.preventDefault();
+  }
+
+  Redirect(ruta:string){
+    this._router.navigateByUrl(ruta)
+  }
+
+  userLogout(){
+    this.usuarioId = null;
+    this.Redirect('/home')
   }
 
 }

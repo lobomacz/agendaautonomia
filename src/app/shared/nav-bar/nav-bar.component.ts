@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, EventEmitter, OnInit, Input, Output, OnChanges } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { OpcionNav } from '../../clases/opcion-nav';
 import { environment } from '../../../environments/environment';
@@ -13,9 +13,11 @@ import { AuthserviceService } from '../../servicios/authservice.service';
   templateUrl: './nav-bar.component.html',
   styleUrls: ['./nav-bar.component.scss']
 })
-export class NavBarComponent implements OnInit {
+export class NavBarComponent implements OnInit, OnChanges {
 
 	@Input() usuarioId:string;
+  @Output() logout = new EventEmitter();
+
   private usuario:Usuario;
   private funcionarioUsuario:Funcionario;
   private foto:string;
@@ -34,15 +36,34 @@ export class NavBarComponent implements OnInit {
   }
 
   ngOnInit() {
-  	 this.Inicializa();
+  	 
   }
+
+  ngOnChanges(changes:any) {
+    this.Inicializa();
+  }
+  
 
   OnNavLink_Click(event:Event,ruta:string){
 
     if (ruta === 'logout') {
-      this._auth.Logout();
-      alert(this.route.parent);
-      this.GoHome();
+      let that = this;
+      this._auth.Logout().then(() => {
+
+        this.route.url.subscribe((p) => {
+          if(p.length > 0){
+            that.GoHome();
+          }else{
+            that.logout.emit();
+          }
+        });
+
+      }).catch((error) => {
+        const mensaje = error.message;
+        let mensaje_error = `Ocurrió un problema al salir del sistema. Intentelo de nuevo. ${mensaje}`;
+        alert(mensaje_error);
+      });
+      
     }else{
       this.router.navigateByUrl(ruta);
     }
@@ -52,7 +73,7 @@ export class NavBarComponent implements OnInit {
   }
 
   GoHome(){
-    this.router.navigateByUrl("/");
+    this.router.navigateByUrl("/home");
   }
 
   Inicializa(){
@@ -72,6 +93,10 @@ export class NavBarComponent implements OnInit {
           });
         }
       });
+    }else{
+      this.usuario = null;
+      this.funcionarioUsuario = null;
+      this.LlenaListaOpciones();
     }
   }
 
@@ -125,6 +150,8 @@ export class NavBarComponent implements OnInit {
           break;
       }
        
+    }else{
+      this.link_list = null;
     }
   }
 

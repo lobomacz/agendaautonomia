@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { InstitucionService } from '../../servicios/institucion-service';
+import { AuthserviceService } from '../../servicios/authservice.service';
 import { Organizacion } from '../../clases/organizacion';
 
 @Component({
@@ -15,7 +16,7 @@ import { Organizacion } from '../../clases/organizacion';
 })
 export class EditarOrganizacionesComponent implements OnInit {
 
-	private usuario:boolean;
+	private usuarioId:string;
 	private _id:string;
 	private organizacion:Organizacion;
 	private nuevo:boolean;
@@ -25,8 +26,7 @@ export class EditarOrganizacionesComponent implements OnInit {
 	private lista_niveles:string[];
 	private lista_tipos:string[];
 
-  constructor(private _service:InstitucionService, private _router:Router, private route:ActivatedRoute) { 
-  	this.usuario = false;
+  constructor(private _service:InstitucionService, private _router:Router, private route:ActivatedRoute, private _auth:AuthserviceService) { 
   	this._id = this.route.snapshot.paramMap.get('id');
   	//this.municipiosSubject = new BehaviorSubject(null);
   	this.nuevo = false;
@@ -34,6 +34,18 @@ export class EditarOrganizacionesComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.usuarioId = this._auth.AuthUser() !== null ? this._auth.AuthUser().uid:null;
+
+    if(this.usuarioId === null){
+      this.Redirect('/error');
+    }else{
+      this._auth.IsAdmin(this.usuarioId).subscribe((v) => {
+        if(v.key === null){
+          this.Redirect('/error');
+        }
+      });
+    }
+
   	this.lista_niveles = ["regional","municipal","territorial","comunal"];
   	this.lista_tipos = ["publico","alcaldia","ong","privado"];
   	//this.regione$ = this._service.GetRegiones();
@@ -49,11 +61,20 @@ export class EditarOrganizacionesComponent implements OnInit {
   	this.municipiosSubject.next(region);
   }*/
 
+  Redirect(ruta:string){
+    this._router.navigateByUrl(ruta);
+  }
+
   OnGuardar(){
   	let that = this;
   	this._service.ActualizaInstitucion(this.organizacion,this._id).then(()=>{
   		this._router.navigateByUrl('/instituciones/ver/'.concat(that._id));
   	});
+  }
+
+  userLogout(){
+    this.usuarioId = null;
+    this.Redirect('/home');
   }
 
 }

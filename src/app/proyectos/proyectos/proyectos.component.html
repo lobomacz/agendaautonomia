@@ -1,6 +1,6 @@
-<macz-nav-bar [usuario]="usuario"></macz-nav-bar>
+<macz-nav-bar [usuarioId]="usuarioId" (logout)="userLogout()" ></macz-nav-bar>
 <section class="seccion-proyectos">
-	<div class="fab-button">
+	<div *ngIf="esAdmin === true" class="fab-button">
 		<a class="fab-button__link" routerLink="nuevo">&#xe20d;</a>
 	</div>
 	<h2 class="encabezado-secundario u-margin-bottom-medium">Lista de Proyectos</h2>

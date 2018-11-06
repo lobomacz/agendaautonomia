@@ -12,13 +12,15 @@ export class HomeComponent implements OnInit {
   private usuarioId:string;
   
   constructor(private _auth:AuthserviceService) {
-
-    this.usuarioId = this._auth.AuthUser() !== null ? this._auth.AuthUser().uid:null;
     
   }
 
   ngOnInit() {
-    
+    this.usuarioId = this._auth.AuthUser() !== null ? this._auth.AuthUser().uid:null;
+  }
+
+  userLogout(){
+    this.usuarioId = null;
   }
 
 }

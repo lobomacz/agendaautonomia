@@ -19,7 +19,7 @@ import { InstitucionService } from '../../servicios/institucion-service';
 })
 export class NuevoComponent implements OnInit {
 
-	private usuario:any;
+	private usuarioId:string;
 	private _id:string;
 	private nuevo:boolean;
 	private fotoFile:any;
@@ -57,6 +57,18 @@ export class NuevoComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.usuarioId = this._auth.AuthUser() !== null ? this._auth.AuthUser().uid:null;
+
+    if(this.usuarioId === null){
+      this.Redirect('/error');
+    }else{
+      this._auth.IsAdmin(this.usuarioId).subscribe((v) => {
+        if(v.key === null){
+          this.Redirect('/error');
+        }
+      });
+    }
+
   	this.organizacione$ = this._iService.GetInstituciones();
   	this.municipio$ = this._cService.GetMunicipios();
   }
@@ -129,11 +141,11 @@ export class NuevoComponent implements OnInit {
             that.Guardar_Usuario().then(credenciales => {
             	let uid:string = credenciales.user.uid;
             	that._auth.CreaUsuario(uid, that.usuarioFuncionario).then(() => {
-            		that.Redirect();
+            		that.Redirect('/contactos/ver/'.concat(that._id));
             	});
             });
           }else{
-            that.Redirect();
+            that.Redirect('/contactos/ver/'.concat(that._id));
           }
         }
       );
@@ -141,7 +153,7 @@ export class NuevoComponent implements OnInit {
       this.Guardar_Usuario().then(credenciales => {
 	    	let uid:string = credenciales.user.uid;
 	    	that._auth.CreaUsuario(uid, that.usuarioFuncionario).then(() => {
-	    		that.Redirect();
+	    		that.Redirect('/contactos/ver/'.concat(that._id));
 	    	});
 	    });
     }
@@ -173,10 +185,13 @@ export class NuevoComponent implements OnInit {
     }
   }
 
-  Redirect(){
-  	this._router.navigateByUrl('/contactos/ver/'.concat(this._id));
+  Redirect(ruta:string){
+    this._router.navigateByUrl(ruta)
   }
 
-
+  userLogout(){
+    this.usuarioId = null;
+    this.Redirect('/home')
+  }
 
 }

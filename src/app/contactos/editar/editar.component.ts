@@ -21,7 +21,7 @@ import { InstitucionService } from '../../servicios/institucion-service';
 })
 export class EditarComponent implements OnInit {
 
-	private usuario:any;
+	private usuarioId:string;
 	private _id:string;
 	private nuevo:boolean;
 	private fotoFile:any;
@@ -43,7 +43,6 @@ export class EditarComponent implements OnInit {
 	private mensajeDialogo:Mensaje;
 
   constructor(private _activeRoute:ActivatedRoute, private _auth:AuthserviceService, private _cService:ContactoService, private _iService:InstitucionService, private _router:Router) {
-  	this.usuario = false;
   	this._id = this._activeRoute.snapshot.paramMap.get('id');
   	this.nuevo = false;
   	this.fotoFile = null;
@@ -61,6 +60,17 @@ export class EditarComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.usuarioId = this._auth.AuthUser() !== null ? this._auth.AuthUser().uid:null;
+
+    if(this.usuarioId === null){
+      this.Redirect('/error');
+    }else{
+      this._auth.IsAdmin(this.usuarioId).subscribe((v) => {
+        if(v.key === null){
+          this.Redirect('/error');
+        }
+      });
+    }
 
   	this._cService.GetContactoObservable(this._id).subscribe(datos =>{
   		this.funcionario = new Funcionario(datos);
@@ -153,7 +163,7 @@ export class EditarComponent implements OnInit {
 
   	//Falta manejar el caso de error mostrando un diálogo con el mensaje de error.
   	this._cService.ActualizaContacto(this._id, this.funcionario).then(() => {
-  		this.Redirect();
+  		this.Redirect('/contactos/ver/'.concat(this._id));
   	});
 
   	//Falta la implementación del cambio en el tipo de usuario.
@@ -170,8 +180,13 @@ export class EditarComponent implements OnInit {
   	//FALTA IMPLEMENTACIÓN
   }
 
-  Redirect(){
-  	this._router.navigateByUrl('/contactos/ver/'.concat(this._id));
+  Redirect(ruta:string){
+    this._router.navigateByUrl(ruta)
+  }
+
+  userLogout(){
+    this.usuarioId = null;
+    this.Redirect('/home')
   }
 
 }

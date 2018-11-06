@@ -1,4 +1,4 @@
-<macz-nav-bar [usuario]="usuario"></macz-nav-bar>
+<macz-nav-bar [usuarioId]="usuarioId" (logout)="userLogout()" ></macz-nav-bar>
 <section class="seccion-formulario-proyecto">
 	<h2 class="encabezado-secundario u-center-text u-margin-bottom-medium">{{ nuevo==true ? 'Ingreso':'Edición' }} de Proyecto</h2>
 	<div class="formulario__container">

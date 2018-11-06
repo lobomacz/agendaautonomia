@@ -48,8 +48,14 @@ export class AuthserviceService extends AgendaService {
 
   }
 
-  public Logout(){
-    this._auth.auth.signOut();
+  public Logout():Promise<any>{
+    return this._auth.auth.signOut();
+  }
+
+  IsAdmin(Id:string):Observable<AngularFireAction<DatabaseSnapshot>>{
+
+    return this.GetUsuarioObservable('admin' , Id);
+
   }
 
 }

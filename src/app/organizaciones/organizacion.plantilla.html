@@ -1,4 +1,4 @@
-<macz-nav-bar [usuario]="usuario"></macz-nav-bar>
+<macz-nav-bar [usuarioId]="usuarioId" (logout)="userLogout()" ></macz-nav-bar>
 <section class="seccion-formulario-institucion">
 	<h2 class="encabezado-secundario u-center-text">{{ nuevo == true ? 'Ingreso':'Edición' }} de Datos de Instituciones</h2>
 	<div class="formulario__container u-margin-top-medium">

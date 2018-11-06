@@ -5,6 +5,8 @@ import { Observable } from 'rxjs/Observable';
 
 import { ContactoService } from '../../servicios/contacto-service';
 import { InstitucionService } from '../../servicios/institucion-service';
+import { AuthserviceService } from '../../servicios/authservice.service';
+
 import { Funcionario } from '../../clases/funcionario';
 import { Organizacion } from '../../clases/organizacion';
 import { Mensaje } from '../../clases/mensaje';
@@ -17,7 +19,8 @@ import { Mensaje } from '../../clases/mensaje';
 export class DetalleComponent implements OnInit {
 
   private _id:string;
-  private usuario:any;
+  private esAdmin:boolean;
+  private usuarioId:string;
 	private contacto:Funcionario;
 	private contactoObservable:Observable<any>;
   private organizacion$:Observable<any>;
@@ -30,14 +33,27 @@ export class DetalleComponent implements OnInit {
   private dialogo_mensaje:boolean = false;
 
 
-  constructor(private _route:ActivatedRoute, private _service:ContactoService, private _institService:InstitucionService, private _router:Router) {
+  constructor(private _route:ActivatedRoute, private _service:ContactoService, private _institService:InstitucionService, private _router:Router, private _auth:AuthserviceService) {
     this._id = this._route.snapshot.paramMap.get('id');
     this.contacto = new Funcionario();
     this.mensaje = new Mensaje();
     this.organizacion = new Organizacion();
+    this.esAdmin = false;
   }
 
   ngOnInit() {
+    this.usuarioId = this._auth.AuthUser() !== null ? this._auth.AuthUser().uid:null;
+
+    if(this.usuarioId === null){
+      this.Redirect('/error');
+    }
+
+    this._auth.IsAdmin(this.usuarioId).subscribe((v) => {
+      if(v.key !== null){
+        this.esAdmin = true;
+      }
+    });
+
   	this.getFuncionario();
   }
 
@@ -96,6 +112,15 @@ export class DetalleComponent implements OnInit {
     this.dialogo_mensaje = false;
     this.mensaje = new Mensaje();
     evento.preventDefault();
+  }
+
+  Redirect(ruta:string){
+    this._router.navigateByUrl(ruta)
+  }
+
+  userLogout(){
+    this.usuarioId = null;
+    this.Redirect('/home')
   }
 
 }

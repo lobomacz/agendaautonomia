@@ -1,4 +1,4 @@
-<macz-nav-bar [usuario]="usuario"></macz-nav-bar>
+<macz-nav-bar [usuarioId]="usuarioId" (logout)="userLogout()"></macz-nav-bar>
 <section class="seccion-detalle-proyecto">
 	<div class="detalle-elemento" *ngIf="proyecto !== undefined" >
 		<h2 class="encabezado-secundario">{{ proyecto.nombre | uppercase }}</h2>
@@ -76,7 +76,7 @@
 				</ng-template>
 			</li>
 		</ul>
-		<p>
+		<p *ngIf="esAdmin === true">
 			<a routerLink="/proyectos/editar/{{ _id }}" class="btn-texto">Editar</a>
 			<a href="#" class="btn-texto" (click)="OnEliminar_Click($event)" >Eliminar</a>
 		</p>

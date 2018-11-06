@@ -1,11 +1,13 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { NgForm, FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AngularFireAction, DatabaseSnapshot } from 'angularfire2/database';
 import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Chart } from 'chart.js';
 import { InstitucionService } from '../../servicios/institucion-service';
 import { ProyectosService } from '../../servicios/proyectos-service';
+import { AuthserviceService } from "../../servicios/authservice.service";
 import 'rxjs/add/operator/map';
 
 @Component({
@@ -21,7 +23,7 @@ export class MonitoreoComponent implements OnInit {
 	@ViewChild("chartIS") porIS:any;
   @ViewChild("chartPorInversion") porInversion:any;
 
-	private usuario:any;
+	private usuarioId:string;
 	private annio:number;
 	private filtroInstitucion:string;
 	private annioSubject:BehaviorSubject<number>;
@@ -45,7 +47,7 @@ export class MonitoreoComponent implements OnInit {
 
 	private colores:string[];
 
-  constructor(private iService:InstitucionService, private pService:ProyectosService) { 
+  constructor(private _router:Router, private iService:InstitucionService, private pService:ProyectosService, private _auth:AuthserviceService) { 
   	this.annio = new Date().getFullYear();
 
   	this.colores = [
@@ -75,6 +77,10 @@ export class MonitoreoComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.usuarioId = this._auth.AuthUser() !== null ? this._auth.AuthUser().uid:null;
+    if(this.usuarioId === null){
+      this.Redirect('/error');
+    }
   	this.annioSubject = new BehaviorSubject(this.annio);
   }
 
@@ -546,6 +552,15 @@ export class MonitoreoComponent implements OnInit {
 
   	evento.preventDefault();
 
+  }
+
+  Redirect(ruta:string){
+    this._router.navigateByUrl(ruta)
+  }
+
+  userLogout(){
+    this.usuarioId = null;
+    this.Redirect('/home');
   }
 
 }
