@@ -67,3 +67,10 @@
 		background-color: rgba($color-gris-oscuro, .2);
 	}
 }
+
+%figure_shape {
+	cursor: pointer;
+	width: 4.8rem;
+	height: 4.8rem;
+	clip-path: circle(50% at 50% 50%);
+}

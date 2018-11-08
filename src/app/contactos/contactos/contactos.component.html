@@ -5,21 +5,43 @@
 	</div>
 	<h2 class="encabezado-secundario u-margin-bottom-medium">Lista de contactos de instituciones</h2>
 	<div class="row" *ngIf="contacto$ != null; else sindatos">
-		<div class="col-1-de-3  u-margin-bottom-medium" *ngFor="let contacto of contacto$">
-			<div class="tarjeta-contacto tarjeta-contacto--lista">
 
-				<div class="tarjeta-contacto--lista__texto">
-					<h4 class="encabezado-terciario u-margin-bottom-small">{{ contacto.payload.val().nombre }}</h4>
-					<p>
-						Institución: {{ organizaciones[contacto.payload.val().organizacion].nombre_corto }}
-					</p>
-					<p>
-						Cargo: {{ contacto.payload.val().cargo }}
-					</p>
-					<p><a routerLink="ver/{{ contacto.key }}" class="btn-texto">Ver contacto</a></p>
+		<div class="tabla-bloques">
+			<div class="tabla-bloques__header">
+				<div class="tabla-bloques__header-cell--x-small">Foto</div>
+				<div class="tabla-bloques__header-cell">Nombre</div>
+				<div class="tabla-bloques__header-cell">Institución</div>
+				<div class="tabla-bloques__header-cell">Cargo</div>
+				<div class="tabla-bloques__header-cell--x-small"></div>
+			</div>
+			<div class="tabla-bloques__filas">
+				<div class="tabla-bloques__fila" [ngClass]="{'fila-impar': impar}" *ngFor="let contacto of contacto$; odd as impar">
+					<div class="tabla-bloques__columna--centrada">
+						<figure class="tabla-bloques__columna-figure" *ngIf="contacto.payload.val().foto.indexOf('assets') < 0;else defaultImg">
+							<img src="{{ fotos[contacto.key] }}" alt="" class="tabla-bloques__columna__img">
+						</figure>
+						<ng-template #defaultImg>
+							<figure class="tabla-bloques__columna-figure">
+								<img src="{{ contacto.payload.val().foto }}" alt="" class="tabla-bloques__columna__img">
+							</figure>
+						</ng-template>	
+					</div>
+					<div class="tabla-bloques__columna">
+						{{ contacto.payload.val().nombre }}
+					</div>
+					<div class="tabla-bloques__columna">
+						{{ organizaciones[contacto.payload.val().organizacion].nombre_corto }}
+					</div>
+					<div class="tabla-bloques__columna">
+						{{ contacto.payload.val().cargo }}
+					</div>
+					<div class="tabla-bloques__columna">
+						<a routerLink="ver/{{ contacto.key }}" class="btn-texto">Ver contacto</a>
+					</div>
 				</div>
 			</div>
 		</div>
+		
 	</div>
 	<ng-template #sindatos>
 		<h3 class="encabezado-terciario">

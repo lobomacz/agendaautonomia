@@ -22,6 +22,7 @@ export class ContactosComponent implements OnInit {
   private esAdmin:boolean;
   private contactosSubject:BehaviorSubject<string | null>;
   private contacto$?:AngularFireAction<DatabaseSnapshot>[];
+  private fotos:any;
   private contactoVacio:boolean;
 
   private organizacione$?:Observable<any>;
@@ -34,6 +35,7 @@ export class ContactosComponent implements OnInit {
     this.organizacione$ = null;
     this.organizaciones = null;
     this.esAdmin = false;
+    this.fotos = {};
   }
 
   suscribeMunicipios(municipio:string | null):any{
@@ -56,12 +58,24 @@ export class ContactosComponent implements OnInit {
     this._service.GetContactosObservable(this.contactosSubject).subscribe(datos => {
       if (datos.length > 0) {
         this.contacto$ = datos;
+
+        for(let contacto of this.contacto$){
+          if(contacto.payload.val().foto.indexOf('assets') < 0){
+            this.BuscaFoto(contacto.key, contacto.payload.val().foto).subscribe((v)=>{
+              this.fotos[contacto.key] = v;
+            });
+          }
+        }
         this.organizacione$ = this._institService.GetInstitucionesAsObject();
         this.organizacione$.subscribe(orgs => {
           this.organizaciones = orgs;
         });
       }
     });
+  }
+
+  BuscaFoto(id:string, file:string):Observable<string>{
+    return this._service.GetFotoContacto(id,file);
   }
 
   Redirect(ruta:string){

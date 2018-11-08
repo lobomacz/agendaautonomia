@@ -461,6 +461,12 @@ export class MonitoreoComponent implements OnInit {
 
   ChartPorIS(){
 
+    console.log(this.porIS.nativeElement);
+
+    if (this.cPorIS !== undefined){
+      delete this.cPorIS;
+    }
+
   	let nombre:string;
 
   	this.institucionesProyectos.forEach((valor) => {
