@@ -22,11 +22,17 @@ export class ContactosComponent implements OnInit {
   private esAdmin:boolean;
   private contactosSubject:BehaviorSubject<string | null>;
   private contacto$?:AngularFireAction<DatabaseSnapshot>[];
+  private paginaContactos:AngularFireAction<DatabaseSnapshot>[];
   private fotos:any;
   private contactoVacio:boolean;
 
   private organizacione$?:Observable<any>;
   private organizaciones?:any;
+
+  private page:number;
+  private total:number;
+  private limit:number;
+  private loading:boolean;
 
   constructor(private _router:Router, private _service:ContactoService, private _institService:InstitucionService, private _auth:AuthserviceService) {
     this.contactosSubject = new BehaviorSubject(null);
@@ -36,6 +42,11 @@ export class ContactosComponent implements OnInit {
     this.organizaciones = null;
     this.esAdmin = false;
     this.fotos = {};
+    this.page = 1;
+    this.total = 0;
+    this.limit = 20;
+    this.loading = false;
+    this.paginaContactos = [];
   }
 
   suscribeMunicipios(municipio:string | null):any{
@@ -59,6 +70,7 @@ export class ContactosComponent implements OnInit {
       if (datos.length > 0) {
         this.contacto$ = datos;
 
+
         for(let contacto of this.contacto$){
           if(contacto.payload.val().foto.indexOf('assets') < 0){
             this.BuscaFoto(contacto.key, contacto.payload.val().foto).subscribe((v)=>{
@@ -66,12 +78,46 @@ export class ContactosComponent implements OnInit {
             });
           }
         }
+
+        this.total = this.contacto$.length;
+        if (this.total > this.limit) {
+          this.getPage();
+        }else{
+          this.paginaContactos = this.contacto$;
+        }
+
         this.organizacione$ = this._institService.GetInstitucionesAsObject();
         this.organizacione$.subscribe(orgs => {
           this.organizaciones = orgs;
         });
       }
     });
+  }
+
+  getPage(){
+    let start = (this.page - 1) * this.limit;
+    let end = start + this.limit;
+
+    if(end >= this.total){
+      this.paginaContactos = this.contacto$.slice(start);
+    }else{
+      this.paginaContactos = this.contacto$.slice(start, end);
+    }
+  }
+
+  onNextPage(){
+    this.page++;
+    this.getPage();
+  }
+
+  onPrevPage(){
+    this.page--;
+    this.getPage();
+  }
+
+  goToPage(n:number){
+    this.page = n;
+    this.getPage();
   }
 
   BuscaFoto(id:string, file:string):Observable<string>{

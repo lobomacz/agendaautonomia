@@ -58,6 +58,15 @@
 			</div>
 		</div>
 	</div>
+	<macz-pager *ngIf="total > limit" 
+	[page]="page"
+	[count]="total"
+	[perPage]="limit"
+	[pagesToShow]="5"
+	[loading]="loading"
+	(goNext)="onNextPage()"
+	(goPrev)="onPrevPage()"
+	(goPage)="goToPage($event)"></macz-pager>
 	<div class="tabla-bloques u-margin-top-medium" *ngIf="listaProyectos != null && listaProyectos.length > 0;else sinregistros">
 		<div class="tabla-bloques__header">
 			<div class="tabla-bloques__header-cell">Proyecto</div>
@@ -68,7 +77,7 @@
 			
 		</div>
 		<div class="tabla-bloques__filas">
-			<div class="tabla-bloques__fila" [ngClass]="{'fila-impar':impar}" *ngFor="let proyecto of listaProyectos; odd as impar">
+			<div class="tabla-bloques__fila" [ngClass]="{'fila-impar':impar}" *ngFor="let proyecto of paginaProyectos; odd as impar">
 				<div *ngIf="proyecto != null" class="tabla-bloques__columna">
 					<a routerLink="ver/{{proyecto.key}}" class="btn-texto" >
 					{{ proyecto.payload.val().nombre | uppercase }}

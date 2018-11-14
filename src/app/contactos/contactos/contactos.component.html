@@ -5,7 +5,15 @@
 	</div>
 	<h2 class="encabezado-secundario u-margin-bottom-medium">Lista de contactos de instituciones</h2>
 	<div class="row" *ngIf="contacto$ != null; else sindatos">
-
+		<macz-pager *ngIf="total > limit"  
+		[page]="page"
+		[count]="total"
+		[perPage]="limit"
+		[pagesToShow]="5"
+		[loading]="loading"
+		(goNext)="onNextPage()"
+		(goPrev)="onPrevPage()"
+		(goPage)="goToPage($event)"></macz-pager>
 		<div class="tabla-bloques">
 			<div class="tabla-bloques__header">
 				<div class="tabla-bloques__header-cell--x-small">Foto</div>
@@ -15,7 +23,7 @@
 				<div class="tabla-bloques__header-cell--x-small"></div>
 			</div>
 			<div class="tabla-bloques__filas">
-				<div class="tabla-bloques__fila" [ngClass]="{'fila-impar': impar}" *ngFor="let contacto of contacto$; odd as impar">
+				<div class="tabla-bloques__fila" [ngClass]="{'fila-impar': impar}" *ngFor="let contacto of paginaContactos; odd as impar">
 					<div class="tabla-bloques__columna--centrada">
 						<figure class="tabla-bloques__columna-figure" *ngIf="contacto.payload.val().foto.indexOf('assets') < 0;else defaultImg">
 							<img src="{{ fotos[contacto.key] }}" alt="" class="tabla-bloques__columna__img">

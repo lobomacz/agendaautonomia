@@ -1,4 +1,7 @@
 
-<div class="pagination">
-	pager works!
+<div class="pagination" *ngIf="count > 0">
+	<span class="pagination__label">{{ getMin() }} a {{ getMax() }} de {{ count }}</span>
+	<div class="pagination__button" (click)="onPrev()" [ngClass]="{'pagination__button--hidden':page === 1 || loading}"><span class="pagination__button-icon icon icon-macz-angle-left"></span></div>
+	<div class="pagination__button" [ngClass]="{'pagination__button--active':pageNum === page}" *ngFor="let pageNum of getPages()" (click)="onPage(pageNum)" >{{ pageNum }}</div>
+	<div class="pagination__button" (click)="onNext()" [ngClass]="{'pagination__button--hidden':lastPage() || loading}"><span class="pagination__button-icon icon icon-macz-angle-right"></span></div>
 </div>

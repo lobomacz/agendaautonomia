@@ -28,14 +28,23 @@ export class ProyectosComponent implements OnInit {
 	private proyecto_sector$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private proyecto_institucion$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private listaProyectos:AngularFireAction<DatabaseSnapshot>[];
+  private paginaProyectos:AngularFireAction<DatabaseSnapshot>[];
 	private listaOpciones:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private listaSectores:AngularFireAction<DatabaseSnapshot>[];
   private listaOrganizaciones:any;
+  private page:number;
+  private loading:boolean;
+  private limit:number;
+  private total:number;
 
 
   constructor(private _service:ProyectosService, private _institService:InstitucionService, private _router:Router, private _auth:AuthserviceService) {
   	this.opcionFiltro = 'todos';
     this.annio = new Date().getFullYear();
+    this.limit = 20;
+    this.total = 0;
+    this.loading = false;
+    this.page = 1;
   }
 
   ngOnInit() {
@@ -69,6 +78,32 @@ export class ProyectosComponent implements OnInit {
 
   }
 
+  onNextPage():void{
+    this.page++;
+    this.getPage();
+  }
+
+  onPrevPage():void{
+    this.page--;
+    this.getPage();
+  }
+
+  goToPage(n:number):void{
+    this.page = n;
+    this.getPage();
+  }
+
+  getPage():void{
+    let start = (this.page - 1) * this.limit;
+    let end = start + this.limit;
+
+    if (end >= this.total) {
+      this.paginaProyectos = this.listaProyectos.slice(start);
+    }else{
+      this.paginaProyectos = this.listaProyectos.slice(start, end);
+    }
+  }
+
   BuscaOrganizacion(clave:string):string{
     let nombre:string = "N/C";
 
@@ -83,22 +118,52 @@ export class ProyectosComponent implements OnInit {
     return nombre;
   }
 
+  /* TODO:
+  Mejorar la programación al obtener la lista de proyectos ya que actualmente
+  se ve código repetitivo en las tres opciones de filtrado. LlenaProyectos puede
+  simplificarse con el uso de un solo Observer llamado proyecto$ el cual se llena eventualmente
+  con las llamadas a cada subject.
+   */
   LlenaProyectos(){
 
+    if (this.page > 1) {
+      this.page = 1;
+    }
+
   	switch (this.opcionFiltro) {
+
   		case "sector":
   			this.proyecto_sector$.subscribe(lista => {
           this.listaProyectos = lista;
+          this.total = this.listaProyectos.length;
+          if(this.total>this.limit){
+            this.getPage();
+          }else{
+            this.paginaProyectos = this.listaProyectos;
+          }
+          
         });
   			break;
   		case "institucion":
   			this.proyecto_institucion$.subscribe(lista => {
           this.listaProyectos = lista;
+          this.total = this.listaProyectos.length;
+          if(this.total>this.limit){
+            this.getPage();
+          }else{
+            this.paginaProyectos = this.listaProyectos;
+          }
         });
   			break;
   		default:
   			this.proyecto_anio$.subscribe(lista => {
 		  		this.listaProyectos = lista;
+          this.total = this.listaProyectos.length;
+          if(this.total>this.limit){
+            this.getPage();
+          }else{
+            this.paginaProyectos = this.listaProyectos;
+          }
 		  	});
   			break;
   	}
@@ -127,6 +192,13 @@ export class ProyectosComponent implements OnInit {
   	}
     this.UpdateLista();
   }
+
+  /*
+  TODO:
+  Mejorar el código de UpdateLista() para hacer uso de un solo Observer
+  que puede llamarse proyecto$ el cual se actualizará según el tipo de filtro
+  haciendo la correspondiente llamada al Subject.
+  */
 
   UpdateLista(){
   	switch (this.opcionFiltro) {

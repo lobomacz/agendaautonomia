@@ -19,12 +19,22 @@ export class OrganizacionesComponent implements OnInit {
   private esAdmin:boolean;
 	public tipo_filtro:string;
   private organizacionesSub:BehaviorSubject<string | null>;
-	private organizaciones$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+	private organizaciones:AngularFireAction<DatabaseSnapshot>[];
+  private paginaOrganizaciones:AngularFireAction<DatabaseSnapshot>[];
+
+  private page:number;
+  private total:number;
+  private limit:number;
+  private loading:boolean;
 
 
   constructor(private _router:Router , private _service:InstitucionService, private _auth:AuthserviceService) {
   	this.tipo_filtro = 'todas';
     this.esAdmin = false;
+    this.page = 1;
+    this.total = 0;
+    this.limit = 20;
+    this.loading = false;
   }
 
   ngOnInit() {
@@ -41,8 +51,44 @@ export class OrganizacionesComponent implements OnInit {
     });
 
     this.organizacionesSub = new BehaviorSubject(null);
-    this.organizaciones$ = this._service.GetInstitucionesPorTipo(this.organizacionesSub);
+    this._service.GetInstitucionesPorTipo(this.organizacionesSub).subscribe((datos) => {
+      this.organizaciones = datos;
+      this.total = this.organizaciones.length;
+
+      if (this.total > this.limit) {
+        this.getPage();
+      }else{
+        this.paginaOrganizaciones = this.organizaciones;
+      }
+      
+    });
     
+  }
+
+  onNextPage(){
+    this.page++;
+    this.getPage();
+  }
+
+  onPrevPage(){
+    this.page--;
+    this.getPage();
+  }
+
+  goToPage(n:number){
+    this.page = n;
+    this.getPage();
+  }
+
+  getPage(){
+    let start = (this.page - 1) * this.limit;
+    let end = start + this.limit;
+
+    if(end >= this.total){
+      this.paginaOrganizaciones = this.organizaciones.slice(start);
+    }else{
+      this.paginaOrganizaciones = this.organizaciones.slice(start,end);
+    }
   }
 
   setTipoFiltro(tipo:string):void{
