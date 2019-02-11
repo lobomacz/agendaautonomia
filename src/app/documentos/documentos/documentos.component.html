@@ -1,4 +1,52 @@
-<macz-nav-bar [usuario]="usuario"></macz-nav-bar>
-<p>
-  documentos works!
-</p>
+<macz-nav-bar [usuarioId]="usuarioId" (logout)="userLogout()" ></macz-nav-bar>
+<section class="seccion-documentos">
+	<h1 class="u-center-text">Reportes</h1>
+	<p>Seleccione el reporte dando clic en el botón correspondiente y se generará un archivo PDF.</p>
+	<div class="row">
+		<div class="col-1-de-3">
+			<input type="button" class="btn" name="" value="Por Institución" (click)="BuscaDatos('institucion',false)">
+		</div>	
+	</div>
+	<div class="row">
+		<div class="col-1-de-3">
+			<input type="button" class="btn" name="" value="Por Sector" (click)="BuscaDatos('sector',false)">
+		</div>	
+	</div>
+	<div class="row">
+		<div class="col-1-de-3">
+			<input type="button" class="btn" name="" value="Por Fuente De Financ." (click)="BuscaDatos('fuente',false)">
+		</div>	
+	</div>
+	<div class="row">
+		<div class="col-1-de-3">
+			<input type="button" class="btn" name="" value="Por Tipo de Inversión" (click)="BuscaDatos('inversion',false)">
+		</div>	
+	</div>
+	<div class="row">
+		<div class="col-1-de-3">
+			<input type="button" class="btn" name="" value="Por Institución y Sector" (click)="BuscaDatos('isector',true)">
+		</div>	
+	</div>
+	
+
+
+	<div class="overlay" [class.overlay--active]="dialogo_annio">
+		<div class="overlay__close" (click)="CerrarModal($event)">
+			<span class="overlay__icon">&#xe00e;</span>
+		</div>
+		<div class="dialog">
+	      <h3 class="dialog__titulo u-margin-bottom-medium">Seleccionar Año</h3>
+	      <p>
+	      	Seleccione el año para generar el reporte
+	      </p>
+	      <input type="number" #anio="ngModel" name="anno" value="" placeholder="Ej. 2018" [ngModel]="annio" maxlength="4">
+	      <div *ngIf="combo == true && (instituciones != undefined && instituciones.length > 0)">
+			<p>Seleccione la Institución</p>
+			<select #cmInstitucion="ngModel" [ngModel]="institucion" name="cmbselect" id="cmbinstitucion"  >
+				
+			</select>
+			</div>
+	      <a href="#" class="btn" (click)="OnSeleccionarAnnio($event)">Ok</a><a href="#" class="btn" (click)="CerrarModal($event)">Cancelar</a>
+	    </div>
+	</div>
+</section>

@@ -32,6 +32,7 @@ export class MonitoreoComponent implements OnInit {
 	private institucionesProyectos:AngularFireAction<DatabaseSnapshot>[];
   private alcaldias:AngularFireAction<DatabaseSnapshot>[];
 	private sectores:AngularFireAction<DatabaseSnapshot>[];
+  private transferencias:AngularFireAction<DatabaseSnapshot>[];
 
 	private cPorInstituciones:Chart;
 	private cPorSector:Chart;
@@ -48,7 +49,7 @@ export class MonitoreoComponent implements OnInit {
 	private colores:string[];
 
   constructor(private _router:Router, private iService:InstitucionService, private pService:ProyectosService, private _auth:AuthserviceService) { 
-  	this.annio = new Date().getFullYear();
+  	//this.annio = new Date().getFullYear();
 
   	this.colores = [
   		"#1e90ff",
@@ -81,11 +82,23 @@ export class MonitoreoComponent implements OnInit {
     if(this.usuarioId === null){
       this.Redirect('/error');
     }
-  	this.annioSubject = new BehaviorSubject(this.annio);
+
+    this.pService.GetLastProjectYear().subscribe((dato) => {
+      if(dato.length > 0) {
+        
+        this.annioSubject = new BehaviorSubject(Number.parseInt(dato[0].anio));
+        this.annio = dato[0].anio;
+        this.LlenaDatos();
+      }else{
+        this.Redirect('/error');
+      }
+      
+    });
+  	
   }
 
   ngAfterViewInit(){
-  	this.LlenaDatos();
+  	
   }
 
   BuscarDatos(evento:Event){
@@ -105,7 +118,22 @@ export class MonitoreoComponent implements OnInit {
   		this.iService.GetInstituciones().subscribe(res => {
   			this.instituciones = res;
   			this.datosPorI = this.ProcesaPorInstitucion(this.proyectos.map(this.ArrayPorInstitucion));
-  			this.ChartPorInstitucion();
+
+        this.iService.GetTransferenciasPip(this.annio).subscribe((transf) => {
+          this.transferencias = transf;
+          
+          this.IncluyeTransferencias(this.datosPorI,'institucion',this.transferencias.map(this.ArrayTrasferencias));
+          this.ChartPorInstitucion();
+
+          this.datosPorF = this.ProcesaPorFuente(this.proyectos.map(this.ArrayPorFuente));
+          //this.IncluyeTransferencias(this.datosPorF,'fuente',null);
+          this.ChartPorFuente();
+
+          this.datosPorInv = this.ProcesaPorInversion(this.proyectos.map(this.ArrayPorFuente));
+          //this.IncluyeTransferencias(this.datosPorInv, 'inversion',null);
+          this.ChartPorInversion();
+        });
+        
   			this.institucionesProyectos = this.InstitucionesConProyectos();
   			this.filtroInstitucion = this.institucionesProyectos[0].key;
 
@@ -115,16 +143,10 @@ export class MonitoreoComponent implements OnInit {
 	  			this.datosPorS = this.ProcesaPorSector(this.proyectos.map(this.ArrayPorSector));
 	  			this.ChartPorSector();
 
-	  			this.datosPorF = this.ProcesaPorFuente(this.proyectos.map(this.ArrayPorFuente));
-	  			this.ChartPorFuente();
-
 	  			this.datosPorIS = this.ProcesaInstitucionSector(this.proyectos.map(this.ArrayPorInstitucionSector));
 	  			this.ChartPorIS();
 
 	  		});
-
-        this.datosPorInv = this.ProcesaPorInversion(this.proyectos.map(this.ArrayPorFuente));
-        this.ChartPorInversion();
 
   		});
   		
@@ -166,6 +188,13 @@ export class MonitoreoComponent implements OnInit {
   	return {'fuente':clave, 'cext':valor, 'monto':valor2};
   }
 
+  ArrayTrasferencias(dato:any, indice:number):any{
+    let clave = dato.key;
+    let valor1 = dato.payload.val().cext;
+    let valor2 = dato.payload.val().tesoro;
+    return {'organizacion':clave,'coop':valor1,'tesoro':valor2};
+  }
+
   ProcesaPorInstitucion(datos:any[]):any{
   	let seleccion = {};
 
@@ -183,15 +212,54 @@ export class MonitoreoComponent implements OnInit {
 
   	}
 
-    for(let alcaldia of this.alcaldias){
-      if(!(alcaldia.key in Object.keys(seleccion))){
-        this.iService.GetTransferenciaPip(this.annio,alcaldia.key).subscribe((trans) => {
+  	return seleccion;
+  }
+
+  private IncluyeTransferencias(seleccion:any, opcion:string, transferencias:any[]){
+
+    switch (opcion) {
+      case "institucion":
+        
+        transferencias.forEach((v) => {
           
+          let clave = v.organizacion;
+          
+          if(!(Object.keys(seleccion).find((val) => {return val === clave;}))) {
+
+            seleccion[clave] = v.coop + v.tesoro;
+
+          }
+
         });
-      }
+
+      /*
+        for(let alcaldia of this.alcaldias){
+          if(!(alcaldia.key in Object.keys(seleccion))){
+            for(let transf of this.transferencias){
+              if(transf.key === alcaldia.key){
+                let valor = transf.payload.val().cext + transf.payload.val().tesoro;
+                seleccion[alcaldia.key] = valor;
+              }
+            }
+          }
+        }*/
+
+        break;
+      case "fuente":
+        for(let transf of this.transferencias){
+          seleccion['cooperacion'] += transf.payload.val().cext;
+          seleccion['tesoro'] += transf.payload.val().tesoro;
+        }
+        break;
+      default:
+        for(let transf of this.transferencias){
+          let valor = transf.payload.val().cext + transf.payload.val().tesoro;
+          seleccion['ALCALDIA'] += valor;
+        }
+        break;
     }
 
-  	return seleccion;
+    
   }
 
   ProcesaPorSector(datos:any[]):any{
@@ -352,9 +420,12 @@ export class MonitoreoComponent implements OnInit {
   }
 
   ChartPorInstitucion(){
+    
   	let etiquetas:string[] = Object.keys(this.datosPorI);
   	let valores:number[] = Object.values(this.datosPorI);
 
+    //console.log({'etiquetas':etiquetas,'datosInst':this.datosPorI,'claves':Object.keys(this.datosPorI)});
+    
   	//etiquetas = etiquetas.map(this.NombreOrganizacion);
   	for (let eti of etiquetas) {
   		etiquetas[etiquetas.indexOf(eti)] = this.NombreOrganizacion(eti);
@@ -460,8 +531,6 @@ export class MonitoreoComponent implements OnInit {
   }
 
   ChartPorIS(){
-
-    console.log(this.porIS.nativeElement);
 
     if (this.cPorIS !== undefined){
       delete this.cPorIS;

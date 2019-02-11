@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
 import { TransmuniComponent } from './transmuni/transmuni.component';
+import { SharedModule } from '../shared/shared.module';
 
 
 const routes:Routes = [
@@ -14,7 +16,9 @@ const routes:Routes = [
 @NgModule({
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    SharedModule,
+    FormsModule
   ],
   declarations: [TransmuniComponent]
 })

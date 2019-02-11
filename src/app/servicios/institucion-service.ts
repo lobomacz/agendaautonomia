@@ -71,7 +71,23 @@ export class InstitucionService extends AgendaService {
 		return this._db.list('/organizaciones',ref => ref.orderByChild('tipo').equalTo('alcaldia')).snapshotChanges();
 	}
 
-	public GetTransferenciaPip(annio:number,id:string):Observable<any>{
-		return this._db.object('/transferenciasPip/'.concat(annio.toString(),'/',id)).valueChanges();
+	public GetTransferenciaPip(annio:number,id:string):Observable<AngularFireAction<DatabaseSnapshot>>{
+		return this._db.object('/transferenciasPip/'.concat(annio.toString(),'/',id)).snapshotChanges();
+	}
+
+	public GetTransferenciasPip(annio:number):Observable<AngularFireAction<DatabaseSnapshot>[]>{
+		return this._db.list('/transferenciasPip/'.concat(annio.toString())).snapshotChanges();
+	}
+
+	public IngresaTransferenciaPip(annio:number,id:string,cext:number,tesoro:number):Promise<void>{
+		return this._db.list('/transferenciasPip/'.concat(annio.toString())).set(id,{'cext':cext,'tesoro':tesoro});
+	}
+
+	public UpdateTransferenciaPip(annio:number,id:string,cext:number,tesoro:number):Promise<void>{
+		return this._db.object('/transferenciasPip/'.concat(annio.toString(),'/',id)).update({'cext':cext,'tesoro':tesoro});
+	}
+
+	public DeleteTransferenciaPip(annio:number,id:string):Promise<void>{
+		return this._db.object('/transferenciasPip/'.concat(annio.toString(),'/',id)).remove();
 	}
 }

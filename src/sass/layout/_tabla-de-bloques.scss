@@ -20,19 +20,20 @@
 			display: table-cell;
 			width: 6rem;
 			border: 1px solid $color-gris-claro-2;
-		}
 
-		&-cell--small {
-			display: table-cell;
-			width: 3rem;
-			border: 1px solid $color-gris-claro-2;
-		}
+			&--small {
+				display: table-cell;
+				width: 3rem;
+				border: 1px solid $color-gris-claro-2;
+			}
 
-		&-cell--x-small {
-			display: table-cell;
-			width: 1.5rem;
-			border: 1px solid $color-gris-claro-2;
+			&--x-small {
+				display: table-cell;
+				width: 1.5rem;
+				border: 1px solid $color-gris-claro-2;
+			}
 		}
+		
 	}
 
 	&__filas {

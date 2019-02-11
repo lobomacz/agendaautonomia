@@ -83,4 +83,8 @@ export class ProyectosService extends AgendaService {
 		return this._db.object('/sitiosProyectos/'.concat(id)).remove();
 	}
 
+	GetLastProjectYear():Observable<any[]>{
+		return this._db.list('/proyectos', ref => ref.orderByChild('anio').limitToFirst(1)).valueChanges();
+	}
+
 }
