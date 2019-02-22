@@ -18,8 +18,8 @@ export class NavBarComponent implements OnInit, OnChanges {
 	@Input() usuarioId:string;
   @Output() logout = new EventEmitter();
 
-  private usuario:Usuario;
-  private funcionarioUsuario:Funcionario;
+  public usuario:Usuario;
+  public funcionarioUsuario:Funcionario;
   private foto:string;
 	private titulo_sitio:string;
 	private link_list:Array<OpcionNav>;
@@ -36,7 +36,7 @@ export class NavBarComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-  	 
+  	 this.Inicializa();
   }
 
   ngOnChanges(changes:any) {
@@ -129,10 +129,10 @@ export class NavBarComponent implements OnInit, OnChanges {
         default:
             this.link_list = [
             {
-              titulo:'Instituciones',icono:'&#xe028;',ruta:'instituciones'
+              titulo:'Contactos',icono:'{',ruta:'contactos'
             },
             {
-              titulo:'Contactos',icono:'{',ruta:'contactos'
+              titulo:'Proyectos',icono:'?',ruta:'proyectos'
             },
             {
               titulo:'Reportes',icono:'&#xe00b;',ruta:'documentos'

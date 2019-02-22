@@ -49,7 +49,7 @@ export class MonitoreoComponent implements OnInit {
 	private colores:string[];
 
   constructor(private _router:Router, private iService:InstitucionService, private pService:ProyectosService, private _auth:AuthserviceService) { 
-  	//this.annio = new Date().getFullYear();
+  	
 
   	this.colores = [
   		"#1e90ff",
@@ -86,8 +86,8 @@ export class MonitoreoComponent implements OnInit {
     this.pService.GetLastProjectYear().subscribe((dato) => {
       if(dato.length > 0) {
         
-        this.annioSubject = new BehaviorSubject(Number.parseInt(dato[0].anio));
-        this.annio = dato[0].anio;
+        this.annioSubject = new BehaviorSubject(Number.parseInt(dato[0].key));
+        this.annio = Number.parseInt(dato[0].key);
         this.LlenaDatos();
       }else{
         this.Redirect('/error');
@@ -126,11 +126,11 @@ export class MonitoreoComponent implements OnInit {
           this.ChartPorInstitucion();
 
           this.datosPorF = this.ProcesaPorFuente(this.proyectos.map(this.ArrayPorFuente));
-          //this.IncluyeTransferencias(this.datosPorF,'fuente',null);
+          this.IncluyeTransferencias(this.datosPorF,'fuente',this.transferencias.map(this.ArrayTrasferencias));
           this.ChartPorFuente();
 
           this.datosPorInv = this.ProcesaPorInversion(this.proyectos.map(this.ArrayPorFuente));
-          //this.IncluyeTransferencias(this.datosPorInv, 'inversion',null);
+          this.IncluyeTransferencias(this.datosPorInv, 'inversion',this.transferencias.map(this.ArrayTrasferencias));
           this.ChartPorInversion();
         });
         
@@ -232,28 +232,16 @@ export class MonitoreoComponent implements OnInit {
 
         });
 
-      /*
-        for(let alcaldia of this.alcaldias){
-          if(!(alcaldia.key in Object.keys(seleccion))){
-            for(let transf of this.transferencias){
-              if(transf.key === alcaldia.key){
-                let valor = transf.payload.val().cext + transf.payload.val().tesoro;
-                seleccion[alcaldia.key] = valor;
-              }
-            }
-          }
-        }*/
-
         break;
       case "fuente":
-        for(let transf of this.transferencias){
-          seleccion['cooperacion'] += transf.payload.val().cext;
-          seleccion['tesoro'] += transf.payload.val().tesoro;
+        for(let transf of transferencias){
+          seleccion['COOPERACION'] += transf.coop;
+          seleccion['TESORO'] += transf.tesoro;
         }
         break;
       default:
-        for(let transf of this.transferencias){
-          let valor = transf.payload.val().cext + transf.payload.val().tesoro;
+        for(let transf of transferencias){
+          let valor = transf.coop + transf.tesoro;
           seleccion['ALCALDIA'] += valor;
         }
         break;
@@ -625,7 +613,7 @@ export class MonitoreoComponent implements OnInit {
 
   VerReporte(evento:Event,tipo:string):void{
 
-  	evento.preventDefault();
+  	this._router.navigate(['/documentos', {'tipo':tipo, 'annio':this.annio}]);
 
   }
 

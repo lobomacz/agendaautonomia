@@ -11,7 +11,7 @@ import { AuthserviceService } from '../../servicios/authservice.service';
 import { DocDefinition } from '../../clases/doc-definition';
 import * as pdfMake from 'pdfmake/build/pdfmake';
 import * as pdfFonts from 'pdfmake/build/vfs_fonts';
-//import { pdfMake } from 'pdfmake';
+
 
 @Component({
   selector: 'macz-documentos',
@@ -27,7 +27,6 @@ export class DocumentosComponent implements OnInit {
 	private annio:number;
   private annioSubject:BehaviorSubject<number>;
 	private dialogo_annio:boolean;
-  private combo:boolean;
   private fecha:string;
   private logoUrl:string = '/assets/img/logo_cgraas.png';
   private escudoUrl:string = '/assets/img/logoGrun.png';
@@ -39,9 +38,14 @@ export class DocumentosComponent implements OnInit {
   private sectores:AngularFireAction<DatabaseSnapshot>[];
   private transferencias:AngularFireAction<DatabaseSnapshot>[];
 
-  constructor(private iService:InstitucionService, private pService:ProyectosService, private _route:ActivatedRoute, private _router:Router, private _auth:AuthserviceService) {
+  constructor(
+    private iService:InstitucionService, 
+    private pService:ProyectosService, 
+    private _route:ActivatedRoute, 
+    private _router:Router, 
+    private _auth:AuthserviceService
+    ) {
     pdfMake.vfs = pdfFonts.pdfMake.vfs;
-    this.combo = false;
     this.dialogo_annio = false;
     this.annio = null;
     this.fecha = new Date().toLocaleDateString();
@@ -52,7 +56,7 @@ export class DocumentosComponent implements OnInit {
   	this.usuarioId = this._auth.AuthUser() !== null ? this._auth.AuthUser().uid:null;
     this.pService.GetLastProjectYear().subscribe((dat) => {
       if(dat.length > 0){
-        this.annio = dat[0].anio;
+        this.annio = Number.parseInt(dat[0].key);
       }
     });
 
@@ -60,25 +64,10 @@ export class DocumentosComponent implements OnInit {
       this.Redirect('/error');
     }
 
-    this.CheckParams();
+    
   }
 
-  CheckParams(){
-
-    if(this._route.snapshot.paramMap.has('tipo')){
-      this.tipoReporte = this._route.snapshot.paramMap.get('tipo');
-
-      this.annio = parseInt(this._route.snapshot.paramMap.get('annio'));
-
-      if(this._route.snapshot.paramMap.has('idOrg')){
-        this.idInstitucion = this._route.snapshot.paramMap.get('idOrg');
-      }
-
-      this.LlenaDatos();
-    }
-
-  }
-
+  
   LlenaDatos(){
 
     this.annioSubject = new BehaviorSubject(this.annio);
@@ -99,7 +88,7 @@ export class DocumentosComponent implements OnInit {
 
               let datos_temp = this.ProcesaPorInstitucion(this.proyectos.map(this.ArrayPorInstitucion));
               this.IncluyeTransferencias(datos_temp, this.tipoReporte, trans.map(this.ArrayTrasferencias));
-              console.table(datos_temp);
+              
               this.datosReporte = [[{text:'No.',style:'encabezadoTabla'},{text:'INSTITUCIÓN',style:'encabezadoTabla'},{text:'INVERSIÓN',style:'encabezadoTabla'}]];
               let count:number = 1;
               let total:number = 0;
@@ -117,27 +106,94 @@ export class DocumentosComponent implements OnInit {
           });
 
           
-
-          
           break;
 
         case "sector":
           this.pService.GetSectores().subscribe(sec => {
+            this.datosReporte = [[{text:'No.',style:'encabezadoTabla'},{text:'SECTOR',style:'encabezadoTabla'},{text:'INVERSIÓN',style:'encabezadoTabla'}]];
             this.sectores = sec;
-            this.datosReporte = this.ProcesaPorSector(this.proyectos.map(this.ArrayPorSector));
+            let datos_temp = this.ProcesaPorSector(this.proyectos.map(this.ArrayPorSector));
+            let count:number = 1;
+            let total:number = 0;
+            for(let dato in datos_temp){
+              this.datosReporte.push([count, dato, {text:Number.parseFloat(datos_temp[dato]).toLocaleString('es-NI',{style:'currency',currency:'NIO'}),style:'celdaMoneda'}]);
+              count++;
+              total += Number.parseFloat(datos_temp[dato]);
+            }
+
+            this.datosReporte.push([{text:'Total', colSpan:2, alignment:'right', style:'encabezadoTabla'},{},{text:total.toLocaleString('es-NI',{style:'currency',currency:'NIO'}),style:'celdaMonedaTotal'}])
+
+            this.CreaReporte();
+
           });
           
           break;
         case "fuente":
-          this.datosReporte = this.ProcesaPorFuente(this.proyectos.map(this.ArrayPorFuente));
+          this.iService.GetTransferenciasPip(this.annio).subscribe((trans) => {
+            this.datosReporte = [[{text:'No.',style:'encabezadoTabla'},{text:'FUENTE',style:'encabezadoTabla'},{text:'INVERSIÓN',style:'encabezadoTabla'}]];
+            let datos_temp = this.ProcesaPorFuente(this.proyectos.map(this.ArrayPorFuente));
+            this.IncluyeTransferencias(datos_temp, 'fuente', trans.map(this.ArrayTrasferencias));
+            let count = 1;
+
+            for (let dato in datos_temp) {
+              this.datosReporte.push([count, dato, {text:Number.parseFloat(datos_temp[dato]).toLocaleString('es-NI',{style:'currency',currency:'NIO'}),style:'celdaMoneda'}]);
+              count++;
+            }
+
+            this.CreaReporte();
+          });
           break;
         case "inversion":
-          this.datosReporte = this.ProcesaPorInversion(this.proyectos.map(this.ArrayPorFuente));
-          this.IncluyeTransferencias(this.datosReporte,'inversion');
+
+          this.iService.GetTransferenciasPip(this.annio).subscribe((trans) => {
+            this.datosReporte = [[{text:'No.',style:'encabezadoTabla'},{text:'TIPO INV.',style:'encabezadoTabla'},{text:'MONTO',style:'encabezadoTabla'}]];
+            let datos_temp = this.ProcesaPorInversion(this.proyectos.map(this.ArrayPorFuente));
+            this.IncluyeTransferencias(datos_temp, 'inversion',trans.map(this.ArrayTrasferencias));
+            let count = 1;
+
+            for(let dato in datos_temp){
+              this.datosReporte.push([count, dato, {text:Number.parseFloat(datos_temp[dato]).toLocaleString('es-NI',{style:'currency',currency:'NIO'}),style:'celdaMoneda'}]);
+              count++;
+            }
+
+            this.CreaReporte();
+          });
+
+          
           break;
 
         default:
-          this.datosReporte = this.ProcesaInstitucionSector(this.proyectos.map(this.ArrayPorInstitucionSector));
+          
+          this.iService.GetInstituciones().subscribe((instit) => {
+            this.instituciones = instit;
+
+            this.pService.GetSectores().subscribe((sec) => {
+
+              this.sectores = sec;
+
+              let datos_temp = this.ProcesaInstitucionSector(this.proyectos.map(this.ArrayPorInstitucionSector));
+
+              this.datosReporte = [[{colSpan:3,text:'Datos Por Sector Por Institucion', style:'encabezadoTabla', alignment:'center'},{},{}]];
+              for (let dato in datos_temp) {
+                let count:number = 1;
+                let total:number = 0;
+                this.datosReporte.push([{text:this.NombreOrganizacion(dato), style:'encabezadoTabla', colSpan:3, alignment:'center'},{},{}]);
+
+                for(let sector of datos_temp[dato]){
+                  if(sector) {
+                    
+                    this.datosReporte.push([count, {text:this.NombreSector(datos_temp[dato].indexOf(sector)).toUpperCase()}, {text:sector.toLocaleString('es-NI',{style:'currency',currency:'NIO'}),style:'celdaMoneda'}]);
+                    count++;
+                    total += sector;
+                  }
+                }
+
+                this.datosReporte.push([{colSpan:2, text:'TOTAL', style:'encabezadoTabla', alignment:'right'}, {}, {text:total.toLocaleString('es-NI',{style:'currency',currency:'NIO'}),style:'celdaMonedaTotal'}])
+              }
+              
+              this.CreaReporte();
+            });
+          });
           break;
       }
       
@@ -153,27 +209,16 @@ export class DocumentosComponent implements OnInit {
     this.Redirect('/home')
   }
 
-  BuscaDatos(tipo:string,combo:boolean){
-    this.combo = combo;
+  BuscaDatos(tipo:string){
+    
     this.tipoReporte = tipo;
-
-    if(this.combo === true){
-      this.datosReporte = this.ProcesaPorInstitucion(this.proyectos.map(this.ArrayPorInstitucion));
-      this.iService.GetInstituciones().subscribe((v) => {
-        this.instituciones = v;
-        this.instituciones = this.InstitucionesConProyectos();
-      });
-      
-    }
-
 
     this.dialogo_annio = true;
   }
 
   CerrarModal(event:Event){
-    this.combo = false;
+
     this.dialogo_annio = false;
-    //this.annio = null;
 
     event.preventDefault();
   }
@@ -181,8 +226,6 @@ export class DocumentosComponent implements OnInit {
   OnSeleccionarAnnio(event:Event){
 
     this.LlenaDatos();
-
-    //this.CreaReporte();
 
     this.CerrarModal(event);
 
@@ -192,9 +235,7 @@ export class DocumentosComponent implements OnInit {
 
   CreaReporte(){
 
-    let contenido:any[];
     let encabezado:any;
-    let logo:any;
     let cuerpo:any;
     let tabla:any;
 
@@ -222,61 +263,105 @@ export class DocumentosComponent implements OnInit {
 
 
         
-        this.toDataURL(this.logoUrl,(dataUrl) => {
-
-          logo = {
-            columns:[
-              {
-                text:'',
-                width:'*'
-              },
-              {
-                image: dataUrl,
-                width: 80,
-                height: 40,
-                margin:10,
-              },
-              {
-                text:'',
-                width:'*'
-              }
-            ]
-
-            
-          };
-
-          contenido = [encabezado,logo,cuerpo,tabla];
-        
-          let df = new DocDefinition(this.fecha,this.annio);
-          df.setContent(contenido);
-          //df.setLogo(dataUrl);
-
-          this.toDataURL(this.escudoUrl, (dataU) => {
-            df.setEscudo(dataU);
-
-            this.toDataURL(this.grunUrl,(dataUl) => {
-              df.setLogoPie(dataUl);
-              pdfMake.createPdf(df.toJSON()).open();
-            });
-            
-          });
-          
-        });
+        this.DocumentoReporte(encabezado, cuerpo, tabla);
         
 
         break;
       case "sector":
-        // code...
+        
+        encabezado = {
+          text:"Reporte de Inversión por Sector Económico",
+          style:'encabezado2'
+        }; 
+
+        cuerpo = {
+          text:`A continuación se detalla el monto de inversión en la región consolidado por sector económico. Se incluyen todas las instituciones que ejecutan proyectos en la región durante el año ${this.annio}.`,
+          style:'parrafo'
+        };
+
+        tabla = {
+          table:{
+            heatherRows:1,
+            widths:[40,'*','auto'],
+            body: this.datosReporte
+          }
+        };
+
+
+        this.DocumentoReporte(encabezado,cuerpo,tabla);
+
         break;
       case "fuente":
-        // code...
+        
+
+        encabezado = {
+          text:"Reporte de Inversión por Fuente de Financiamiento",
+          style:'encabezado2'
+        }; 
+
+        cuerpo = {
+          text:`A continuación se detalla el monto de inversión en la región consolidado por fuente de financiamiento. Se reflejan los montos de las fuentes de cooperación externa, fondos del tesoro y la inversión privada en la región durante el año ${this.annio}.`,
+          style:'parrafo'
+        };
+
+        tabla = {
+          table:{
+            heatherRows:1,
+            widths:[40,'*','auto'],
+            body: this.datosReporte
+          }
+        };
+
+
+        this.DocumentoReporte(encabezado,cuerpo,tabla);
+
         break;
       case "inversion":
-        // code...
+        
+        encabezado = {
+          text:"Reporte por Tipo de Inversión",
+          style:'encabezado2'
+        }; 
+
+        cuerpo = {
+          text:`A continuación se detallan los montos consolidados por tipo de inversión en la región. Se reflejan los montos de inversión privad, inversión pública y las inversiones de las alcaldías municipales en la región durante el año ${this.annio}.`,
+          style:'parrafo'
+        };
+
+        tabla = {
+          table:{
+            heatherRows:1,
+            widths:[40,'*','auto'],
+            body: this.datosReporte
+          }
+        };
+
+        this.DocumentoReporte(encabezado,cuerpo,tabla);
+
         break;
 
       default:
-        // code...
+        
+        encabezado = {
+          text:"Reporte por Institución y Sector",
+          style:'encabezado2'
+        }; 
+
+        cuerpo = {
+          text:`A continuación se detallan los montos consolidados por institución y sector de desarrollo en la región. Se reflejan los montos de los proyectos agrupados por institución y sector de desarrollo durante el año ${this.annio}.`,
+          style:'parrafo'
+        };
+
+        tabla = {
+          table:{
+            heatherRows:1,
+            widths:[40,'*','auto'],
+            body: this.datosReporte
+          }
+        };
+
+        this.DocumentoReporte(encabezado,cuerpo,tabla);
+
         break;
     }
   }
@@ -301,9 +386,9 @@ export class DocumentosComponent implements OnInit {
   }
 
   ArrayPorFuente(dato:any,indice:number):any{
-    let clave:string;// = dato.payload.val().tipo;
-    let valor:number;// = dato.payload.val().monto;
-    let valor2:number;// = dato.payload.val().cooperacion;
+    let clave:string;
+    let valor:number;
+    let valor2:number;
 
     clave = dato.payload.val().tipo;
     valor = dato.payload.val().cooperacion;
@@ -357,14 +442,14 @@ export class DocumentosComponent implements OnInit {
         });
         break;
       case "fuente":
-        for(let transf of this.transferencias){
-          seleccion['cooperacion'] += transf.payload.val().cext;
-          seleccion['tesoro'] += transf.payload.val().tesoro;
+        for(let transf of transferencias){
+          seleccion['COOPERACION'] += transf.coop;
+          seleccion['TESORO'] += transf.tesoro;
         }
         break;
       default:
-        for(let transf of this.transferencias){
-          let valor = transf.payload.val().cext + transf.payload.val().tesoro;
+        for(let transf of transferencias){
+          let valor = transf.coop + transf.tesoro;
           seleccion['ALCALDIA'] += valor;
         }
         break;
@@ -402,7 +487,6 @@ export class DocumentosComponent implements OnInit {
     
     //Reemplazado por dataset para gráfico de barras
     return seleccion;
-    //return dataset;
   }
 
   ProcesaInstitucionSector(datos:any[]):any{
@@ -528,6 +612,53 @@ export class DocumentosComponent implements OnInit {
 
   NombreSector(clave:number):string{
     return this.sectores[clave].payload.val();
+  }
+
+  DocumentoReporte(encabezado:any,cuerpo:any,tabla:any[]){
+
+    let contenido:any[];
+    let logo:any;
+
+    this.toDataURL(this.logoUrl,(dataUrl) => {
+
+          logo = {
+            columns:[
+              {
+                text:'',
+                width:'*'
+              },
+              {
+                image: dataUrl,
+                width: 80,
+                height: 40,
+                margin:10,
+              },
+              {
+                text:'',
+                width:'*'
+              }
+            ]
+
+            
+          };
+
+          contenido = [encabezado,logo,cuerpo,tabla];
+        
+          let df = new DocDefinition(this.fecha,this.annio);
+          df.setContent(contenido);
+
+          this.toDataURL(this.escudoUrl, (dataU) => {
+            df.setEscudo(dataU);
+
+            this.toDataURL(this.grunUrl,(dataUl) => {
+              df.setLogoPie(dataUl);
+              
+              pdfMake.createPdf(df.toJSON()).open();
+            });
+            
+          });
+          
+        });
   }
 
   private toDataURL(url, callback) {

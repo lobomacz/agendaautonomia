@@ -8,7 +8,7 @@
 			<form action="" #formulario="ngForm" accept-charset="utf-8">
 				<div class="formulario__group">
 					<label for="txtAnio">Año</label>
-					<input class="formulario__control" type="text" #anio="ngModel" id="txtAnio" name="anno" [(ngModel)]="annio">
+					<input class="formulario__control" type="number" maxlength="3" max="{{ annio }}" min="2018" #anio="ngModel" id="txtAnio" name="anno" [(ngModel)]="annio">
 					<a href="#" class="btn btn--white u-margin-top-small" (click)="BuscarDatos($event)">Buscar</a>
 				</div>
 			</form>
@@ -19,25 +19,21 @@
 		<div class="dashboard__col-1-row-1">
 			<div class="chart">
 				<canvas class="chart__canvas" #chartPorInstitucion id="gPorInstitucion">{{ cPorInstituciones }}</canvas>
-				<a href="#" class="btn-texto" (click)="VerReporte($event,'instituciones')">Ver Reporte <span class="icon icon-macz-file-text-o"></span></a>
 			</div>
 		</div>
 		<div class="dashboard__col-2-row-1">
 			<div class="chart">
 				<canvas class="chart__canvas" #chartPorSector id="gPorSector">{{ cPorSector }}</canvas>
-				<a href="#" class="btn-texto" (click)="VerReporte($event,'sector')">Ver Reporte <span class="icon icon-macz-file-text-o"></span></a>
 			</div>
 		</div>
 		<div class="dashboard__col-1-row-2">
 			<div class="chart">
 				<canvas #chartPorFuente class="chart__canvas">{{ cPorFuente }}</canvas>
-				<a href="#" class="btn-texto" (click)="VerReporte($event,'fuente')">Ver Reporte <span class="icon icon-macz-file-text-o"></span></a>
 			</div>
 		</div>
 		<div class="dashboard__col-2-row-2">
 			<div class="chart">
 				<canvas #chartPorInversion class="chart__canvas">{{ cPorInversion }}</canvas>
-				<a href="#" class="btn-texto" (click)="VerReporte($event,'inversion')">Ver Reporte <span class="icon icon-macz-file-text-o"></span></a>
 			</div>
 		</div>
 	</div>
@@ -58,7 +54,6 @@
 							</div>
 						</form>
 						<canvas #chartIS class="chart__canvas">{{ cPorIS }}</canvas>
-						<a href="#" class="btn-texto" (click)="VerReporteInstitucion($event)">Ver Reporte <span class="icon icon-macz-file-text-o"></span></a>
 					</div>
 				</div>
 			</div>

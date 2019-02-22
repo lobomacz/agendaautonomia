@@ -23,11 +23,11 @@ export class NuevoComponent implements OnInit {
 	private _id:string;
 	private nuevo:boolean;
 	private fotoFile:any;
-	private fotoUrl:string;
+	public fotoUrl:string;
 	private nombreFoto:string;
-	private funcionario?:Funcionario;
+	public funcionario?:Funcionario;
+  public usuarioFuncionario?:Usuario;
 	private funcionarioGuardado:boolean;
-	private usuarioFuncionario?:Usuario;
 	private crearUsuario:boolean;
 	private resetPassword:boolean;
 	private contrasena:string;
@@ -46,6 +46,7 @@ export class NuevoComponent implements OnInit {
   	this.fotoUrl = 'assets/img/unknown-user.png';
   	this.nombreFoto = '';
   	this.funcionario = new Funcionario();
+    this.usuarioFuncionario = new Usuario();
   	this.funcionarioGuardado = false;
   	this.usuarioFuncionario = null;
   	this.crearUsuario = false;
@@ -139,7 +140,8 @@ export class NuevoComponent implements OnInit {
           if (that.crearUsuario == true) {
           	that.usuarioFuncionario.idFuncionario = that._id;
             that.Guardar_Usuario().then(credenciales => {
-            	let uid:string = credenciales.user.uid;
+              
+            	let uid:string = credenciales.uid;
             	that._auth.CreaUsuario(uid, that.usuarioFuncionario).then(() => {
             		that.Redirect('/contactos/ver/'.concat(that._id));
             	});
@@ -179,8 +181,8 @@ export class NuevoComponent implements OnInit {
   }
 
   On_CreaUsuario_Click(elemento:any){
-    console.log(elemento.control.value);
-    if (this.usuarioFuncionario === null) {
+    
+    if (this.usuarioFuncionario == null || this.usuarioFuncionario == undefined) {
       this.usuarioFuncionario = new Usuario();
     }
   }

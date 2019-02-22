@@ -2,7 +2,7 @@
 	<macz-nav-bar [usuarioId]="usuarioId" (logout)="userLogout()" ></macz-nav-bar>
 	<h2 class="encabezado-secundario u-margin-bottom-medium u-margin-top-big">Agenda Autonómica del Desarrollo</h2>
 	<div class="home__text">
-		<div class="home__content">
+		<div class="home__content" *ngIf="usuarioId == null; else instrucciones" >
 			
 			<p>
 				En este apartado se ofrece información sobre los diferentes proyectos que se ejecutan en la región, las instituciones que los ejecutan y los funcionarios al frente de dichas instituciones.
@@ -11,9 +11,47 @@
 				Se podrá obtener información sobre inversión privada e inversión pública de proyectos en la R.A.C.C.S.
 			</p>
 			<p>
-				Ingrese con sus credenciales de usuario dando click en el ícono <span class="icon icon-macz-sign-in-1"></span> e ingrese su dirección de correo y contraseña para tener acceso a las opciones de información.
+				Ingrese con sus credenciales de usuario dando click en el ícono <span class="icon icon-macz-sign-in-1">}</span> e ingrese su dirección de correo y contraseña para tener acceso a las opciones de información.
 			</p>
 
 		</div>
+		<ng-template #instrucciones>
+			<div class="home__content">
+				
+				<h2>Bienvenido</h2>
+
+				<p>
+					Desde esta plataforma podrás tener acceso a la agenda de funcionarios de instituciones públicas y ONG's con presencia en la R.A.C.C.S.
+				</p>
+				<dl>
+					<dt>
+						
+						Contactos<span class="icono icono-basic" [innerHtml]="'{'" ></span>
+						
+					</dt>
+					<dd>
+						Se muestra una lista de los funcionarios al frente de las instituciones y organizaciones con proyectos en la región.
+					</dd>
+					<dt>
+						Proyectos <span class="icono icono-basic" [innerHtml]="'?'"></span>
+					</dt>
+					<dd>
+						Se muestran todos los proyectos registrados desde el 2018 con la posibilidad de filtrar por año, institución y sector social de incidencia.
+					</dd>
+					<dt>
+						Reportes <span class="icono icono-basic" [innerHtml]="'&#xe00b;'" ></span>
+					</dt>
+					<dd>
+						Podrá seleccionar entre una serie de diferentes reportes por año de mapeo.
+					</dd>
+					<dt>
+						Monitoreo <span class="icono icono-basic" [innerHtml]="'a'" ></span>
+					</dt>
+					<dd>
+						Se muestran gráficos de análisis de los datos obtenidos del mapeo. Se pueden visualizar distintos gráficos de análisis por cada año de mapeo.
+					</dd>
+				</dl>
+			</div>
+		</ng-template>
 	</div>
 </section>

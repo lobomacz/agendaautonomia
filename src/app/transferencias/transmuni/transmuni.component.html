@@ -9,8 +9,11 @@
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
 								<label for="txtAnio">Año</label>
-								<input type="number" id="txtAnio" name="anno" value="" placeholder="" #annioTrans="ngModel" [(ngModel)]="annio" ><div class="btn icon icon-macz-search" (click)="LlenaTransferencias()" ></div>
-								<div *ngIf="annioTrans.invalid && (annioTrans.dirty || annioTrans.touched)" class="mensaje mensaje--error">	
+								<input type="number" id="txtAnio" name="anno" value="" placeholder="" #annioTrans="ngModel" [(ngModel)]="annio" maxlength="4" minlength="4" required="true" ><div class="btn icon icon-macz-search" (click)="LlenaTransferencias()" ></div>
+								<div *ngIf="annioTrans.invalid && (annioTrans.dirty || annioTrans.touched)" class="mensaje mensaje--error u-margin-top-medium">	
+									<div *ngIf="annioTrans.errors.required">
+										Se requiere un año válido.
+									</div>
 								</div>
 							</div>
 						</div>
@@ -26,7 +29,7 @@
 					<div class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input class="formulario__control" type="number" name="cooperacion" value="" #coopExt="ngModel" [ngModel]="cooperacionExterna" placeholder="Cooperación Externa C$" required>
+								<input class="formulario__control" type="number" name="cooperacion" value="" #coopExt="ngModel" [(ngModel)]="cooperacionExterna" placeholder="Cooperación Externa C$" required>
 								<label class="formulario__label" for="txtCext">Cooperación Externa C$</label>
 								<div *ngIf="coopExt.invalid && (coopExt.dirty || coopExt.touched)" class="mensaje mensaje--error">
 									<div *ngIf="coopExt.errors.required">
@@ -37,7 +40,7 @@
 						</div>
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
-								<input class="formulario__control" type="number" name="tesoroNac" value="" #tesoroN="ngModel" [ngModel]="tesoroNacional" placeholder="Fondos del Tesoro C$" required="">
+								<input class="formulario__control" type="number" name="tesoroNac" value="" #tesoroN="ngModel" [(ngModel)]="tesoroNacional" placeholder="Fondos del Tesoro C$" required="">
 								<label class="formulario__label" for="txtTesoro">Fondos del Tesoro C$</label>
 								<div class="mensaje mensaje--error" *ngIf="tesoroN.invalid && (tesoroN.dirty || tesoroN.tourched)" >
 									<div *ngIf="tesoroN.errors.required" >
@@ -49,7 +52,7 @@
 					</div>
 					<div class="tabla-bloques__fila--flat">
 						<div class="tabla-bloques__columna">
-							<input class="btn btn--verde" type="button" name="" value="{{ nuevo === true ? 'Ingresar':'Guardar' }}" [disabled]="!formTransmuni.form.valid" (click)="Ingresar()" >
+							<input #btnGuardar class="btn btn--verde" type="button" name="" value="{{ nuevo === true ? 'Ingresar':'Guardar' }}" [disabled]="!formTransmuni.form.valid" (click)="Ingresar()" >
 						</div>
 						<div class="tabla-bloques__columna">
 							<input class="btn " type="reset" name="" value="Limpiar">
@@ -98,5 +101,18 @@
 	      </p>
 	      <a href="#" class="btn" (click)="OnEliminarTrans_Click($event)">Si</a><a href="#" class="btn" (click)="CerrarModal($event)">No</a>
 	    </div>
+	</div>
+
+	<div class="dialogo" *ngIf="showDialog" [class.dialogo--active]="showDialog" >
+		<div class="dialogo__titulo">{{ titulo_dialogo }}</div>
+		<div class="dialogo__texto">
+			<p>
+				{{ texto_dialogo }}
+			</p>
+			<div>
+				
+			</div>
+		</div>
+		<div class="dialogo__btn--default btn" (click)="CierraDialogo()">Ok</div>
 	</div>
 </section>

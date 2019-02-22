@@ -66,32 +66,37 @@ export class ContactosComponent implements OnInit {
       }
     });
 
-    this._service.GetContactosObservable(this.contactosSubject).subscribe(datos => {
-      if (datos.length > 0) {
-        this.contacto$ = datos;
-
-
-        for(let contacto of this.contacto$){
-          if(contacto.payload.val().foto.indexOf('assets') < 0){
-            this.BuscaFoto(contacto.key, contacto.payload.val().foto).subscribe((v)=>{
-              this.fotos[contacto.key] = v;
-            });
-          }
-        }
-
-        this.total = this.contacto$.length;
-        if (this.total > this.limit) {
-          this.getPage();
-        }else{
-          this.paginaContactos = this.contacto$;
-        }
-
-        this.organizacione$ = this._institService.GetInstitucionesAsObject();
+    this.organizacione$ = this._institService.GetInstitucionesAsObject();
         this.organizacione$.subscribe(orgs => {
           this.organizaciones = orgs;
+
+          this._service.GetContactosObservable(this.contactosSubject).subscribe(datos => {
+            if (datos.length > 0) {
+              this.contacto$ = datos;
+
+
+              for(let contacto of this.contacto$){
+                if(contacto.payload.val().foto.indexOf('assets') < 0){
+                  this.BuscaFoto(contacto.key, contacto.payload.val().foto).subscribe((v)=>{
+                    this.fotos[contacto.key] = v;
+                  });
+                }
+              }
+
+              this.total = this.contacto$.length;
+              if (this.total > this.limit) {
+                this.getPage();
+              }else{
+                this.paginaContactos = this.contacto$;
+              }
+
+              
+            }
+          });
+
+
         });
-      }
-    });
+
   }
 
   getPage(){

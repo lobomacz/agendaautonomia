@@ -1,0 +1,10 @@
+.icono {
+	margin-left: 2rem;
+	
+	&-basic {
+		font-family: $fuente-basic;
+		color: $color-blanco;
+		font-size: 3.2rem;
+		font-weight: 600;
+	}
+}

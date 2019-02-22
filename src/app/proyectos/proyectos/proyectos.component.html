@@ -11,15 +11,9 @@
 					<div class="form__group">
 						<fieldset>
 							<legend>Filtrar Por:</legend>
+							
 							<div class="form__group-option">
-								<input #todas class="form__radio-input" id="optTodas" type="radio" name="tipoOrg" [checked]="opcionFiltro=='todos'" value="todos" (click)="setTipoFiltro(todas.value)" >
-								<label class="form__radio-label" for="optTodas">
-									<span class="form__radio-button"></span>
-									Todos
-								</label>
-							</div>
-							<div class="form__group-option">
-								<input #anio id="optAnio" class="form__radio-input" type="radio" name="tipoOrg" value="anio" (click)="setTipoFiltro(anio.value)">
+								<input #anio id="optAnio" [checked]="opcionFiltro=='anio'" class="form__radio-input" type="radio" name="tipoOrg" value="anio" (click)="setTipoFiltro(anio.value)">
 								<label class="form__radio-label" for="optAnio">
 									<span class="form__radio-button"></span>
 									Año
@@ -41,9 +35,8 @@
 							</div>
 						</fieldset>
 						<div class="formulario__group u-margin-top-small" *ngIf="opcionFiltro=='anio';else comboSelect">
-							<input class="formulario__control" type="text" id="txtanio" name="anioFiltro"  placeholder="Ej. 2018" [ngModel]="filtro" >
-							<label class="formulario__label" for="txtanio" >Año Inicio</label>
-							<input class="btn" type="button" name="btnFiltro" value="Ver" (click)="UpdateLista()">
+							<input class="formulario__control" type="number" id="txtanio" name="anioFiltro"  placeholder="2018" [(ngModel)]="filtro" >
+							<input class="btn u-margin-top-small" type="button" name="btnFiltro" value="Ver" (click)="UpdateLista()">
 						</div>
 						<ng-template #comboSelect>
 							<div class="formulario__group" *ngIf="opcionFiltro != 'todos'">
@@ -79,7 +72,7 @@
 		<div class="tabla-bloques__filas">
 			<div class="tabla-bloques__fila" [ngClass]="{'fila-impar':impar}" *ngFor="let proyecto of paginaProyectos; odd as impar">
 				<div *ngIf="proyecto != null" class="tabla-bloques__columna">
-					<a routerLink="ver/{{proyecto.key}}" class="btn-texto" >
+					<a routerLink="ver/{{ annio }}/{{ proyecto.anio }}/{{proyecto.key}}" class="btn-texto" >
 					{{ proyecto.payload.val().nombre | uppercase }}
 					</a>
 				</div>

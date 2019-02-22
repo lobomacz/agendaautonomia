@@ -21,29 +21,31 @@ export class EditaProyectoComponent implements OnInit {
 
 	private usuarioId:string;
 	private nuevo:boolean;
-  	private disableUbicacion:boolean;
+  private disableUbicacion:boolean;
 	private _id:string;
+  private anio:number;
 	private tipoProyecto:string;
 	private proyecto:Proyecto;
-  	private personal:PersonalProyecto;
+  private personal:PersonalProyecto;
 	private organizacionesSub:BehaviorSubject<string | null>;
 	private organizacione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private sectore$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private comunidadesSub:BehaviorSubject<string | null>;
 	private comunidade$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-  	private municipioUbicacion:string;
-  	private comunidadUbicacion:string;
+	private municipioUbicacion:string;
+	private comunidadUbicacion:string;
 	private min_fecha_inicio:any;
 	private min_fecha_final:any;
-  	private listaSitios:any[];
-  	private listaNombreSitios:string[];
+	private listaSitios:any[];
+	private listaNombreSitios:string[];
 
 
   constructor(private _activatedRoute:ActivatedRoute, private _router:Router, private _service:ProyectosService, private _institService:InstitucionService, private _auth:AuthserviceService) {
   	this.nuevo = false;
     this.disableUbicacion = true;
   	this._id = this._activatedRoute.snapshot.paramMap.get('id');
+    this.anio = Number.parseInt(this._activatedRoute.snapshot.paramMap.get('anio'));
   	this.tipoProyecto = "publico";
   	this.proyecto = new Proyecto();
     this.personal = new PersonalProyecto();
@@ -64,10 +66,10 @@ export class EditaProyectoComponent implements OnInit {
       });
     }
     
-  	this._service.GetProyecto(this._id).subscribe(datos => {
+  	this._service.GetProyecto(this._id, this.anio.toString()).subscribe(datos => {
   		this.proyecto = new Proyecto(datos);
       console.log(this.proyecto.fechaInicio);
-      this._service.GetPersonalProyecto(this._id).subscribe(datos => {
+      this._service.GetPersonalProyecto(this._id, this.anio.toString()).subscribe(datos => {
         this.personal = new PersonalProyecto(datos);
       });
   		this.min_fecha_inicio = this.proyecto.fechaInicio;
@@ -79,7 +81,7 @@ export class EditaProyectoComponent implements OnInit {
   		this.municipio$ = this._service.GetMunicipios();
   		this.comunidadesSub = new BehaviorSubject(null);
   		this.comunidade$ = this._service.GetComunidadesPorMunicipio(this.comunidadesSub);
-      this._service.GetSitiosProyecto(this._id).subscribe((sitios) => {
+      this._service.GetSitiosProyecto(this._id, this.anio.toString()).subscribe((sitios) => {
 
         if (sitios !== null) {
           this.listaSitios = sitios;
@@ -121,8 +123,8 @@ export class EditaProyectoComponent implements OnInit {
   	}
 
   	this._service.ActualizaProyecto(this.proyecto, this._id).then(() => {
-      that._service.ActualizaSitiosProyecto(that._id,that.listaSitios);
-      that._service.ActualizaPersonalProyecto(that._id,that.personal);
+      that._service.ActualizaSitiosProyecto(that._id,that.listaSitios,this.anio.toString());
+      that._service.ActualizaPersonalProyecto(that._id,that.personal,this.anio.toString());
   		that._router.navigateByUrl('/proyectos/ver/'.concat(that._id));
   	});
   }

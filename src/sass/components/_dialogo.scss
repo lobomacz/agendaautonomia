@@ -68,14 +68,14 @@
 
 .dialogo {
 
-	background-color: rgba($color-gris-claro, .9);
+	background-color: $color-gris-claro;
 	@include centra-elemento;
 	border: 1px solid $color-blanco;
 	border-radius: 3px;
 	text-align: center;
 	padding: 3rem;
 	width: 0;
-	height: 30%;
+	//height: 30%;
 	opacity: 0;
 	transition: all .2s;
 
@@ -85,15 +85,19 @@
 	}
 
 	&__titulo {
+		color: $color-blanco;
 		text-transform: uppercase;
 		font-size: 1.6rem;
 		letter-spacing: .5rem;
 		font-weight: 700;
+		background-color: $color-terciario-oscuro;
+		width: 100%;
 	}
 
 	&__texto {
 		font-size: 1.8rem;
 		padding: 5rem;
+		display: block;
 
 		&-icono {
 			font-family: $fuente-basic;
@@ -101,6 +105,28 @@
 			font-size: 2.5rem;
 			display: inline-block;
 			float: right;
+		}
+	}
+
+	&__btn {
+
+		display: block;
+		background-color: $color-gris-claro;
+		color: $color-gris-oscuro-3;
+		font-weight: bold;
+		margin-top: 6rem;
+
+		&--default {
+			background-color: $color-terciario-especial;
+			color: $color-gris-claro;
+
+			&:hover{
+				color: $color-primario-claro;
+			}
+		}
+
+		&:not(:first-child){
+			margin-left: 3rem;
 		}
 	}
 }

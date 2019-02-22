@@ -20,71 +20,71 @@ export class ProyectosService extends AgendaService {
 	}
 
 	GetProyectosPorAnio(subject:BehaviorSubject<number>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
-		return subject.switchMap(anio => this._db.list('/proyectos', ref => anio ? ref.orderByChild('anio').equalTo(anio):ref).snapshotChanges());
+		return subject.switchMap(anio => this._db.list('/proyectos/'.concat(anio.toString())).snapshotChanges());
 	}
 
-	GetProyectosPorSector(subject:BehaviorSubject<string>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
-		return subject.switchMap(sector => this._db.list('/proyectos', ref => ref.orderByChild('sector').equalTo(sector)).snapshotChanges());
+	GetProyectosPorSector(subject:BehaviorSubject<{anio:string, sector:string}>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
+		return subject.switchMap((param) => this._db.list('/proyectos/'.concat(param.anio), ref => ref.orderByChild('sector').equalTo(param.sector)).snapshotChanges());
 	}
 
-	GetProyectosPorInstitucion(subject:BehaviorSubject<string>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
-		return subject.switchMap(instit => this._db.list('/proyectos', ref => ref.orderByChild('id_organizacion').equalTo(instit)).snapshotChanges());
+	GetProyectosPorInstitucion(subject:BehaviorSubject<{anio:string, instit:string}>):Observable<AngularFireAction<DatabaseSnapshot>[]>{
+		return subject.switchMap((param) => this._db.list('/proyectos/'.concat(param.anio), ref => ref.orderByChild('id_organizacion').equalTo(param.instit)).snapshotChanges());
 	}
 
-	GetProyecto(id:string):Observable<any>{
-		return this._db.object('/proyectos/'.concat(id)).valueChanges();
+	GetProyecto(id:string, anio:string):Observable<any>{
+		return this._db.object('/proyectos/'.concat(anio, '/',id)).valueChanges();
 	}
 
 	IngresaProyecto(proyecto:Proyecto):any{
-		return this._db.list('/proyectos').push(proyecto.ToJSon());
+		return this._db.list('/proyectos/'.concat(proyecto.anio.toString())).push(proyecto.ToJSon());
 	}
 
 	ActualizaProyecto(proyecto:Proyecto, _id:string):Promise<void>{
-		return this._db.object('/proyectos/'.concat(_id)).update(proyecto.ToJSon());
+		return this._db.object('/proyectos/'.concat(proyecto.anio.toString(),'/', _id)).update(proyecto.ToJSon());
 	}
 
-	BorraProyecto(_id:string):Promise<void>{
-		return this._db.object('/proyectos/'.concat(_id)).remove();
+	BorraProyecto(_id:string, anio:string):Promise<void>{
+		return this._db.object('/proyectos/'.concat(anio, '/', _id)).remove();
 	}
 
-	GetPersonalProyecto(id:string):Observable<any>{
-		return this._db.object('/personalProyectos/'.concat(id)).valueChanges();
+	GetPersonalProyecto(id:string, anio:string):Observable<any>{
+		return this._db.object('/personalProyectos/'.concat(anio, '/', id)).valueChanges();
 	}
 
-	IngresaPersonalProyecto(id:string,personal:any):Promise<void>{
-		return this._db.object('/personalProyectos/'.concat(id)).set(personal);
+	IngresaPersonalProyecto(id:string, personal:any, anio:string):Promise<void>{
+		return this._db.object('/personalProyectos/'.concat(anio, '/', id)).set(personal);
 	}
 
-	ActualizaPersonalProyecto(id:string,personal:any):Promise<void>{
-		return this._db.object('/personalProyectos/'.concat(id)).update(personal);
+	ActualizaPersonalProyecto(id:string,personal:any, anio:string):Promise<void>{
+		return this._db.object('/personalProyectos/'.concat(anio, '/', id)).update(personal);
 	}
 
-	BorraPersonalProyecto(id:string):Promise<void>{
-		return this._db.object('/personalProyectos/'.concat(id)).remove();
+	BorraPersonalProyecto(id:string, anio:string):Promise<void>{
+		return this._db.object('/personalProyectos/'.concat(anio, '/', id)).remove();
 	}
 
-	GetSitiosProyecto(proyecto:string):Observable<any[]>{
-		return this._db.list('/sitiosProyectos/'.concat(proyecto)).valueChanges();
+	GetSitiosProyecto(proyecto:string, anio:string):Observable<any[]>{
+		return this._db.list('/sitiosProyectos/'.concat(anio, '/', proyecto)).valueChanges();
 	}
 
-	IngresaSitiosProyecto(proyecto:string, sitios:any[]):Promise<void>{
-		return this._db.object('/sitiosProyectos/'.concat(proyecto,'/')).set(sitios);
+	IngresaSitiosProyecto(proyecto:string, sitios:any[], anio:string):Promise<void>{
+		return this._db.object('/sitiosProyectos/'.concat(anio, '/', proyecto,'/')).set(sitios);
 	}
 
-	ActualizaSitiosProyecto(proyecto:string, sitio:any[]):Promise<void>{
-		return this._db.object('/sitiosProyectos/'.concat(proyecto)).update(sitio);
+	ActualizaSitiosProyecto(proyecto:string, sitio:any[], anio:string):Promise<void>{
+		return this._db.object('/sitiosProyectos/'.concat(anio, '/', proyecto)).update(sitio);
 	}
 
-	BorraSitioProyecto(proyecto:string, indiceSitio:number):Promise<void>{
-		return this._db.object('/sitiosProyectos/'.concat(proyecto,'/',indiceSitio.toString(),'/',)).remove();
+	BorraSitioProyecto(proyecto:string, indiceSitio:number, anio:string):Promise<void>{
+		return this._db.object('/sitiosProyectos/'.concat(anio, '/', proyecto,'/',indiceSitio.toString(),'/',)).remove();
 	}
 
-	BorraSitiosProyecto(id:string):Promise<void>{
-		return this._db.object('/sitiosProyectos/'.concat(id)).remove();
+	BorraSitiosProyecto(id:string, anio:string):Promise<void>{
+		return this._db.object('/sitiosProyectos/'.concat(anio, '/', id)).remove();
 	}
 
-	GetLastProjectYear():Observable<any[]>{
-		return this._db.list('/proyectos', ref => ref.orderByChild('anio').limitToFirst(1)).valueChanges();
+	GetLastProjectYear():Observable<AngularFireAction<DatabaseSnapshot>[]>{
+		return this._db.list('/proyectos', ref => ref.orderByKey().limitToFirst(1)).snapshotChanges();
 	}
 
 }

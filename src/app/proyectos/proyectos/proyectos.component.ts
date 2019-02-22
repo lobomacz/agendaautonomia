@@ -22,8 +22,8 @@ export class ProyectosComponent implements OnInit {
 	private filtro:string;
   private annio:number;
 	private aniosSubject:BehaviorSubject<number>;
-	private sectorSubject:BehaviorSubject<string>;
-	private institucionSubject:BehaviorSubject<string>;
+	private sectorSubject:BehaviorSubject<{anio:string,sector:string}>;
+	private institucionSubject:BehaviorSubject<{anio:string,instit:string}>;
 	private proyecto_anio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private proyecto_sector$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private proyecto_institucion$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
@@ -40,7 +40,6 @@ export class ProyectosComponent implements OnInit {
 
   constructor(private _service:ProyectosService, private _institService:InstitucionService, private _router:Router, private _auth:AuthserviceService) {
   	this.opcionFiltro = 'todos';
-    this.annio = new Date().getFullYear();
     this.limit = 20;
     this.total = 0;
     this.loading = false;
@@ -54,27 +53,38 @@ export class ProyectosComponent implements OnInit {
       this.Redirect('/error');
     }
 
-    this._auth.IsAdmin(this.usuarioId).subscribe((v) => {
-      if(v.key !== null){
-        this.esAdmin = true;
-      }
+
+    this._service.GetLastProjectYear().subscribe((dato) => {
+
+      this._auth.IsAdmin(this.usuarioId).subscribe((v) => {
+        if(v.key !== null){
+          this.esAdmin = true;
+        }
+      });
+
+      this._service.GetSectores().subscribe(lista => {
+        this.listaSectores = lista;
+      });
+
+
+      this._institService.GetInstitucionesAsObject().subscribe(objeto => {
+        this.listaOrganizaciones = objeto;
+      });
+
+      this.annio = Number.parseInt(dato[0].key);
+      this.aniosSubject = new BehaviorSubject(this.annio);
+      this.opcionFiltro = 'anio';
+      this.filtro = this.annio.toString();
+
+      this.proyecto_anio$ = this._service.GetProyectosPorAnio(this.aniosSubject);
+
+      this.LlenaProyectos();
+
     });
+
     
-    this._service.GetSectores().subscribe(lista => {
-      this.listaSectores = lista;
-    });
-
-
-    this._institService.GetInstitucionesAsObject().subscribe(objeto => {
-      this.listaOrganizaciones = objeto;
-    });
-
-  	//this.aniosSubject = new BehaviorSubject(null);
-    this.aniosSubject = new BehaviorSubject(this.annio);
-
-  	this.proyecto_anio$ = this._service.GetProyectosPorAnio(this.aniosSubject);
-
-  	this.LlenaProyectos();
+    
+    
 
   }
 
@@ -163,6 +173,7 @@ export class ProyectosComponent implements OnInit {
             this.getPage();
           }else{
             this.paginaProyectos = this.listaProyectos;
+            
           }
 		  	});
   			break;
@@ -192,37 +203,29 @@ export class ProyectosComponent implements OnInit {
   	}
     this.UpdateLista();
   }
-
-  /*
-  TODO:
-  Mejorar el código de UpdateLista() para hacer uso de un solo Observer
-  que puede llamarse proyecto$ el cual se actualizará según el tipo de filtro
-  haciendo la correspondiente llamada al Subject.
-  */
+  
 
   UpdateLista(){
   	switch (this.opcionFiltro) {
-  		case "anio":
-  			this.aniosSubject.next(Number.parseInt(this.filtro));
-  			break;
+
   		case "sector":
   			if(this.sectorSubject == undefined){
-  				this.sectorSubject = new BehaviorSubject(this.filtro);
+  				this.sectorSubject = new BehaviorSubject({'anio':this.annio.toString(),'sector':this.filtro});
   				this.proyecto_sector$ = this._service.GetProyectosPorSector(this.sectorSubject);
   			}else{
-  				this.sectorSubject.next(this.filtro);
+  				this.sectorSubject.next({'anio':this.annio.toString(),'sector':this.filtro});
   			}
   			break;
   		case "institucion":
   			if(this.institucionSubject == undefined){
-  				this.institucionSubject = new BehaviorSubject(this.filtro);
+  				this.institucionSubject = new BehaviorSubject({'anio':this.annio.toString(),'instit':this.filtro});
   				this.proyecto_institucion$ = this._service.GetProyectosPorInstitucion(this.institucionSubject);
   			}else{
-  				this.institucionSubject.next(this.filtro);
+  				this.institucionSubject.next({'anio':this.annio.toString(),'instit':this.filtro});
   			}
   			break;
   		default:
-  			this.aniosSubject.next(null);
+  			this.aniosSubject.next(Number.parseInt(this.filtro));
   			break;
   	}
 

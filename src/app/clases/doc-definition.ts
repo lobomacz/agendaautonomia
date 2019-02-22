@@ -51,7 +51,7 @@ export class DocDefinition {
 		            alignment:'center',
 		            margin: [0, 20, 40, 80],
 		        }
-		         ],
+		         ]
 	      },
 	      footer:{
 	      	columns:[

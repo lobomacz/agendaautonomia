@@ -18,6 +18,7 @@ export class DetalleProyectoComponent implements OnInit {
 	private usuarioId:string;
   private esAdmin:boolean;
 	private _id:string;
+  private anio:number;
 	private organizacion:string;
 	private sector:string;
 	private municipio:string;
@@ -32,7 +33,8 @@ export class DetalleProyectoComponent implements OnInit {
   constructor(private _activatedRoute:ActivatedRoute, private _router:Router, private _service:ProyectosService, private _institService:InstitucionService, private _auth:AuthserviceService) {
   	this.dialogo_borrar = false;
   	this._id = this._activatedRoute.snapshot.paramMap.get('id');
-  	this.proyect0 = this._service.GetProyecto(this._id);
+    this.anio = Number.parseInt(this._activatedRoute.snapshot.paramMap.get('anio'));
+  	this.proyect0 = this._service.GetProyecto(this._id, this.anio.toString());
     this.listaSitios = [];
     this.esAdmin = false;
   }
@@ -61,7 +63,7 @@ export class DetalleProyectoComponent implements OnInit {
   			this.sector = sectores[this.proyecto.sector].payload.val();
   		});
 
-      this._service.GetSitiosProyecto(this._id).subscribe((datos) => {
+      this._service.GetSitiosProyecto(this._id, this.anio.toString()).subscribe((datos) => {
         for(let sitio of datos){
           let nombre:string = '';
           this._service.GetComunidad(sitio.comunidad).subscribe((comu) => {
@@ -71,7 +73,7 @@ export class DetalleProyectoComponent implements OnInit {
         }
       });
 
-      this._service.GetPersonalProyecto(this._id).subscribe((personal) => {
+      this._service.GetPersonalProyecto(this._id, this.anio.toString()).subscribe((personal) => {
         this.personal = new PersonalProyecto(personal);
       });
       /*
@@ -93,9 +95,9 @@ export class DetalleProyectoComponent implements OnInit {
 
   OnEliminarProyecto_Click(evento:Event){
     let that = this;
-  	this._service.BorraProyecto(this._id).then(() => {
-      that._service.BorraPersonalProyecto(that._id);
-      that._service.BorraSitiosProyecto(that._id);
+  	this._service.BorraProyecto(this._id, this.anio.toString()).then(() => {
+      that._service.BorraPersonalProyecto(that._id, this.anio.toString());
+      that._service.BorraSitiosProyecto(that._id, this.anio.toString());
       that._router.navigateByUrl('/proyectos');
     });
     evento.preventDefault();

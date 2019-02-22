@@ -100,8 +100,8 @@ export class NuevoProyectoComponent implements OnInit {
     
     this._service.IngresaProyecto(this.proyecto).then((ref) => {
       let clave = ref.key;
-      this._service.IngresaSitiosProyecto(clave,this.listaSitios);
-      this._service.IngresaPersonalProyecto(clave,this.personal);
+      this._service.IngresaSitiosProyecto(clave, this.listaSitios, this.proyecto.anio.toString());
+      this._service.IngresaPersonalProyecto(clave, this.personal, this.proyecto.anio.toString());
       this._router.navigateByUrl('/proyectos');
     });
   }

@@ -15,7 +15,7 @@ const routes:Routes = [
 		component: ProyectosComponent
 	},
   {
-    path: 'ver/:id',
+    path: 'ver/:anio/:id',
     component: DetalleProyectoComponent
   },
   {
@@ -23,7 +23,7 @@ const routes:Routes = [
     component: NuevoProyectoComponent
   },
   {
-    path: 'editar/:id',
+    path: 'editar/:anio/:id',
     component: EditaProyectoComponent
   }
 ];

@@ -32,7 +32,6 @@ export class InstitucionService extends AgendaService {
 
 	public GuardaInstitucion(item:Organizacion){
 		return this._db.list("/organizaciones").push(item.ToJSon());
-	  //return this._db.object("/organizaciones/".concat(clave.toLowerCase())).set(item.ToJSon());
 	}
 
 	public ActualizaInstitucion(item:Organizacion, clave:string){
@@ -80,7 +79,7 @@ export class InstitucionService extends AgendaService {
 	}
 
 	public IngresaTransferenciaPip(annio:number,id:string,cext:number,tesoro:number):Promise<void>{
-		return this._db.list('/transferenciasPip/'.concat(annio.toString())).set(id,{'cext':cext,'tesoro':tesoro});
+		return this._db.object('/transferenciasPip/'.concat(annio.toString(),'/',id)).set({'cext':cext,'tesoro':tesoro});
 	}
 
 	public UpdateTransferenciaPip(annio:number,id:string,cext:number,tesoro:number):Promise<void>{

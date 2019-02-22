@@ -77,7 +77,7 @@
 			</li>
 		</ul>
 		<p *ngIf="esAdmin === true">
-			<a routerLink="/proyectos/editar/{{ _id }}" class="btn-texto">Editar</a>
+			<a routerLink="/proyectos/editar/{{ proyecto.anio }}/{{ _id }}" class="btn-texto">Editar</a>
 			<a href="#" class="btn-texto" (click)="OnEliminar_Click($event)" >Eliminar</a>
 		</p>
 	</div>
