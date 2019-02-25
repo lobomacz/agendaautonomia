@@ -31,10 +31,10 @@ export class EditarComponent implements OnInit {
   public mensajeDialogo:Mensaje;
   public usuarioFuncionario?:Usuario;
   public crearUsuario:boolean;
-
-	private usuarioId:string;
+  public usuarioId:string;
+  public nuevo:boolean;
+	
 	private _id:string;
-	private nuevo:boolean;
 	private fotoFile:any;
 	private nombreFoto:string;
 	private funcionarioGuardado:boolean;

@@ -30,12 +30,12 @@ export class MonitoreoComponent implements OnInit {
   public cPorFuente:Chart;
   public cPorIS:Chart;
   public cPorInversion:Chart;
-
-	private filtroInstitucion:string;
+  public filtroInstitucion:string;
+  public institucionesProyectos:AngularFireAction<DatabaseSnapshot>[];
+	
 	private annioSubject:BehaviorSubject<number>;
 	private proyectos:AngularFireAction<DatabaseSnapshot>[];
 	private instituciones:AngularFireAction<DatabaseSnapshot>[];
-	private institucionesProyectos:AngularFireAction<DatabaseSnapshot>[];
   private alcaldias:AngularFireAction<DatabaseSnapshot>[];
 	private sectores:AngularFireAction<DatabaseSnapshot>[];
   private transferencias:AngularFireAction<DatabaseSnapshot>[];

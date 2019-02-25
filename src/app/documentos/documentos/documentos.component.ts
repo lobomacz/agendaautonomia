@@ -22,11 +22,11 @@ export class DocumentosComponent implements OnInit {
 
 	public usuarioId:string;	
   public dialogo_annio:boolean;
+  public annio:number;
 
 	private tipoReporte:string;
   private datosReporte:any[];
   private idInstitucion:string;
-	private annio:number;
   private annioSubject:BehaviorSubject<number>;
   private fecha:string;
   private logoUrl:string = '/assets/img/logo_cgraas.png';

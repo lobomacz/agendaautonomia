@@ -29,10 +29,10 @@ export class NuevoComponent implements OnInit {
   public crearUsuario:boolean;
   public contrasena:string;
   public confirmaContrasena:string;
-
-	private usuarioId:string;
+  public usuarioId:string;
+  public nuevo:boolean;
+	
 	private _id:string;
-	private nuevo:boolean;
 	private fotoFile:any;
 	private nombreFoto:string;
 	private funcionarioGuardado:boolean;

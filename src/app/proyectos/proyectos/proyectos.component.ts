@@ -21,6 +21,7 @@ export class ProyectosComponent implements OnInit {
 	public opcionFiltro:string;
 	public filtro:string;
   public annio:number;
+  public listaProyectos:AngularFireAction<DatabaseSnapshot>[];
   public paginaProyectos:AngularFireAction<DatabaseSnapshot>[];
   public listaOpciones:Observable<AngularFireAction<DatabaseSnapshot>[]>;
   public listaSectores:AngularFireAction<DatabaseSnapshot>[];
@@ -36,7 +37,7 @@ export class ProyectosComponent implements OnInit {
 	private proyecto_anio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private proyecto_sector$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private proyecto_institucion$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-	private listaProyectos:AngularFireAction<DatabaseSnapshot>[];
+	
   
 
 

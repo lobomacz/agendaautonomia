@@ -20,7 +20,6 @@ export class TransmuniComponent implements OnInit {
 
 	public usuarioId:string;
 	public annio:number;
-  
 	public codAlcaldia:string;
 	public cooperacionExterna:number;
 	public tesoroNacional:number;
@@ -29,10 +28,10 @@ export class TransmuniComponent implements OnInit {
   public showDialog:boolean;
   public titulo_dialogo:string;
   public texto_dialogo:string;
+  public alcaldias:AngularFireAction<DatabaseSnapshot>[];
+  public transferencias:AngularFireAction<DatabaseSnapshot>[];
 
   private annio_abierto:number;
-	private alcaldias:AngularFireAction<DatabaseSnapshot>[];
-	private transferencias:AngularFireAction<DatabaseSnapshot>[];
   private alcaldias_con_proyectos:string[];
 
 	@ViewChild('formTransmuni') formulario:any; 

@@ -53,7 +53,7 @@
 						</div>
 						<div class="tabla-bloques__columna tabla-bloques__columna--controls">
 							<div class="formulario__group">
-								<label for="cmbOrganizacion">{{ tipoOrg != 'privado' ? 'Institución':'Empresa' }}</label>
+								<label for="cmbOrganizacion">Organización</label>
 								<select class="formulario__control" #idOrganizacion="ngModel" [(ngModel)]="proyecto.id_organizacion" name="organizacion" id="cmbOrganizacion" required>
 									<option *ngFor="let organizacion of organizacione$ | async" value="{{ organizacion.key }}">{{ organizacion.payload.val().nombre_corto | uppercase }}</option>
 								</select>

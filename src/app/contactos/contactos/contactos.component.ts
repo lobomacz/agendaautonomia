@@ -26,10 +26,10 @@ export class ContactosComponent implements OnInit {
   public total:number;
   public limit:number;
   public loading:boolean;
+  public esAdmin:boolean;
+  public contacto$?:AngularFireAction<DatabaseSnapshot>[];
 
-  private esAdmin:boolean;
   private contactosSubject:BehaviorSubject<string | null>;
-  private contacto$?:AngularFireAction<DatabaseSnapshot>[];
   private contactoVacio:boolean;
   private organizacione$?:Observable<any>;
   
