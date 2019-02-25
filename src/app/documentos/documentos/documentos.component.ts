@@ -20,18 +20,18 @@ import * as pdfFonts from 'pdfmake/build/vfs_fonts';
 })
 export class DocumentosComponent implements OnInit {
 
-	private usuarioId:string;	
+	public usuarioId:string;	
+  public dialogo_annio:boolean;
+
 	private tipoReporte:string;
   private datosReporte:any[];
   private idInstitucion:string;
 	private annio:number;
   private annioSubject:BehaviorSubject<number>;
-	private dialogo_annio:boolean;
   private fecha:string;
   private logoUrl:string = '/assets/img/logo_cgraas.png';
   private escudoUrl:string = '/assets/img/logoGrun.png';
   private grunUrl:string = '/assets/img/LogoGrun2019.jpg';
-
   private instituciones:AngularFireAction<DatabaseSnapshot>[];
   private proyectos:AngularFireAction<DatabaseSnapshot>[];
   private alcaldias:AngularFireAction<DatabaseSnapshot>[];

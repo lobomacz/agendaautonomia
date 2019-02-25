@@ -9,7 +9,7 @@ import { AuthserviceService } from '../servicios/authservice.service';
 })
 export class HomeComponent implements OnInit {
 	
-  private usuarioId:string;
+  public usuarioId:string;
   
   constructor(private _auth:AuthserviceService) {
     

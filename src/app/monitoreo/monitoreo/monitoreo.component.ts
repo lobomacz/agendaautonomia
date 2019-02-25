@@ -23,8 +23,14 @@ export class MonitoreoComponent implements OnInit {
 	@ViewChild("chartIS") porIS:any;
   @ViewChild("chartPorInversion") porInversion:any;
 
-	private usuarioId:string;
-	private annio:number;
+	public usuarioId:string;
+	public annio:number;
+  public cPorInstituciones:Chart;
+  public cPorSector:Chart;
+  public cPorFuente:Chart;
+  public cPorIS:Chart;
+  public cPorInversion:Chart;
+
 	private filtroInstitucion:string;
 	private annioSubject:BehaviorSubject<number>;
 	private proyectos:AngularFireAction<DatabaseSnapshot>[];
@@ -33,19 +39,11 @@ export class MonitoreoComponent implements OnInit {
   private alcaldias:AngularFireAction<DatabaseSnapshot>[];
 	private sectores:AngularFireAction<DatabaseSnapshot>[];
   private transferencias:AngularFireAction<DatabaseSnapshot>[];
-
-	private cPorInstituciones:Chart;
-	private cPorSector:Chart;
-	private cPorFuente:Chart;
-	private cPorIS:Chart;
-  private cPorInversion:Chart;
-
 	private datosPorI:any;
 	private datosPorS:any;
 	private datosPorF:any;
 	private datosPorIS:any;
   private datosPorInv:any;
-
 	private colores:string[];
 
   constructor(private _router:Router, private iService:InstitucionService, private pService:ProyectosService, private _auth:AuthserviceService) { 

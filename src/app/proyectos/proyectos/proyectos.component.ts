@@ -16,11 +16,20 @@ import { AuthserviceService } from "../../servicios/authservice.service";
 })
 export class ProyectosComponent implements OnInit {
 
-	private usuarioId:string;
-  private esAdmin:boolean;
-	private opcionFiltro:string;
-	private filtro:string;
-  private annio:number;
+	public usuarioId:string;
+  public esAdmin:boolean;
+	public opcionFiltro:string;
+	public filtro:string;
+  public annio:number;
+  public paginaProyectos:AngularFireAction<DatabaseSnapshot>[];
+  public listaOpciones:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+  public listaSectores:AngularFireAction<DatabaseSnapshot>[];
+  public listaOrganizaciones:any;
+  public page:number;
+  public loading:boolean;
+  public limit:number;
+  public total:number;
+  
 	private aniosSubject:BehaviorSubject<number>;
 	private sectorSubject:BehaviorSubject<{anio:string,sector:string}>;
 	private institucionSubject:BehaviorSubject<{anio:string,instit:string}>;
@@ -28,14 +37,7 @@ export class ProyectosComponent implements OnInit {
 	private proyecto_sector$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private proyecto_institucion$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	private listaProyectos:AngularFireAction<DatabaseSnapshot>[];
-  private paginaProyectos:AngularFireAction<DatabaseSnapshot>[];
-	private listaOpciones:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-	private listaSectores:AngularFireAction<DatabaseSnapshot>[];
-  private listaOrganizaciones:any;
-  private page:number;
-  private loading:boolean;
-  private limit:number;
-  private total:number;
+  
 
 
   constructor(private _service:ProyectosService, private _institService:InstitucionService, private _router:Router, private _auth:AuthserviceService) {

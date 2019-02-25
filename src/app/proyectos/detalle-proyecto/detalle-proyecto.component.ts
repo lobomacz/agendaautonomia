@@ -15,19 +15,20 @@ import { AuthserviceService } from "../../servicios/authservice.service";
 })
 export class DetalleProyectoComponent implements OnInit {
 
-	private usuarioId:string;
-  private esAdmin:boolean;
-	private _id:string;
-  private anio:number;
-	private organizacion:string;
-	private sector:string;
-	private municipio:string;
-	private comunidad:string;
-	private proyect0:Observable<any>;
-	private proyecto:Proyecto;
-	private dialogo_borrar:boolean;
-  private listaSitios:string[];
-  private personal:PersonalProyecto;
+	public usuarioId:string;
+  public esAdmin:boolean;
+  public anio:number;
+	public organizacion:string;
+	public sector:string;
+	public municipio:string;
+	public comunidad:string;
+	public proyecto:Proyecto;
+	public dialogo_borrar:boolean;
+  public listaSitios:string[];
+  public personal:PersonalProyecto;
+
+  private _id:string;
+  private proyect0:Observable<any>;
 
 
   constructor(private _activatedRoute:ActivatedRoute, private _router:Router, private _service:ProyectosService, private _institService:InstitucionService, private _auth:AuthserviceService) {

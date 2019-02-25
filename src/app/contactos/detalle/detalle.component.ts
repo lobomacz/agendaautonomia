@@ -18,19 +18,22 @@ import { Mensaje } from '../../clases/mensaje';
 })
 export class DetalleComponent implements OnInit {
 
-  private _id:string;
+  public _id:string;
+  public usuarioId:string;
+  public contacto:Funcionario;
+  public organizacion:Organizacion;
+  public foto:string;
+  public dialogo_borrar:boolean = false;
+  public dialogo_mensaje:boolean = false;
+  public mensaje:Mensaje;
+
   private esAdmin:boolean;
-  private usuarioId:string;
-	private contacto:Funcionario;
 	private contactoObservable:Observable<any>;
   private organizacion$:Observable<any>;
-  private organizacion:Organizacion;
   private foto$:Observable<string>;
-  private foto:string;
-  private mensaje:Mensaje;
+  
 
-	private dialogo_borrar:boolean = false;
-  private dialogo_mensaje:boolean = false;
+	
 
 
   constructor(private _route:ActivatedRoute, private _service:ContactoService, private _institService:InstitucionService, private _router:Router, private _auth:AuthserviceService) {

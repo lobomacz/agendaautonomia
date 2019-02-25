@@ -21,26 +21,27 @@ import { InstitucionService } from '../../servicios/institucion-service';
 })
 export class EditarComponent implements OnInit {
 
+  public fotoUrl:string;
+  public funcionario?:Funcionario;
+  public contrasena:string;
+  public confirmaContrasena:string;
+  public organizacione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+  public municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+  public mostrarDialogo:boolean;
+  public mensajeDialogo:Mensaje;
+  public usuarioFuncionario?:Usuario;
+  public crearUsuario:boolean;
+
 	private usuarioId:string;
 	private _id:string;
 	private nuevo:boolean;
 	private fotoFile:any;
-	private fotoUrl:string;
 	private nombreFoto:string;
-	private funcionario?:Funcionario;
 	private funcionarioGuardado:boolean;
-	private usuarioFuncionario?:Usuario;
-	private crearUsuario:boolean;
 	private resetPassword:boolean;
-	private contrasena:string;
-	private confirmaContrasena:string;
 	private oldTipoUsuario:string;
 	private usuarioGuardado:boolean;
-	private organizacione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-	private municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-
-	private mostrarDialogo:boolean;
-	private mensajeDialogo:Mensaje;
+	
 
   constructor(private _activeRoute:ActivatedRoute, private _auth:AuthserviceService, private _cService:ContactoService, private _iService:InstitucionService, private _router:Router) {
   	this._id = this._activeRoute.snapshot.paramMap.get('id');

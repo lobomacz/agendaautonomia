@@ -18,21 +18,23 @@ import { AuthserviceService } from "../../servicios/authservice.service";
 })
 export class ContactosComponent implements OnInit {
  
-  private usuarioId:string;
+  public usuarioId:string;
+  public paginaContactos:AngularFireAction<DatabaseSnapshot>[];
+  public fotos:any;
+  public organizaciones?:any;
+  public page:number;
+  public total:number;
+  public limit:number;
+  public loading:boolean;
+
   private esAdmin:boolean;
   private contactosSubject:BehaviorSubject<string | null>;
   private contacto$?:AngularFireAction<DatabaseSnapshot>[];
-  private paginaContactos:AngularFireAction<DatabaseSnapshot>[];
-  private fotos:any;
   private contactoVacio:boolean;
-
   private organizacione$?:Observable<any>;
-  private organizaciones?:any;
+  
 
-  private page:number;
-  private total:number;
-  private limit:number;
-  private loading:boolean;
+  
 
   constructor(private _router:Router, private _service:ContactoService, private _institService:InstitucionService, private _auth:AuthserviceService) {
     this.contactosSubject = new BehaviorSubject(null);

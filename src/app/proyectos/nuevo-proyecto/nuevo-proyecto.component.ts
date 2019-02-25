@@ -20,24 +20,25 @@ import { Usuario } from '../../clases/usuario';
 })
 export class NuevoProyectoComponent implements OnInit {
 
-	private usuarioId:string;
-	private nuevo:boolean;
-  private disableUbicacion:boolean;
-	private tipoProyecto:string;
-	private proyecto:Proyecto;
-  private personal:PersonalProyecto;
-	private organizacionesSub:BehaviorSubject<string | null>;
-	private organizacione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-	private sectore$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-	private municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-	private comunidadesSub:BehaviorSubject<string | null>;
-	private comunidade$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-  private municipioUbicacion:string;
-  private comunidadUbicacion:string;
-  private min_fecha_inicio:any;
-  private min_fecha_final:any;
-  private listaSitios:any[];
-  private listaNombreSitios:string[];
+	public usuarioId:string;
+	public nuevo:boolean;
+  public disableUbicacion:boolean;
+	public tipoProyecto:string;
+	public proyecto:Proyecto;
+  public personal:PersonalProyecto;
+	public organizacione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+	public sectore$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+	public municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+	public comunidade$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+  public municipioUbicacion:string;
+  public comunidadUbicacion:string;
+  public min_fecha_inicio:any;
+  public min_fecha_final:any;
+  public listaSitios:any[];
+  public listaNombreSitios:string[];
+
+  private organizacionesSub:BehaviorSubject<string | null>;
+  private comunidadesSub:BehaviorSubject<string | null>;
 
 
   constructor(private _service:ProyectosService, private _institService:InstitucionService, private _router:Router, private _auth:AuthserviceService) { 

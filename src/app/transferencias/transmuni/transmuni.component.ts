@@ -18,18 +18,19 @@ import { ProyectosService } from '../../servicios/proyectos-service';
 })
 export class TransmuniComponent implements OnInit {
 
-	private usuarioId:string;
-	private annio:number;
-  private annio_abierto:number;
-	private codAlcaldia:string;
+	public usuarioId:string;
+	public annio:number;
+  
+	public codAlcaldia:string;
 	public cooperacionExterna:number;
 	public tesoroNacional:number;
-	private nuevo:boolean;
-	private dialogo_borrar:boolean;
-  private showDialog:boolean;
-  private titulo_dialogo:string;
-  private texto_dialogo:string;
+	public nuevo:boolean;
+	public dialogo_borrar:boolean;
+  public showDialog:boolean;
+  public titulo_dialogo:string;
+  public texto_dialogo:string;
 
+  private annio_abierto:number;
 	private alcaldias:AngularFireAction<DatabaseSnapshot>[];
 	private transferencias:AngularFireAction<DatabaseSnapshot>[];
   private alcaldias_con_proyectos:string[];

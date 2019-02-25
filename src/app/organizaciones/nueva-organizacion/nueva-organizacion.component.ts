@@ -18,14 +18,15 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 })
 export class NuevaOrganizacionComponent implements OnInit {
 
-	private usuarioId:string;
-	private organizacion:Organizacion;
+	public usuarioId:string;
+	public organizacion:Organizacion;
 	//private regione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	//private municipiosSubject:BehaviorSubject<string | null>;
-	private municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-	private lista_niveles:string[];
-	private lista_tipos:string[];
-	private nuevo:boolean;
+	public municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+	public lista_niveles:string[];
+	public lista_tipos:string[];
+	public nuevo:boolean;
+  
 	private guardado:boolean;
 
   constructor(private _service:InstitucionService, private _router:Router, private _auth:AuthserviceService) {

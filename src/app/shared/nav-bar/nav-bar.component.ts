@@ -20,9 +20,9 @@ export class NavBarComponent implements OnInit, OnChanges {
 
   public usuario:Usuario;
   public funcionarioUsuario:Funcionario;
-  private foto:string;
-	private titulo_sitio:string;
-	private link_list:Array<OpcionNav>;
+  public foto:string;
+	public titulo_sitio:string;
+	public link_list:Array<OpcionNav>;
 
 
   constructor(private router:Router, private route:ActivatedRoute, private _auth:AuthserviceService, private contactoService:ContactoService) {

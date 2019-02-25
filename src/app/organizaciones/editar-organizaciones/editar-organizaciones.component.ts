@@ -16,15 +16,16 @@ import { Organizacion } from '../../clases/organizacion';
 })
 export class EditarOrganizacionesComponent implements OnInit {
 
-	private usuarioId:string;
-	private _id:string;
-	private organizacion:Organizacion;
-	private nuevo:boolean;
+	public usuarioId:string;
+	public organizacion:Organizacion;
+	public nuevo:boolean;
 	//private regione$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
 	//private municipiosSubject:BehaviorSubject<string | null>;
-	private municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
-	private lista_niveles:string[];
-	private lista_tipos:string[];
+	public municipio$:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+	public lista_niveles:string[];
+	public lista_tipos:string[];
+
+  private _id:string;
 
   constructor(private _service:InstitucionService, private _router:Router, private route:ActivatedRoute, private _auth:AuthserviceService) { 
   	this._id = this.route.snapshot.paramMap.get('id');

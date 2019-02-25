@@ -15,17 +15,23 @@ import { Observable } from 'rxjs/Observable';
 })
 export class LoginComponent implements OnInit {
 
-  private correo:string;
-  private contrasena:string;
+  public correo:string;
+  public contrasena:string;
+  public showDialog:boolean;
+  public titulo_dialogo:string;
+  public texto_dialogo:string;
 
   constructor(private router:Router, private _auth:AuthserviceService, private route:ActivatedRoute) {
     //this.ruta = this.route.snapshot.paramMap.get('origen');
     this.correo = ""; //"Correo-e";
     this.contrasena = ""; //"Contraseña";
+    this.showDialog = false;
   }
 
   ngOnInit() {
 
+    this.titulo_dialogo = '';
+    this.texto_dialogo = '';
   }
 
   LoginCheck(event:Event):any{
@@ -43,8 +49,39 @@ export class LoginComponent implements OnInit {
     }).catch((error) => {
       let errorMessage = error.message; 
       let errorCode = error.code;
-      alert("Error ".concat(errorMessage, " Codigo: ", errorCode));
+      let titulo = '';
+      let mensaje = '';
+
+      switch (error.code) {
+        case "auth/invalid-email":
+          titulo = 'Correo No Válido';
+          mensaje = 'La dirección de correo ingresada NO es válida. Verifique y vuelva a intentarlo.';
+          break;
+        case "auth/user-disabled":
+          titulo = 'Usuario Desactivado';
+          mensaje = 'Su cuenta de usuario ha sido desactivada. Contacte al administrador de la plataforma.';
+          break;
+        case "auth/user-not-found":
+          titulo = 'Usuario Desconocido';
+          mensaje = 'El correo ingresado no corresponde a ninguna cuenta de usuario conocida. Verifique y vuelva a intentarlo.';
+          break;
+        default:
+          titulo = 'Contraseña Incorrecta';
+          mensaje = 'La contraseña ingresada no es correcta. Por favor, verifique y vuelva a intentarlo.';
+          break;
+      }
+
+      this.titulo_dialogo = titulo;
+      this.texto_dialogo = mensaje;
+      this.showDialog = true;
+
     });
+  }
+
+  CierraDialogo(){
+    this.showDialog = false;
+    this.titulo_dialogo = '';
+    this.texto_dialogo = '';
   }
 
 }

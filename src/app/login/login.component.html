@@ -36,5 +36,18 @@
 	</div>
 </div>
 
+<div class="dialogo" *ngIf="showDialog" [class.dialogo--active]="showDialog" >
+	<div class="dialogo__titulo">{{ titulo_dialogo }}</div>
+	<div class="dialogo__texto">
+		<p>
+			{{ texto_dialogo }}
+		</p>
+		<div>
+			
+		</div>
+	</div>
+	<div class="dialogo__btn--default btn" (click)="CierraDialogo()">Ok</div>
+</div>
+
 
 

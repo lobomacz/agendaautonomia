@@ -13,13 +13,14 @@ import { Observable } from 'rxjs/Observable';
 })
 export class VerOrganizacionesComponent implements OnInit {
 
-  private usuarioId:string;
-  private esAdmin:boolean;
-	private _id:string;
-	private organizacion$:Observable<any>;
-	private organizacion:any;
-  private dialogo_borrar:boolean;
-  private dialogo_mensaje:boolean;
+  public usuarioId:string;
+  public esAdmin:boolean;
+	public _id:string;
+	public organizacion:any;
+  public dialogo_borrar:boolean;
+  public dialogo_mensaje:boolean;
+
+  private organizacion$:Observable<any>;
 
   constructor(private activatedRoute:ActivatedRoute, private _router:Router, private _service:InstitucionService, private _auth:AuthserviceService) { 
   	this._id = this.activatedRoute.snapshot.paramMap.get('id');

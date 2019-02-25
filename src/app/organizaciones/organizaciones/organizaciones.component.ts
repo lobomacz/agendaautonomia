@@ -15,17 +15,17 @@ import { AuthserviceService } from "../../servicios/authservice.service";
 })
 export class OrganizacionesComponent implements OnInit {
 
-	private usuarioId:string;
-  private esAdmin:boolean;
+	public usuarioId:string;
+  public esAdmin:boolean;
 	public tipo_filtro:string;
-  private organizacionesSub:BehaviorSubject<string | null>;
-	private organizaciones:AngularFireAction<DatabaseSnapshot>[];
-  private paginaOrganizaciones:AngularFireAction<DatabaseSnapshot>[];
+  public paginaOrganizaciones:AngularFireAction<DatabaseSnapshot>[];
+  public page:number;
+  public total:number;
+  public limit:number;
+  public loading:boolean;
 
-  private page:number;
-  private total:number;
-  private limit:number;
-  private loading:boolean;
+  private organizacionesSub:BehaviorSubject<string | null>;
+  private organizaciones:AngularFireAction<DatabaseSnapshot>[];
 
 
   constructor(private _router:Router , private _service:InstitucionService, private _auth:AuthserviceService) {
