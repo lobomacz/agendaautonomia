@@ -23,7 +23,7 @@ export class ProyectosComponent implements OnInit {
   public annio:number;
   public listaProyectos:AngularFireAction<DatabaseSnapshot>[];
   public paginaProyectos:AngularFireAction<DatabaseSnapshot>[];
-  public listaOpciones:Observable<AngularFireAction<DatabaseSnapshot>[]>;
+  public listaOpciones:AngularFireAction<DatabaseSnapshot>[];
   public listaSectores:AngularFireAction<DatabaseSnapshot>[];
   public listaOrganizaciones:any;
   public page:number;
@@ -42,7 +42,7 @@ export class ProyectosComponent implements OnInit {
 
 
   constructor(private _service:ProyectosService, private _institService:InstitucionService, private _router:Router, private _auth:AuthserviceService) {
-  	this.opcionFiltro = 'todos';
+  	this.opcionFiltro = 'anio';
     this.limit = 20;
     this.total = 0;
     this.loading = false;
@@ -185,11 +185,25 @@ export class ProyectosComponent implements OnInit {
   }
 
   GetOpcionesSectores(){
-  	this.listaOpciones = this._service.GetSectores();
+    this._service.GetSectores().subscribe((list) => {
+      this.listaOpciones = list;
+    });
   }
 
   GetOpcionesInstituciones(){
-  	this.listaOpciones = this._institService.GetInstituciones();
+    this._institService.GetInstituciones().subscribe((list) => {
+      this.listaOpciones = list;
+    });
+  }
+
+  GetOpcionesGtis(){
+    this._institService.GetInstitucionesPorTipo(new BehaviorSubject("publico")).subscribe((list) => {
+      this.listaOpciones = list.filter((option) => {
+        return option.payload.val().nivel == 'territorial';
+      });
+
+      console.table(this.listaOpciones);
+    });
   }
 
   setTipoFiltro(opcion:string){
@@ -203,6 +217,9 @@ export class ProyectosComponent implements OnInit {
   		case "institucion":
   			this.GetOpcionesInstituciones();
   			break;
+      case "gti":
+        this.GetOpcionesGtis();
+        break;
   	}
     this.UpdateLista();
   }

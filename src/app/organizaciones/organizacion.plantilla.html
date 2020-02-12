@@ -68,7 +68,7 @@
 						<div class="tabla-bloques__columna">
 							<div class="formulario__group">
 								<select class="formulario__control" name="nivel" id="nivel" #nivel="ngModel" required="true" [(ngModel)]="organizacion.nivel" >
-									<option *ngFor="let nivel of lista_niveles" value="nivel">{{ nivel | uppercase }}</option>
+									<option *ngFor="let nivel of lista_niveles" value="{{ nivel }}">{{ nivel | uppercase }}</option>
 								</select>
 								<label class="formulario__label" for="nivel">Nivel</label>
 							</div>

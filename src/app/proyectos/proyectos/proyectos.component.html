@@ -33,16 +33,23 @@
 									Sector
 								</label>
 							</div>
+							<div class="form__group-option">
+								<input #gtis class="form__radio-input" id="optGti" type="radio" name="tipoOrg" value="gti" (click)="setTipoFiltro(gtis.value)">
+								<label class="form__radio-label" for="optGti">
+									<span class="form__radio-button"></span>
+									GTIs
+								</label>
+							</div>
 						</fieldset>
 						<div class="formulario__group u-margin-top-small" *ngIf="opcionFiltro=='anio';else comboSelect">
 							<input class="formulario__control" type="number" id="txtanio" name="anioFiltro"  placeholder="2018" [(ngModel)]="filtro" >
 							<input class="btn u-margin-top-small" type="button" name="btnFiltro" value="Ver" (click)="UpdateLista()">
 						</div>
 						<ng-template #comboSelect>
-							<div class="formulario__group" *ngIf="opcionFiltro != 'todos'">
+							<div class="formulario__group" *ngIf="opcionFiltro != 'anio'">
 								<label for="cmbFiltro">Seleccione:</label>
 								<select class="formulario__control" [(ngModel)]="filtro" name="filtro" id="cmbFiltro" #cmbFiltro (change)="UpdateLista()">
-									<option *ngFor="let opcion of listaOpciones | async" value="{{ opcion.key }}">{{ (opcionFiltro == 'sector' ? opcion.payload.val():opcion.payload.val().nombre_corto) | uppercase }}</option>
+									<option *ngFor="let opcion of listaOpciones" value="{{ opcion.key }}">{{ (opcionFiltro == 'sector' ? opcion.payload.val():opcion.payload.val().nombre_corto) | uppercase }}</option>
 								</select>
 							</div>
 						</ng-template>
