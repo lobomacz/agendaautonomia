@@ -1,16 +1,17 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule, Routes } from '@angular/router';
 import { NavComponent } from './nav/nav.component';
-import { DialogComponent } from './dialog/dialog.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { DialogComponent } from './dialog/dialog.component';
+import { PagerComponent } from './pager/pager.component';
+import { GraficoComponent } from './grafico/grafico.component';
 
 
 @NgModule({
   imports: [
     CommonModule
   ],
-  declarations: [NavComponent, DialogComponent, NavBarComponent],
-  exports: [NavComponent, DialogComponent, NavBarComponent]
+  declarations: [NavComponent, NavBarComponent, DialogComponent, PagerComponent, GraficoComponent],
+  exports: [NavComponent, NavBarComponent, DialogComponent, PagerComponent]
 })
 export class SharedModule { }

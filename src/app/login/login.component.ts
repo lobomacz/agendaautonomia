@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { FormGroup, FormControl, Validators, NgForm } from '@angular/forms';//28022018 Se removió FormsModule de los imports
-import { AngularFireAuth } from 'angularfire2/auth';
+import { Router,ActivatedRoute } from '@angular/router';
+import { FormGroup, FormControl, Validators } from '@angular/forms';//28022018 Se removió FormsModule de los imports
 import { NavBarComponent } from '../shared/nav-bar/nav-bar.component';
-import * as firebase from 'firebase/app';
+
+import { AuthserviceService } from '../servicios/authservice.service';
+
+import { Observable } from 'rxjs/Observable';
 
 
 @Component({
@@ -13,35 +15,73 @@ import * as firebase from 'firebase/app';
 })
 export class LoginComponent implements OnInit {
 
-  private usuario:boolean;
+  public correo:string;
+  public contrasena:string;
+  public showDialog:boolean;
+  public titulo_dialogo:string;
+  public texto_dialogo:string;
 
-  constructor(private afAuth:AngularFireAuth, private router:Router) {
-    
-		this.revisaSesion();
+  constructor(private router:Router, private _auth:AuthserviceService, private route:ActivatedRoute) {
+    //this.ruta = this.route.snapshot.paramMap.get('origen');
+    this.correo = ""; //"Correo-e";
+    this.contrasena = ""; //"Contraseña";
+    this.showDialog = false;
   }
 
   ngOnInit() {
 
+    this.titulo_dialogo = '';
+    this.texto_dialogo = '';
   }
 
-  revisaSesion():any{
-
-      this.usuario = false;
-
-      let suscripcion = this.afAuth.authState.forEach(value => {
-        console.log(value);
-      });
-  }
-
-  loginCheck(event:any, loginform:NgForm):any{
+  LoginCheck(event:Event):any{
     
-    let valores:any = loginform.value;
-
-    console.log(valores.correo);
-
-    this.router.navigateByUrl('home');
-
     event.preventDefault();
+    let that = this;
+
+    this._auth.Login(this.correo, this.contrasena).then((cred) => {
+
+      if (cred != null) {
+        const ruta:string = '/home';
+        this.router.navigateByUrl(ruta);
+      }
+
+    }).catch((error) => {
+      let errorMessage = error.message; 
+      let errorCode = error.code;
+      let titulo = '';
+      let mensaje = '';
+
+      switch (error.code) {
+        case "auth/invalid-email":
+          titulo = 'Correo No Válido';
+          mensaje = 'La dirección de correo ingresada NO es válida. Verifique y vuelva a intentarlo.';
+          break;
+        case "auth/user-disabled":
+          titulo = 'Usuario Desactivado';
+          mensaje = 'Su cuenta de usuario ha sido desactivada. Contacte al administrador de la plataforma.';
+          break;
+        case "auth/user-not-found":
+          titulo = 'Usuario Desconocido';
+          mensaje = 'El correo ingresado no corresponde a ninguna cuenta de usuario conocida. Verifique y vuelva a intentarlo.';
+          break;
+        default:
+          titulo = 'Contraseña Incorrecta';
+          mensaje = 'La contraseña ingresada no es correcta. Por favor, verifique y vuelva a intentarlo.';
+          break;
+      }
+
+      this.titulo_dialogo = titulo;
+      this.texto_dialogo = mensaje;
+      this.showDialog = true;
+
+    });
+  }
+
+  CierraDialogo(){
+    this.showDialog = false;
+    this.titulo_dialogo = '';
+    this.texto_dialogo = '';
   }
 
 }

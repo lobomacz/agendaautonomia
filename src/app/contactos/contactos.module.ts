@@ -7,29 +7,24 @@ import { SharedModule } from '../shared/shared.module';
 import { NuevoComponent } from './nuevo/nuevo.component';
 import { DetalleComponent } from './detalle/detalle.component';
 import { EditarComponent } from './editar/editar.component';
-import { EliminarComponent } from './eliminar/eliminar.component';
 
 
 const routes:Routes = [
-	{
-		path: '',
-		component: ContactosComponent
-	},
+  {
+    path: 'ver/:id',
+    component: DetalleComponent
+  },
+  {
+    path: 'editar/:id',
+    component: EditarComponent
+  },
   {
     path: 'nuevo',
     component: NuevoComponent
   },
   {
-    path: 'detalle/:id',
-    component: DetalleComponent
-  },
-  {
-    path: 'editar/:id',
-    component:EditarComponent
-  },
-  {
-    path: 'eliminar/:id',
-    component: EliminarComponent
+    path: '',
+    component: ContactosComponent
   }
 ];
 
@@ -40,6 +35,6 @@ const routes:Routes = [
     FormsModule,
     SharedModule
   ],
-  declarations: [ContactosComponent, NuevoComponent, DetalleComponent, EditarComponent, EliminarComponent]
+  declarations: [ContactosComponent, NuevoComponent, DetalleComponent, EditarComponent]
 })
 export class ContactosModule { }

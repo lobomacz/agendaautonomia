@@ -1,0 +1,16 @@
+.chart {
+	margin: 0;
+	padding: 0;
+	display: inline-block;
+	position: relative;
+	width: 60rem;
+	height: 40rem;
+	text-align: left;
+
+	&__canvas {
+		width: 55rem;
+		height: 40rem;
+		display: inline-block;
+		@include centra-elemento;
+	}
+}

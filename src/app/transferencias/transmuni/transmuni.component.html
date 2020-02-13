@@ -1,0 +1,118 @@
+<macz-nav-bar [usuarioId]="usuarioId" (logout)="userLogout()" ></macz-nav-bar>
+<section class="seccion-transferencias">
+	<h2 class="encabezado-secundario u-center-text u-margin-bottom-medium">Transferencias PIP Municipales</h2>
+	<div class="formulario__container">
+		<form #formTransmuni="ngForm"  accept-charset="utf-8" class="formulario__form">
+			<div class="tabla-bloques--form">
+				<div class="tabla-bloques__filas">
+					<div class="tabla-bloques__fila--flat">
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<label for="txtAnio">Año</label>
+								<input type="number" id="txtAnio" name="anno" value="" placeholder="" #annioTrans="ngModel" [(ngModel)]="annio" maxlength="4" minlength="4" required="true" ><div class="btn icon icon-macz-search" (click)="LlenaTransferencias()" ></div>
+								<div *ngIf="annioTrans.invalid && (annioTrans.dirty || annioTrans.touched)" class="mensaje mensaje--error u-margin-top-medium">	
+									<div *ngIf="annioTrans.errors.required">
+										Se requiere un año válido.
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<label for="cmdAlcaldia">Alcaldía</label>
+								<select name="alcaldia" id="cmdAlcaldia" [(ngModel)]="codAlcaldia" #idAlcaldia="ngModel" class="formulario__control" (change)="CheckAlcaldia()" required>
+									<option *ngFor="let opt of alcaldias" value="{{ opt.key }}">{{ opt.payload.val().nombre_corto | uppercase }}</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					<div class="tabla-bloques__fila--flat">
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input class="formulario__control" type="number" name="cooperacion" value="" #coopExt="ngModel" [(ngModel)]="cooperacionExterna" placeholder="Cooperación Externa C$" required>
+								<label class="formulario__label" for="txtCext">Cooperación Externa C$</label>
+								<div *ngIf="coopExt.invalid && (coopExt.dirty || coopExt.touched)" class="mensaje mensaje--error">
+									<div *ngIf="coopExt.errors.required">
+										El campo es requerido. No puede estar vacío. Ingrece 0 o un valor mayor.
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input class="formulario__control" type="number" name="tesoroNac" value="" #tesoroN="ngModel" [(ngModel)]="tesoroNacional" placeholder="Fondos del Tesoro C$" required="">
+								<label class="formulario__label" for="txtTesoro">Fondos del Tesoro C$</label>
+								<div class="mensaje mensaje--error" *ngIf="tesoroN.invalid && (tesoroN.dirty || tesoroN.tourched)" >
+									<div *ngIf="tesoroN.errors.required" >
+										El campo es requerido. No puede estar vacío. Ingrece 0 o un valor mayor.
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tabla-bloques__fila--flat">
+						<div class="tabla-bloques__columna">
+							<input #btnGuardar class="btn btn--verde" type="button" name="" value="{{ nuevo === true ? 'Ingresar':'Guardar' }}" [disabled]="!formTransmuni.form.valid" (click)="Ingresar()" >
+						</div>
+						<div class="tabla-bloques__columna">
+							<input class="btn " type="reset" name="" value="Limpiar">
+						</div>
+					</div>
+				</div>
+			</div>
+			
+		</form>
+	</div>
+	<div class="tabla-bloques" *ngIf="transferencias != undefined && transferencias.length > 0;else sindatos">
+		<div class="tabla-bloques__header">
+			<div class="tabla-bloques__header-cell">Alcaldía</div>
+			<div class="tabla-bloques__header-cell">Cooperación Ext C$</div>
+			<div class="tabla-bloques__header-cell">Rec. del Tesoro C$</div>
+			<div class="tabla-bloques__header-cell--x-small">&nbsp;</div>
+			<div class="tabla-bloques__header-cell--x-small">&nbsp;</div>
+		</div>
+		<div class="tabla-bloques__filas">
+			<div class="tabla-bloques__fila" *ngFor="let trans of transferencias">
+				<div class="tabla-bloques__columna">{{ GetAlcaldia(trans.key).payload.val().nombre_largo }}</div>
+				<div class="tabla-bloques__columna">{{ trans.payload.val().cext | currency:'NIO':'symbol-narrow' }}</div>
+				<div class="tabla-bloques__columna">{{ trans.payload.val().tesoro | currency:'NIO':'symbol-narrow' }}</div>
+				<div class="tabla-bloques__columna">
+					<div class="btn icon icon-macz-trashcan" (click)="Borrar(trans.key)" ></div>
+				</div>
+				<div class="tabla-bloques__columna">
+					<div class="btn icon icon-macz-pencil-1" (click)="Editar(trans.key)" ></div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<ng-template #sindatos>
+		<h1>No Existen Datos</h1>
+	</ng-template>
+
+	<div class="overlay" [class.overlay--active]="dialogo_borrar">
+		<div class="overlay__close" (click)="dialogo_borrar=false">
+			<span class="overlay__icon">&#xe00e;</span>
+		</div>
+		<div class="dialog">
+	      <h3 class="dialog__titulo u-margin-bottom-medium">Eliminar Transferencia</h3>
+	      <p>
+	      	Se eliminará el dato de transferencia de la base de datos. ¿Desea Continuar?
+	      </p>
+	      <a href="#" class="btn" (click)="OnEliminarTrans_Click($event)">Si</a><a href="#" class="btn" (click)="CerrarModal($event)">No</a>
+	    </div>
+	</div>
+
+	<div class="dialogo" *ngIf="showDialog" [class.dialogo--active]="showDialog" >
+		<div class="dialogo__titulo">{{ titulo_dialogo }}</div>
+		<div class="dialogo__texto">
+			<p>
+				{{ texto_dialogo }}
+			</p>
+			<div>
+				
+			</div>
+		</div>
+		<div class="dialogo__btn--default btn" (click)="CierraDialogo()">Ok</div>
+	</div>
+</section>

@@ -1,0 +1,117 @@
+<macz-nav-bar [usuarioId]="usuarioId" (logout)="userLogout()"></macz-nav-bar>
+<section class="seccion-nuevo-usuario">
+	<h2 class="encabezado-secundario u-center-text">{{ nuevo == true ? 'Ingresar':'Editar' }} Contacto</h2>
+	<div class="formulario__container u-margin-top-medium">
+		<form #contactForm="ngForm" accept-charset="utf-8">
+			<div class="tabla-bloques--form">
+				<div class="tabla-bloques__filas">
+					<div class="tabla-bloques__fila--flat">
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<label for="txtNombre">Nombre</label>
+								<input id="txtNombre" class="formulario__control" [(ngModel)]="funcionario.nombre" type="text" #nombre="ngModel" name="Nombre" required placeholder="Nombre y Apellido">
+								<div class="mensaje mensaje--error" *ngIf="nombre.invalid && (nombre.dirty || nombre.touched)">
+									<div *ngIf="nombre.errors.required">
+										El campo nombre es requerido.
+									</div>
+								</div>
+							</div>
+							<div class="formulario__group">
+								<label for="cmbOrganizacion">Institución</label>
+								<select id="cmbOrganizacion" class="formulario__control" name="Organizacion" [(ngModel)]="funcionario.organizacion" required>
+									<option *ngFor="let org of organizacione$ | async" value="{{ org.key }}">{{ org.payload.val().nombre_corto | uppercase }}</option>
+								</select>
+							</div>
+							<div class="formulario__group">
+								<label for="txtCargo">Cargo</label>
+								<input class="formulario__control" type="text" name="Cargo" [(ngModel)]="funcionario.cargo" placeholder="Cargo" #cargo="ngModel" id="txtCargo" required>
+							</div>
+							<div class="formulario__group">
+								<label for="txtCorreo">Correo</label>
+								<input class="formulario__control" type="email" name="Correo" [(ngModel)]="funcionario.correo" placeholder="ejemplo@correo.com" #correo="ngModel" id="txtCorreo" required>
+							</div>
+						</div>
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<img class="formulario-container__image" src="{{ fotoUrl }}" alt="Foto de {{ funcionario.nombre | uppercase }}">
+							</div>
+							<div class="formulario__group">
+								<label for="fFoto" class="formulario__boton-archivo">Foto&nbsp;<span class="formulario__icono-archivo">&#xe072;</span></label>
+								<input class="formulario__input-archivo" type="file" #foto id="fFoto" name="Foto" (change)="On_Foto_Change(foto)" accept="image/jpeg|image/png|image/jpg" [disabled]="!nombre.valid">
+							</div>
+						</div>
+					</div>
+					<div class="tabla-bloques__fila--flat">
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<label for="cmbMunicipio">Municipio</label>
+								<select class="formulario__control" name="Municipio" id="cmbMunicipio" required [(ngModel)]="funcionario.municipio" placeholder="Seleccione">
+									<option *ngFor="let munic of municipio$ | async" value="{{ munic.key }}">{{ munic.payload.val().nombre }}</option>
+								</select>
+							</div>
+						</div>
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<label for="txtTelefono">Teléfono</label>
+								<input class="formulario__control" type="text" name="Telefono" [(ngModel)]="funcionario.telefono" placeholder="Ej. 2563-9874" #telefono="ngModel" id="txtTelefono" required>
+							</div>
+							<div class="formulario__group">
+								<label for="txtMovil">Móvil</label>
+								<input class="formulario__control" type="text" name="Movil" [(ngModel)]="funcionario.movil" placeholder="Ej. 8974-9887" #movil="ngModel" id="txtMovil" required>
+							</div>
+						</div>
+					</div>
+					<div class="tabla-bloques__fila--flat" *ngIf="usuarioFuncionario === null || usuarioFuncionario.idFuncionario === ''">
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input class="form__check-input" (click)="On_CreaUsuario_Click(CrearUsuario)" type="checkbox" #CrearUsuario="ngModel" [(ngModel)]="crearUsuario" name="CrearUsuario" id="chkCrearUsuario">
+								<label class="form__check-label" for="chkCrearUsuario">Crear Usuario <span class="form__check-button">&#xe012;</span></label>
+							</div>
+						</div>
+					</div>
+					<div class="tabla-bloques__fila--flat" *ngIf="usuarioFuncionario !== null">
+						<div class="tabla-bloques__columna">
+							<h3 class="encabezado-terciario">Cambiar Contraseña</h3>
+						</div>
+						<div class="tabla-bloques__columna">
+							<a href="#" class="btn-texto" (click)="On_Cambia_Contrasenna_Click($event)" >Cambiar</a>
+						</div>
+					</div>
+					<div class="tabla-bloques__fila--flat" *ngIf="crearUsuario == true">
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input min="8" class="form__input" type="password" id="txtPassword" name="Contrasena" [(ngModel)]="contrasena" placeholder="Contraseña">
+								<label class="form__label" for="txtPassword">Contraseña</label>
+							</div>
+						</div>
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input min="8" class="form__input" id="txtConfirmaPassword" type="password" name="ConfirmaContrasena" [(ngModel)]="confirmaContrasena" placeholder="Conf. Contraseña">
+								<label class="form__label" for="txtConfirmaPassword">Confirma Contraseña</label>
+							</div>
+						</div>
+					</div>
+					<div class="tabla-bloques__fila--flat" *ngIf="crearUsuario == true || usuarioFuncionario !== null">
+						<div class="tabla-bloques__columna">
+							<h3>Tipo de usuario</h3>
+						</div>
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input #usuario1 (click)="On_TipoUsuario_Check(usuario1.value)" class="form__radio-input" id="optAdmin" type="radio" name="tipousuario" value="admin" [checked]="usuarioFuncionario.tipoUsuario == 'admin'">
+								<label class="form__radio-label" for="optAdmin"><span class="form__radio-button"></span>Administrador</label>
+							</div>
+							<div class="formulario__group">
+								<input (click)="On_TipoUsuario_Check(usuario2.value)" class="form__radio-input" id="optUsuario" #usuario2 type="radio" name="TipoUsuario" value="usuario" [checked]="usuarioFuncionario.tipoUsuario == 'usuario'">
+								<label class="form__radio-label" for="optUsuario"><span class="form__radio-button"></span>Usuario</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="formulario__group">
+				<input class="btn btn-blanco" [disabled]="!contactForm.form.valid" type="button" name="guardar" (click)="On_Guardar_Click()" value="{{ nuevo == true ? 'Guardar' : 'Actualizar' }}">
+			</div>
+		</form>
+	</div>
+</section>
+<macz-dialog [mensajeDialogo]="mensajeDialogo" [mostrarDialogo]="mostrarDialogo"></macz-dialog>

@@ -1,0 +1,55 @@
+.pagination {
+
+	height: 2.6rem;
+	padding: 0 1.3rem;
+	position: relative;
+	background-color: $color-gris-oscuro;
+	color: $color-secundario-oscuro;
+	text-align: center;
+	font-size: 1.7rem;
+	transition: all .2s;
+
+	&__label {
+		text-transform: uppercase;
+		background-color: $color-gris-oscuro-3;
+	}
+
+	&__button {
+		height: 100%;
+		cursor: default;
+		border: 1px solid $color-gris-claro;
+		border-radius: 5px;
+		background-color: $color-gris-oscuro-2;
+		width: 2.7rem;
+		position: relative;
+		display: inline-block;
+		//@include efecto-boton;
+		
+
+		&-icon {
+			display: inline-block;
+			
+		}
+
+		&--hidden {
+			width: 0;
+			visibility: hidden;
+		}
+
+		&--active {
+			background-color: $color-gris-oscuro-3;
+		}
+
+		&:not(:last-child){
+			margin-left: 0.3rem;
+		}
+
+		&:hover{
+			background-color: $color-terciario-especial;
+			color: $color-secundario-claro;
+		}
+
+	}
+
+
+}

@@ -9,6 +9,11 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AgendaService } from './servicios/agenda.service';
+import { InstitucionService } from './servicios/institucion-service';
+import { ContactoService } from './servicios/contacto-service';
+import { ProyectosService } from './servicios/proyectos-service';
+import { AuthserviceService } from './servicios/authservice.service';
 
 import { CoreModule } from '../app/core/core.module';
 import { ShellComponent } from '../app/core/shell/shell.component';
@@ -27,7 +32,13 @@ import { ShellComponent } from '../app/core/shell/shell.component';
     AngularFireStorageModule,
     AngularFireAuthModule,
   ],
-  providers: [],
+  providers: [
+    AgendaService,
+    InstitucionService,
+    ContactoService,
+    ProyectosService,
+    AuthserviceService
+  ],
   bootstrap: [ShellComponent]
 })
 export class AppModule { }

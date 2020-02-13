@@ -1,0 +1,97 @@
+<macz-nav-bar [usuarioId]="usuarioId" (logout)="userLogout()"></macz-nav-bar>
+<section class="seccion-detalle-proyecto">
+	<div class="detalle-elemento" *ngIf="proyecto !== undefined" >
+		<h2 class="encabezado-secundario">{{ proyecto.nombre | uppercase }}</h2>
+		<ul>
+			<li><span class="icon icon-macz-building"></span> {{ proyecto.tipo == 'gobierno'? 'Institución':'Organización' }}: {{ organizacion | uppercase }}</li>
+			<li><span class="icon icon-macz-asterisk"></span> Objetivo: {{ proyecto.objetivo | uppercase }}</li>
+			<li><span class="icon icon-macz-star"></span> Año: {{ proyecto.anio }}</li>
+			<li><span class="icon icon-macz-cubes"></span> Sector: {{ sector | uppercase }}</li>
+			<li><span class="icon icon-macz-map"></span>
+				<h3 class="encabezado-terciario">
+					Ubicación:
+				</h3>
+				<ul *ngIf="listaSitios !== undefined && listaSitios.length > 0; else sinSitios">
+					<li *ngFor="let sitio of listaSitios"><span class="icon icon-macz-pin"></span>
+						{{ sitio | uppercase }}
+					</li>
+				</ul>
+				<ng-template #sinSitios>
+					<h3 class="titulo-terciario">No se registraron sitios</h3>
+				</ng-template>
+			</li>
+			<!--<li><span class="icon icon-macz-map"></span>
+				Ubicación:
+				<ul>
+					<li><span class="icon icon-macz-map-signs"></span> Municipio: {{ //municipio | uppercase }}</li>
+					<li><span class="icon icon-macz-pin"></span> Comunidad: {{ //comunidad | uppercase }}</li>
+				</ul>
+			</li>-->
+			<li><span class="icon icon-macz-money"></span>
+				<h3 class="encabezado-terciario">
+					Financiamiento:
+				</h3>
+				<ul *ngIf="proyecto.tipo == 'publico';else montoPrivado">
+					<li>
+						Cooperación Externa: {{ proyecto.cooperacion | currency:'NIO':'symbol-narrow':'4.2-2' }}
+					</li>
+					<li>
+						Fondos del Tesoro: {{ proyecto.tesoro | currency:'NIO':'symbol-narrow':'4.2-2' }}
+					</li>
+					<li>
+						Total: {{ proyecto.monto | currency:'NIO':'symbol-narrow':'4.2-2' }}
+					</li>
+				</ul>
+				<ng-template #montoPrivado>
+					Total: {{ proyecto.monto | currency:'NIO':'symbol-narrow':'4.2-2' }}
+				</ng-template>
+			</li>
+			<li><span class="icon icon-macz-calendar"></span> Fecha de inicio: {{ proyecto.fechaInicio | date:'dd-LLL-yyyy' }} <span class="icon icon-macz-calendar"></span> Fecha de culminación: {{ proyecto.fechaFinal | date:'dd-LLL-yyyy' }}</li>
+			<li>
+				<span class="icon icon-macz-users"></span> Protagonistas: {{ proyecto.protagonistas }}
+			</li>
+			<li>
+				<span class="icon icon-macz-rebel"></span> 
+				<h3 class="encabezado-terciario">
+					Personal Contratado:
+				</h3>
+				<ul *ngIf="personal !== undefined;else sinPersonal">
+					<li>
+						<span class="icon icon-macz-male"></span> Masculino = {{ personal.masculino }}
+					</li>
+					<li>
+						<span class="icon icon-macz-female"></span> Femenino = {{ personal.femenino }}
+					</li>
+					<ng-template *ngIf="proyecto.tipo == 'ong'">
+						<li>Mestizo = {{ personal.mestizo }}</li>
+						<li>Creole = {{ personal.creole }}</li>
+						<li>Miskitu = {{ personal.miskitu }}</li>
+						<li>Garifuna = {{ personal.garifuna }}</li>
+						<li>Ulwa = {{ personal.ulwa }}</li>
+						<li>Rama = {{ personal.rama }}</li>
+					</ng-template>
+				</ul>
+				<ng-template #sinPersonal>
+					<h3 class="encabezado-terciario">No hay datos sobre personal</h3>
+				</ng-template>
+			</li>
+		</ul>
+		<p *ngIf="esAdmin === true">
+			<a routerLink="/proyectos/editar/{{ proyecto.anio }}/{{ _id }}" class="btn-texto">Editar</a>
+			<a href="#" class="btn-texto" (click)="OnEliminar_Click($event)" >Eliminar</a>
+		</p>
+	</div>
+</section>
+
+<div class="overlay" [class.overlay--active]="dialogo_borrar">
+	<div class="overlay__close" (click)="dialogo_borrar=false">
+		<span class="overlay__icon">&#xe00e;</span>
+	</div>
+	<div class="dialog">
+      <h3 class="dialog__titulo u-margin-bottom-medium">Eliminar Proyecto</h3>
+      <p>
+      	Se eliminará el proyecto de la base de datos. ¿Desea Continuar?
+      </p>
+      <a href="#" class="btn" (click)="OnEliminarProyecto_Click($event)">Si</a><a href="#" class="btn" (click)="CerrarModal($event)">No</a>
+    </div>
+</div>

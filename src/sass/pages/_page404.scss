@@ -1,0 +1,18 @@
+.page-404 {
+
+	width: 90%;
+	margin: 5rem auto;
+	background-color: rgba($color-rosa-especial, .2);
+	border-radius: 5px;
+	padding: 5rem;
+	color: $color-gris-claro-2;
+	font-size: 1.7rem;
+
+	&__text {
+
+	}
+
+	&__link {
+		cursor: pointer;
+	}
+}

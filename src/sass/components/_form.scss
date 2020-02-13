@@ -1,0 +1,152 @@
+.form {
+
+	background-color: rgba($color-gris-claro-1, .2);
+	border-radius: 1rem;
+	color: $color-gris-claro;
+	overflow: hidden;
+	box-shadow: 0 2rem 3rem rgba($color-negro, .4);
+	//@include centra-elemento;
+
+	&__group {
+		padding: 1.5rem;
+		background-color: $color-gris-oscuro;
+
+		&-option{
+			display: inline-block;
+		}
+	}
+
+
+	&__label {
+		display: block;
+		color: $color-gris-claro;
+		margin-left: 2.8rem;
+		font-size: 1.2rem;
+		font-weight: 700;
+		transform: translateY(-6.4rem);
+		transition: all .3s;
+	}
+
+	&__input:placeholder-shown + &__label {
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(-3.8rem);
+	}
+
+	&__input {
+		color: inherit;
+		width: 95%;
+		font-family: inherit;
+		font-size: 1.5rem;
+		border-radius: 3px;
+		background-color: rgba($color-gris-claro, .5);
+		border: none;
+		border-bottom: 3px solid transparent;
+		display: block;
+		margin: 0 auto;
+		padding: 1rem 1.5rem;
+		transition: all .3s;
+
+		&::-webkit-input-placeholder {
+			color: $color-gris-oscuro-2;
+		}
+
+		//REVISAR LA ACTIVACION DE ESTILO 
+		//PARA CAMPOS VALIDOS Y NO VALIDOS
+
+		&.ng-valid[required],
+		&.ng-pristine[required]{
+			&:not(form) {
+				border-left: .5rem solid $color-verde-musgo;
+			}
+		}
+		
+
+		&.ng-dirty,
+		&.ng-invalid[required] {
+			&:not(form) {
+				border-left: .5rem solid $color-rojo-oscuro;
+			}
+		}
+
+		&:focus {
+			outline: none;
+			box-shadow: 0 1rem 2rem rgba($color-gris-claro-2, .1);
+			border-bottom: 3px solid $color-terciario-oscuro;
+		}
+	}
+
+	&__radio-group {
+		display: inline-block;
+	}
+
+	&__radio-input, &__check-input {
+		display: none;
+	}
+
+	&__radio-label {
+		@extend %control_label;
+		padding-left: 4rem;
+		margin-left: 2rem;
+	}
+
+	&__radio-button {
+		@extend %control_button;
+		border-radius: 50%;
+		position: absolute;
+		top: -.4rem;
+		left: 0;
+		backface-visibility: hidden;
+
+		&::after {
+			content: "";
+			display: block;
+			border-radius: 50%;
+			width: 1.2rem;
+			height: 1.2rem;
+			@include centra-elemento;
+			background-color: $color-gris-claro;
+			opacity: 0;
+			transition: opacity .2s;
+		}
+	}
+
+	&__radio-input:checked + &__radio-label &__radio-button::after {
+		opacity: 1;
+	}
+
+	&__check-label {
+		@extend %control_label;
+		padding-right: 4rem;
+		margin-right: 2rem;
+	}
+
+	&__check-button {
+		@extend %control_button;
+		background-color: $color-gris-claro;
+		border-radius: 3px;
+		position: absolute;
+		top: -.4rem;
+		right: 0;
+		backface-visibility: hidden;
+		font-size: 1.5rem;
+		font-family: $fuente-macz;
+		color: $color-verde-musgo;
+		text-align: center;
+
+		&::after {
+			content: "";
+			display: block;
+			@include centra-elemento;
+			background-color: $color-gris-claro;
+			opacity: 1;
+			width: 2rem;
+			height: 2rem;
+			transition: opacity .2s;
+		}
+	}
+
+	&__check-input:checked + &__check-label &__check-button::after {
+		opacity: 0;
+	}
+}

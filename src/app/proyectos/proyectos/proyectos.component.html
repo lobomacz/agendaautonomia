@@ -1,0 +1,105 @@
+<macz-nav-bar [usuarioId]="usuarioId" (logout)="userLogout()" ></macz-nav-bar>
+<section class="seccion-proyectos">
+	<div *ngIf="esAdmin === true" class="fab-button">
+		<a class="fab-button__link" routerLink="nuevo">&#xe20d;</a>
+	</div>
+	<h2 class="encabezado-secundario u-margin-bottom-medium">Lista de Proyectos</h2>
+	<div class="row">
+		<div class="col-1-de-2">
+			<div class="filter">
+				<form #filterForm="ngForm" accept-charset="utf-8" class="form">
+					<div class="form__group">
+						<fieldset>
+							<legend>Filtrar Por:</legend>
+							
+							<div class="form__group-option">
+								<input #anio id="optAnio" [checked]="opcionFiltro=='anio'" class="form__radio-input" type="radio" name="tipoOrg" value="anio" (click)="setTipoFiltro(anio.value)">
+								<label class="form__radio-label" for="optAnio">
+									<span class="form__radio-button"></span>
+									Año
+								</label>
+							</div>
+							<div class="form__group-option">
+								<input #org class="form__radio-input" id="optOrg" type="radio" name="tipoOrg" value="institucion" (click)="setTipoFiltro(org.value)">
+								<label class="form__radio-label" for="optOrg">
+									<span class="form__radio-button"></span>
+									Institución
+								</label>
+							</div>
+							<div class="form__group-option">
+								<input #sector class="form__radio-input" id="optSector" type="radio" name="tipoOrg" value="sector" (click)="setTipoFiltro(sector.value)">
+								<label class="form__radio-label" for="optSector">
+									<span class="form__radio-button"></span>
+									Sector
+								</label>
+							</div>
+							<div class="form__group-option">
+								<input #gtis class="form__radio-input" id="optGti" type="radio" name="tipoOrg" value="gti" (click)="setTipoFiltro(gtis.value)">
+								<label class="form__radio-label" for="optGti">
+									<span class="form__radio-button"></span>
+									GTIs
+								</label>
+							</div>
+						</fieldset>
+						<div class="formulario__group u-margin-top-small" *ngIf="opcionFiltro=='anio';else comboSelect">
+							<input class="formulario__control" type="number" id="txtanio" name="anioFiltro"  placeholder="2018" [(ngModel)]="filtro" >
+							<input class="btn u-margin-top-small" type="button" name="btnFiltro" value="Ver" (click)="UpdateLista()">
+						</div>
+						<ng-template #comboSelect>
+							<div class="formulario__group" *ngIf="opcionFiltro != 'anio'">
+								<label for="cmbFiltro">Seleccione:</label>
+								<select class="formulario__control" [(ngModel)]="filtro" name="filtro" id="cmbFiltro" #cmbFiltro (change)="UpdateLista()">
+									<option *ngFor="let opcion of listaOpciones" value="{{ opcion.key }}">{{ (opcionFiltro == 'sector' ? opcion.payload.val():opcion.payload.val().nombre_corto) | uppercase }}</option>
+								</select>
+							</div>
+						</ng-template>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<macz-pager *ngIf="total > limit" 
+	[page]="page"
+	[count]="total"
+	[perPage]="limit"
+	[pagesToShow]="5"
+	[loading]="loading"
+	(goNext)="onNextPage()"
+	(goPrev)="onPrevPage()"
+	(goPage)="goToPage($event)"></macz-pager>
+	<div class="tabla-bloques u-margin-top-medium" *ngIf="listaProyectos != null && listaProyectos.length > 0;else sinregistros">
+		<div class="tabla-bloques__header">
+			<div class="tabla-bloques__header-cell">Proyecto</div>
+			<div class="tabla-bloques__header-cell">Organización</div>
+			<div class="tabla-bloques__header-cell">Sector</div>
+			<div class="tabla-bloques__header-cell--small">Año</div>
+			<div class="tabla-bloques__header-cell--small">Monto C$</div>
+			
+		</div>
+		<div class="tabla-bloques__filas">
+			<div class="tabla-bloques__fila" [ngClass]="{'fila-impar':impar}" *ngFor="let proyecto of paginaProyectos; odd as impar">
+				<div *ngIf="proyecto != null" class="tabla-bloques__columna">
+					<a routerLink="ver/{{ annio }}/{{ proyecto.anio }}/{{proyecto.key}}" class="btn-texto" >
+					{{ proyecto.payload.val().nombre | uppercase }}
+					</a>
+				</div>
+				<div *ngIf="listaOrganizaciones != null" class="tabla-bloques__columna">
+					{{ listaOrganizaciones[proyecto.payload.val().id_organizacion].nombre_corto | uppercase }}
+				</div>
+				<div *ngIf="proyecto != null" class="tabla-bloques__columna">
+					{{ listaSectores[proyecto.payload.val().sector].payload.val() | uppercase }}
+				</div>
+				<div *ngIf="proyecto != null" class="tabla-bloques__columna">
+					{{ proyecto.payload.val().anio }}
+				</div>
+				<div *ngIf="proyecto != null" class="tabla-bloques__columna">
+					{{ proyecto.payload.val().monto | currency:'NIO':'symbol-narrow' }}
+				</div>
+			</div>
+		</div>
+	</div>
+	<ng-template #sinregistros>
+		<h2 class="encabezado-secundario">No se encontraron registros.</h2>
+	</ng-template>
+</section>
+

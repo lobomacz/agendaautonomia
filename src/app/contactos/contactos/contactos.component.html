@@ -1,53 +1,59 @@
+<macz-nav-bar [usuarioId]="usuarioId" (logout)="userLogout()"></macz-nav-bar>
 <section class="seccion-contactos">
-	<macz-nav [navitems]="menuNav"></macz-nav>
-	<h2 class="encabezado-secundario u-margin-bottom-medium">Lista de contactos de instituciones</h2>
-	<div class="row">
-		<div class="contenedor__controles">
-			
-		</div>
-
-
-
-		<!--
-		<table class="tabla-datos">
-			<caption>table title and/or explanatory text</caption>
-			<thead class="tabla-datos__encabezado">
-				<tr>
-					<th></th>
-					<th>NOMBRE</th>
-					<th>INSTITUCIÓN</th>
-					<th>CARGO</th>
-				</tr>
-			</thead>
-			<tbody class="tabla-datos__contenido">
-				<tr class="tabla-datos__fila" *ngFor="let contacto of contactosObservable | async as contactos; odd as isOdd" [fila-impar]="isOdd">
-					<td class="tabla-datos__celda">{{ contacto.foto }}</td>
-					<td class="tabla-datos__celda">{{ contacto.nombre }}</td>
-					<td class="tabla-datos__celda">{{ contacto.organizacion }}</td>
-					<td class="tabla-datos__celda">{{ contacto.cargo }}</td>
-				</tr>
-			</tbody>
-		</table> -->
+	<div class="fab-button" *ngIf="esAdmin === true">
+		<a class="fab-button__link" routerLink="nuevo">&#xe20d;</a>
 	</div>
-	<div class="row">
-		<div class="col-1-de-3  u-margin-bottom-medium" *ngFor="let contacto of contactos | async">
-			<div class="tarjeta-contacto tarjeta-contacto--lista">
-				<figure class="tarjeta-contacto--lista__shape">
-					<img src="{{ contacto.payload.val().foto }}" alt="Foto del contacto" class="tarjeta-contacto--lista__img">
-				</figure>
-
-
-				<div class="tarjeta-contacto--lista__texto">
-					<h4 class="encabezado-terciario u-margin-bottom-small">{{ contacto.payload.val().nombre }}</h4>
-					<p>
-						Institución: {{ contacto.payload.val().organizacion }}
-					</p>
-					<p>
-						Cargo: {{ contacto.payload.val().cargo }}
-					</p>
-					<p><a routerLink="detalle/{{ contacto.key }}" class="btn-texto">Ver contacto</a></p>
+	<h2 class="encabezado-secundario u-margin-bottom-medium">Lista de contactos de instituciones</h2>
+	<div class="row" *ngIf="contacto$ != null; else sindatos">
+		<macz-pager *ngIf="total > limit"  
+		[page]="page"
+		[count]="total"
+		[perPage]="limit"
+		[pagesToShow]="5"
+		[loading]="loading"
+		(goNext)="onNextPage()"
+		(goPrev)="onPrevPage()"
+		(goPage)="goToPage($event)"></macz-pager>
+		<div class="tabla-bloques">
+			<div class="tabla-bloques__header">
+				<div class="tabla-bloques__header-cell--x-small">Foto</div>
+				<div class="tabla-bloques__header-cell">Nombre</div>
+				<div class="tabla-bloques__header-cell">Institución</div>
+				<div class="tabla-bloques__header-cell">Cargo</div>
+				<div class="tabla-bloques__header-cell--x-small"></div>
+			</div>
+			<div class="tabla-bloques__filas">
+				<div class="tabla-bloques__fila" [ngClass]="{'fila-impar': impar}" *ngFor="let contacto of paginaContactos; odd as impar">
+					<div class="tabla-bloques__columna--centrada">
+						<figure class="tabla-bloques__columna-figure" *ngIf="contacto.payload.val().foto.indexOf('assets') < 0;else defaultImg">
+							<img src="{{ fotos[contacto.key] }}" alt="" class="tabla-bloques__columna__img">
+						</figure>
+						<ng-template #defaultImg>
+							<figure class="tabla-bloques__columna-figure">
+								<img src="{{ contacto.payload.val().foto }}" alt="" class="tabla-bloques__columna__img">
+							</figure>
+						</ng-template>	
+					</div>
+					<div class="tabla-bloques__columna">
+						{{ contacto.payload.val().nombre }}
+					</div>
+					<div class="tabla-bloques__columna">
+						{{ organizaciones[contacto.payload.val().organizacion].nombre_corto }}
+					</div>
+					<div class="tabla-bloques__columna">
+						{{ contacto.payload.val().cargo }}
+					</div>
+					<div class="tabla-bloques__columna">
+						<a routerLink="ver/{{ contacto.key }}" class="btn-texto">Ver contacto</a>
+					</div>
 				</div>
 			</div>
 		</div>
+		
 	</div>
+	<ng-template #sindatos>
+		<h3 class="encabezado-terciario">
+			No se encontraron datos de Contactos.
+		</h3>
+	</ng-template>
 </section>

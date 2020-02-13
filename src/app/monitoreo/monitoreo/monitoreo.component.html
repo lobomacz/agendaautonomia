@@ -1,0 +1,64 @@
+<macz-nav-bar [usuarioId]="usuarioId" (logout)="userLogout()" ></macz-nav-bar>
+<section class="seccion-monitoreo">
+	<h1 class="encabezado-primario u-center-text">
+		Monitoreo de la Inversión
+	</h1>
+	<div class="row">
+		<div class="col-1-de-4">
+			<form action="" #formulario="ngForm" accept-charset="utf-8">
+				<div class="formulario__group">
+					<label for="txtAnio">Año</label>
+					<input class="formulario__control" type="number" maxlength="3" max="{{ annio }}" min="2018" #anio="ngModel" id="txtAnio" name="anno" [(ngModel)]="annio">
+					<a href="#" class="btn btn--white u-margin-top-small" (click)="BuscarDatos($event)">Buscar</a>
+				</div>
+			</form>
+		</div>
+		
+	</div>
+	<div class="dashboard">
+		<div class="dashboard__col-1-row-1">
+			<div class="chart">
+				<canvas class="chart__canvas" #chartPorInstitucion id="gPorInstitucion">{{ cPorInstituciones }}</canvas>
+			</div>
+		</div>
+		<div class="dashboard__col-2-row-1">
+			<div class="chart">
+				<canvas class="chart__canvas" #chartPorSector id="gPorSector">{{ cPorSector }}</canvas>
+			</div>
+		</div>
+		<div class="dashboard__col-1-row-2">
+			<div class="chart">
+				<canvas #chartPorFuente class="chart__canvas">{{ cPorFuente }}</canvas>
+			</div>
+		</div>
+		<div class="dashboard__col-2-row-2">
+			<div class="chart">
+				<canvas #chartPorInversion class="chart__canvas">{{ cPorInversion }}</canvas>
+			</div>
+		</div>
+	</div>
+
+
+	<div class="tabla-bloques u-margin-top-small">
+		<div class="tabla-bloques__filas">
+			<div class="tabla-bloques__fila--flat">
+				<div class="tabla-bloques__columna tabla-bloques__columna--controls">
+					
+					<div class="chart">
+						<form #formFiltro="ngForm" accept-charset="utf-8" class="form" >
+							<div class="formulario__group">
+								<label for="cmbInstitucion">Institución</label>
+								<select #filtroOrg="ngModel" class="formulario__control" [(ngModel)]="filtroInstitucion" name="institucion" id="cmbInstitucion" (change)="ChartPorIS()" >
+									<option *ngFor="let org of institucionesProyectos" value="{{ org.key }}">{{ org.payload.val().nombre_corto }}</option>
+								</select>
+							</div>
+						</form>
+						<canvas #chartIS class="chart__canvas">{{ cPorIS }}</canvas>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+

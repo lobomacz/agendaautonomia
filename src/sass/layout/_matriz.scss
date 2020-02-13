@@ -1,0 +1,28 @@
+.matriz {
+	display: grid;
+	grid-gap: 2rem;
+
+	&__columna-1-a-3 {
+		@include column-span(1,3);
+	}
+
+	&__columna-1-a-4 {
+		@include column-span(1,4);
+	}
+
+	&__fila-1-a-3 {
+		@include row-span(1,3);
+	}
+
+	&__fila-1-a-4 {
+		@include row-span(1,4);
+	}
+
+	&__columna-final-de-2 {
+		grid-column-start: 2;
+	}
+
+	&__columna-final-de-3 {
+		grid-column-start: 3;
+	}
+}

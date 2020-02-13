@@ -1,0 +1,113 @@
+.formulario {
+	&__container {
+		display: inline-block;
+		padding: 1rem;
+		text-align: left;
+		//@include centra-elemento;
+		background-color: rgba($color-gris-claro, .7);
+		border-radius: 1rem;
+	}
+
+	&__image {
+		width: 25.6rem;
+		height: 25.6rem;
+		border-radius: 5px;
+		margin-bottom: 2rem;
+	}
+
+	&__group {
+		font-size: 1.5rem;
+	}
+
+	&__control {
+		color: $color-gris-oscuro;
+		width: 25rem;
+		height: 3rem;
+		margin-left: 1rem;
+		padding-left: 1rem;
+		font-family: inherit;
+		font-size: 1.5rem;
+		border-radius: 3px;
+		border: none;
+		border-bottom: 3px solid transparent;
+		display: block;
+		padding: .6rem;
+		transition: all .3s;
+
+		&::-webkit-input-placeholder {
+			color: $color-gris-oscuro-2;
+		}
+
+		&.ng-valid[required],
+		&.ng-pristine[required]{
+			&:not(form) {
+				border-left: .5rem solid $color-verde-musgo;
+			}
+		}
+		
+
+		&.ng-dirty,
+		&.ng-invalid[required] {
+			&:not(form) {
+				border-left: .5rem solid $color-rojo-oscuro;
+			}
+		}
+
+		&:focus {
+			outline: none;
+			box-shadow: 0 1rem 2rem rgba($color-gris-claro-2, .1);
+			border-bottom: 3px solid $color-terciario-oscuro;
+		}
+	}
+
+	&__label {
+		display: block;
+		//color: $color-gris-claro;
+		margin-left: 2rem;
+		font-size: 1.2rem;
+		font-weight: 700;
+		transform: translateY(-4.5rem);
+		transition: all .3s;
+	}
+
+	&__control:placeholder-shown + &__label {
+		opacity: 0;
+		visibility: hidden;
+		transform: translateY(-3.8rem);
+	}
+
+	&__boton-archivo {
+		//width: 4rem;
+		height: 4rem;
+		background-color: $color-blanco;
+		border: 1px solid $color-gris-oscuro;
+		border-radius: 5px;
+		text-align: center;
+		padding: 0 .6rem .6rem;
+		@include efecto-boton;
+
+		&:hover {
+			border-color: $color-terciario-claro;
+			color: $color-terciario-claro;
+		}
+
+		&:active {
+			border-color: $color-secundario-oscuro;
+			color: $color-secundario-oscuro;
+		}
+	}
+
+	&__icono-archivo {
+		font-size: 2rem;
+		color: $color-gris-oscuro;
+		font-family: $fuente-macz;
+	}
+
+	&__input-archivo {
+		display: none;
+	}
+}
+
+input[type="file"] {
+	display: none;
+}

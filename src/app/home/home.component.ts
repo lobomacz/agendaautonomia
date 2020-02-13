@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { OpcionMenu } from '../clases/opcion-menu';
-import { OpcionNav } from '../clases/opcion-nav';
+import { Usuario } from '../clases/usuario';
+import { AuthserviceService } from '../servicios/authservice.service';
 
 @Component({
   selector: 'macz-home',
@@ -9,29 +9,18 @@ import { OpcionNav } from '../clases/opcion-nav';
 })
 export class HomeComponent implements OnInit {
 	
-  private menuPrincipal:Array<OpcionMenu>;
-  private menuNav:Array<OpcionNav>;
-
-  constructor() {
-
-    this.menuPrincipal = new Array<OpcionMenu>();
-    this.menuPrincipal.push({titulo:'contactos',ruta:'contactos'});
-    this.menuPrincipal.push({titulo:'programas',ruta:'programas'});
-    this.menuPrincipal.push({titulo:'documentos',ruta:'documentos'});
-
-    this.menuNav = new Array<OpcionNav>();
-    this.menuNav.push({titulo:'ajustes',icono:'',ruta:'ajustes'});
-    this.menuNav.push({titulo:'salir',icono:'',ruta:'logout'});
-
+  public usuarioId:string;
+  
+  constructor(private _auth:AuthserviceService) {
+    
   }
 
   ngOnInit() {
+    this.usuarioId = this._auth.AuthUser() !== null ? this._auth.AuthUser().uid:null;
   }
 
-  OnMenuClick(evento:any, ruta:string):void{
-    console.log(ruta);
-
-    evento.preventDefault();
+  userLogout(){
+    this.usuarioId = null;
   }
 
 }

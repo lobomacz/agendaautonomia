@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ShellComponent } from './shell/shell.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 
 const routes: Routes = [
 	{
-		path: '',
+		path: 'login',
 		loadChildren: './../login/login.module#LoginModule'
 	},
 	{
@@ -17,12 +18,33 @@ const routes: Routes = [
 		loadChildren: './../contactos/contactos.module#ContactosModule'
 	},
 	{
-		path: 'programas',
-		loadChildren: './../programas/programas.module#ProgramasModule'
+		path: 'monitoreo',
+		loadChildren: './../monitoreo/monitoreo.module#MonitoreoModule'
+	},
+	{
+		path: 'proyectos',
+		loadChildren: './../proyectos/proyectos.module#ProyectosModule'
+	},
+	{
+		path: 'transferencias',
+		loadChildren: './../transferencias/transferencias.module#TransferenciasModule'
 	},
 	{
 		path: 'documentos',
 		loadChildren: './../documentos/documentos.module#DocumentosModule'
+	},
+	{
+		path: 'instituciones',
+		loadChildren: './../organizaciones/organizaciones.module#OrganizacionesModule'
+	},
+	{
+		path: '',
+		redirectTo: '/home',
+		pathMatch: 'full'
+	},
+	{
+		path:'**',
+		component: PageNotFoundComponent
 	}
 ];
 
@@ -30,7 +52,7 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes)
   ],
-  declarations: [ShellComponent],
+  declarations: [ShellComponent, PageNotFoundComponent],
   exports: [
   	ShellComponent
   ]

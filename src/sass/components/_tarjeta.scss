@@ -1,7 +1,7 @@
 .tarjeta-contacto {
 
-	
 	background-color: $color-blanco;
+	text-align: center;
 	
 	&--lista {
 
@@ -42,10 +42,8 @@
 		background-color: rgba($color-blanco, .7);
 		border: 1px solid $color-negro;
 		border-radius: 3px;
-		position: absolute;
-		top: 50%;
-		left: 50%;
-		transform: translate(-50%,-50%);
+		display: inline-block;
+		//@include centra-elemento;
 		padding: 2rem;
 
 		&__shape {
@@ -67,10 +65,10 @@
 
 }
 
-.tarjeta-contacto--detalle__texto > a.btn-texto {
-	margin-right: 3rem;
+.tarjeta-contacto--detalle__texto a.btn-texto {
+	
 	&:not(:last-child) {
-		
+		margin-right: 3rem;
 	}
 	
 }

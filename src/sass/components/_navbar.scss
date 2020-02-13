@@ -20,9 +20,12 @@
 		//float: left;
 
 		&-texto {
-			font-size: 1.4rem;
+			cursor: pointer;
+			font-size: 1.7rem;
 			font-weight: 700;
 			display: inline-block;
+			letter-spacing: .5rem;
+			margin-top: 1rem;
 		}
 	}
 
@@ -40,27 +43,50 @@
 	}
 }
 
-.navegacion__link {
-	&,
-	&:link,
-	&:visited {
-		padding-top: .3rem;
-		font-family: $fuente-basic;
-		color: $color-blanco;
-		font-size: 2.5rem;
-		font-weight: 700;
-		text-decoration: none;
-		//border-right: 1px solid $color-gris-claro-2;
-		display: inline-block;
-		width: 5rem;
-		text-align: center;
-		height: 100%;
+.navegacion {
+
+	&__boton {
+		
+		@extend %navegacion__boton__extend;
+
+		&--login {
+
+			@extend %navegacion__boton__extend;
+			float: right;
+
+			&:hover .navegacion__hint {
+				@extend %navegacion__boton__hover__extend;
+			}
+		}
+
+		&:hover .navegacion__hint {
+			@extend %navegacion__boton__hover__extend;
+		}
 	}
 
-	&:hover {
-		text-decoration: none;
-		//color: $color-primario-oscuro;
-		background-color: rgba($color-gris-oscuro-2, .6);
-		cursor: pointer;
+	&__link {
+
+		@extend %navegacion__link__extend;
+		
+		&--login {
+			@extend %navegacion__link__extend;
+			font-family: $fuente-macz;
+			//transform: rotate(90deg);
+		}
+	}
+
+	&__hint {
+		width: 0;
+		opacity: 0;
+		position: absolute;
+		background-color: $color-gris-oscuro-3;
+		color: $color-gris-claro-1;
+		display: inline-block;
+		font-size: 1rem;
+		transition: all .2s;
+		bottom: 0;
+		left: 50%;
+		text-align: center;
+		transform: translate(-50%,1.5rem);
 	}
 }

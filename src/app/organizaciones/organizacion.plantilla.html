@@ -1,0 +1,106 @@
+<macz-nav-bar [usuarioId]="usuarioId" (logout)="userLogout()" ></macz-nav-bar>
+<section class="seccion-formulario-institucion">
+	<h2 class="encabezado-secundario u-center-text">{{ nuevo == true ? 'Ingreso':'Edición' }} de Datos de Instituciones</h2>
+	<div class="formulario__container u-margin-top-medium">
+		<form #formInstitucion="ngForm" accept-charset="utf-8">
+			<div class="tabla-bloques--form">
+				<div class="tabla-bloques__filas">
+					<div class="tabla-bloques__fila--flat">
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group" *ngIf="nuevo == true; else siglasRO">
+								<input class="formulario__control" type="text" #nombreCorto="ngModel" name="nombre_corto" required="true" id="nombreCorto" [(ngModel)]="organizacion.nombre_corto" placeholder="Nombre Corto" required>
+								<label class="formulario__label" for="nombreCorto">Nombre Corto</label>
+								<div class="mensaje mensaje--error" *ngIf="nombreCorto.invalid && (nombreCorto.dirty || nombreCorto.touched)">
+									<div *ngIf="nombreCorto.errors.required">
+										El campo nobre corto es requerido.
+									</div>
+								</div>
+							</div>
+							<ng-template #siglasRO>
+								<h3 class="encabezado-terciario">{{ organizacion.nombre_corto | uppercase }}</h3>
+							</ng-template>
+						</div>
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input class="formulario__control" type="text" id="nombreLargo" name="nombre_largo" required="true" [(ngModel)]="organizacion.nombre_largo" #nombreLargo="ngModel" placeholder="Nombre Institución">
+								<label class="formulario__label" for="nombreLargo">Nombre</label>
+								<div class="mensaje mensaje--error" *ngIf="nombreLargo.invalid && (nombreLargo.dirty || nombreLargo.touched)">
+									<div *ngIf="nombreLargo.errors.required">
+										El campo nombre es requerido.
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="tabla-bloques__fila--flat">
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input class="formulario__control" type="text" #direccion="ngModel" name="direccion" [(ngModel)]="organizacion.direccion" placeholder="Dirección">
+								<label class="formulario__label" for="direccion">Dirección</label>
+							</div>
+						</div>
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input class="formulario__control" type="tel" id="telefono" name="telefono" [(ngModel)]="organizacion.telefono" placeholder="Ej. 2572-0078" #telefono="ngModel" required="true">
+								<label for="telefono" class="formulario__label">Teléfono</label>
+							</div>
+						</div>
+					</div>
+					<div class="tabla-bloques__fila--flat">
+						<!-- <div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<select class="formulario__control" name="region" id="region" required="true" #region [(ngModel)]="organizacion.region" (change)="OnSelectRegion()">
+									<option *ngFor="let region of regione$ | async" value="{{ region.key }}">{{ region.key | uppercase }}</option>
+								</select>
+								<label class="formulario__label" for="region">Región</label>
+							</div>
+						</div>-->
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<select class="formulario__control" name="municipio" id="municipio" required="true" [(ngModel)]="organizacion.municipio" placeholder="Seleccione">
+									<option *ngFor="let municipio of municipio$ | async" value="{{ municipio.key }}">{{ municipio.payload.val().nombre }}</option>
+								</select>
+								<label class="formulario__label" for="municipio">Municipio</label>
+							</div>
+						</div>
+					</div>
+					<div class="tabla-bloques__fila--flat">
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<select class="formulario__control" name="nivel" id="nivel" #nivel="ngModel" required="true" [(ngModel)]="organizacion.nivel" >
+									<option *ngFor="let nivel of lista_niveles" value="{{ nivel }}">{{ nivel | uppercase }}</option>
+								</select>
+								<label class="formulario__label" for="nivel">Nivel</label>
+							</div>
+						</div>
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<textarea name="descripcion" id="descripcion" cols="30" rows="5" [(ngModel)]="organizacion.descripcion" #descripcion="ngModel" placeholder="Descripción" ></textarea>
+								<label class="formulario__label" for="descripcion">Descripción</label>
+							</div>		
+						</div>
+					</div>
+					<div class="tabla-bloques__fila--flat">
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<input class="formulario__control" type="url" id="sitio" name="sitio" [(ngModel)]="organizacion.sitio" #sitio="ngModel" placeholder="www.ejemplo.org">
+								<label class="formulario__label" for="sitio">Sitio web</label>
+							</div>
+						</div>
+						<div class="tabla-bloques__columna">
+							<div class="formulario__group">
+								<select class="formulario__control" name="tipo" id="tipo" [(ngModel)]="organizacion.tipo" #tipo="ngModel" required="true" >
+									<option *ngFor="let tipo of lista_tipos" value="{{ tipo }}">{{ tipo | uppercase }}</option>
+								</select>
+								<label class="formulario__label" for="tipo">Tipo de Institución</label>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="formulario__group">
+				<input class="btn btn-blanco" type="button" name="guardar" value="{{ nuevo == true ? 'Guardar':'Actualizar' }}" (click)="OnGuardar()" [disabled]="!formInstitucion.form.valid" >
+			</div>
+		</form>
+	</div>
+</section>

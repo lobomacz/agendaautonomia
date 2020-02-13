@@ -7,10 +7,6 @@ import { HomeComponent } from './home.component';
 
 const routes: Routes = [
 	{
-		path: '',
-		component: HomeComponent
-	},
-	{
 		path:'contactos',
 		redirectTo: '/contactos',
 		pathMatch: 'full'
@@ -24,6 +20,10 @@ const routes: Routes = [
 		path: 'documentos',
 		redirectTo: '/documentos',
 		pathMatch: 'full'
+	},
+	{
+		path: '',
+		component: HomeComponent
 	}
 ];
 
